@@ -337,6 +337,11 @@ TBL([["Rol", "Qué puede hacer"],
      ["Guía", "Ver la información de sus expediciones"],
      ["Comercial", "Gestionar consultas, reservas y el embudo (CRM)"]],
     [38*mm, PAGE_W-LM-RM-38*mm], story)
+H2("Gestión de usuarios", story)
+P("En <b>Usuarios</b> (menú del panel, solo administradores) das de alta a tu equipo: email, "
+  "nombre, <b>rol</b> y una <b>contraseña inicial</b> (mínimo 8 caracteres). En cada usuario "
+  "podés cambiar su rol, <b>activarlo/desactivarlo</b> (un usuario inactivo no puede ingresar) "
+  "y cambiarle la contraseña. Por seguridad, no podés cambiar tu propio rol ni desactivarte.", story)
 
 # 11
 story.append(PageBreak())

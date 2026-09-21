@@ -387,8 +387,16 @@ acción si no corresponde.
 
 Además de los roles, se pueden dar **permisos puntuales** a un usuario específico.
 
-> La pantalla de **gestión de usuarios** dentro del panel se habilita en una etapa posterior.
-> Mientras tanto, los usuarios los crea el equipo técnico.
+### 10.1 Gestión de usuarios
+
+En **Usuarios** (menú del panel, solo para administradores) das de alta a tu equipo:
+
+- **+ Nuevo usuario**: email, nombre, **rol** y una **contraseña inicial** (mínimo 8
+  caracteres) que le pasás a la persona.
+- En cada usuario podés **cambiar su rol**, **activarlo/desactivarlo** (un usuario inactivo no
+  puede ingresar) y **cambiarle la contraseña**.
+- Por seguridad, **no podés cambiar tu propio rol ni desactivarte** a vos mismo (para no quedar
+  afuera del sistema).
 
 ---
 
