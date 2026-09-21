@@ -21,11 +21,12 @@ const NAV: NavItem[] = [
   { href: "/admin/crm", label: "CRM · Contactos", permission: PERMISSIONS.CRM_READ },
   { href: "/admin/consultas", label: "Consultas", permission: PERMISSIONS.INQUIRY_READ },
   { href: "/admin/testimonios", label: "Testimonios", permission: PERMISSIONS.CONTENT_MODERATE },
+  { href: "/admin/estadisticas", label: "Estadísticas", permission: PERMISSIONS.STATS_VIEW },
   { href: "/admin/configuracion", label: "Configuración", permission: PERMISSIONS.SETTINGS_MANAGE },
 ];
 
 // Módulos previstos por el brief que se irán habilitando (no son enlaces falsos).
-const UPCOMING = ["Media Library", "Estadísticas", "Usuarios"];
+const UPCOMING = ["Media Library", "Usuarios"];
 
 export function AdminSidebar({
   user,

@@ -78,11 +78,18 @@ A la izquierda (o arriba en el celular) está el **menú**:
 
 - **Dashboard** — este resumen
 - **Expediciones** — el corazón del sistema
-- **Destinos** — los lugares donde operás
-- **Guías** — tu equipo
-- **Consultas / CRM** — los mensajes de los visitantes
+- **Destinos** y **Guías** — lugares y equipo
+- **Reservas** — inscripciones de visitantes
+- **Testimonios** — moderación de opiniones
+- **Estadísticas** — rendimiento del sitio
+- **CRM · Contactos** y **Consultas** — el módulo comercial
+- **Configuración** — la identidad del sitio
 
 Arriba de todo, **Ver sitio ↗** abre el sitio público en otra pestaña.
+
+**Estadísticas:** en la pantalla de **Estadísticas** ves las **visitas** a cada expedición
+(solo de visitantes, no del equipo), cuántas **consultas** e **inscripciones** generó, y la
+**conversión** (inscripciones ÷ visitas). Sirve para saber qué expediciones atraen más.
 
 ---
 
