@@ -24,7 +24,7 @@ programar, HTML ni bases de datos. Todo se hace desde pantallas.
 6. [Guías](#6-guías)
 7. [Consultas, Reservas y CRM](#7-consultas-reservas-y-crm)
 8. [Imágenes, videos y multimedia](#8-imágenes-videos-y-multimedia)
-9. [WhatsApp y contacto](#9-whatsapp-y-contacto)
+9. [Configuración del sitio](#9-configuración-del-sitio-whatsapp-marca-y-contacto)
 10. [Usuarios, roles y permisos](#10-usuarios-roles-y-permisos)
 11. [Cómo se ve el sitio público](#11-cómo-se-ve-el-sitio-público)
 12. [Preguntas frecuentes](#12-preguntas-frecuentes)
@@ -318,17 +318,29 @@ que los encabezados se vean bien.
 
 ---
 
-## 9. WhatsApp y contacto
+## 9. Configuración del sitio (WhatsApp, marca y contacto)
 
-- En cada expedición podés definir el **Mensaje de WhatsApp**. Cuando un visitante toca
-  **Consultar por WhatsApp**, se abre WhatsApp con ese mensaje ya escrito, identificando la
-  expedición.
-- El **número de WhatsApp** y los datos de contacto (email, teléfono, redes) son globales del
-  sitio y aparecen en el pie de página y en la sección de Contacto.
+En **Configuración** (en el menú del panel) editás la información global del sitio, **sin
+depender de nadie**. Los cambios se ven al instante en el sitio público.
 
-> La configuración global del sitio (nombre, número de WhatsApp, redes, colores) se administra
-> desde la configuración del sistema. Si necesitás cambiarla, coordiná con el equipo técnico
-> hasta que se habilite la pantalla de **Configuración** en el panel.
+**Identidad**
+- **Nombre del sitio** y **frase / tagline**.
+- **Logo (URL)**: si lo cargás, reemplaza al nombre en el encabezado; si lo dejás vacío, se
+  muestra el nombre.
+- **Color de acento**: el color de los botones y detalles (en formato hex, ej. `#ea580c`).
+  Al guardarlo, todo el sitio adopta ese color.
+
+**Contacto** (aparece en el pie y en la página de Contacto)
+- **WhatsApp** en formato internacional, solo números (ej. `5491100000000`).
+- **Email** y **Teléfono**.
+
+**Redes sociales**
+- Instagram, YouTube, Facebook, TikTok, LinkedIn, X y Vimeo: pegás la URL de las que uses y
+  aparecen en el pie del sitio.
+
+> **Además**, en cada expedición podés definir su propio **Mensaje de WhatsApp**: cuando un
+> visitante toca *Consultar por WhatsApp*, se abre con ese texto ya escrito, identificando la
+> expedición.
 
 ---
 

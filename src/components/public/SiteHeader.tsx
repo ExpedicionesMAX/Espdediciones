@@ -13,7 +13,13 @@ const LINKS = [
   { href: "/contacto", label: "Contacto" },
 ];
 
-export function SiteHeader({ siteName }: { siteName: string }) {
+export function SiteHeader({
+  siteName,
+  logoUrl,
+}: {
+  siteName: string;
+  logoUrl?: string | null;
+}) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -43,7 +49,12 @@ export function SiteHeader({ siteName }: { siteName: string }) {
           href="/"
           className="font-display text-xl font-semibold tracking-tight"
         >
-          {siteName}
+          {logoUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={logoUrl} alt={siteName} className="h-8 w-auto" />
+          ) : (
+            siteName
+          )}
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">

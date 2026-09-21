@@ -296,10 +296,18 @@ P("<b>Consejo:</b> usá fotos grandes y de buena calidad (1600 px de ancho o má
   "encabezados se vean bien.", story)
 
 # 9
-H1(9, "WhatsApp y contacto", story)
-P("En cada expedición podés definir el <b>Mensaje de WhatsApp</b>: cuando un visitante toca "
-  "«Consultar por WhatsApp», se abre con ese texto ya escrito, identificando la expedición. "
-  "El número y los datos de contacto son globales del sitio y aparecen en el pie de página.", story)
+H1(9, "Configuración del sitio", story)
+P("En <b>Configuración</b> (menú del panel) editás la información global del sitio, <b>sin "
+  "depender de nadie</b>. Los cambios se ven al instante en el sitio público.", story)
+H2("Identidad", story)
+UL(["<b>Nombre del sitio</b> y <b>frase / tagline</b>.",
+    "<b>Logo (URL):</b> si lo cargás, reemplaza al nombre en el encabezado; vacío muestra el nombre.",
+    "<b>Color de acento:</b> el color de botones y detalles (hex, ej. #ea580c). Todo el sitio lo adopta."], story)
+H2("Contacto y redes", story)
+P("<b>WhatsApp</b> (formato internacional, solo números), <b>Email</b> y <b>Teléfono</b> "
+  "aparecen en el pie y en la página de Contacto. Cargás también las <b>redes sociales</b> "
+  "(Instagram, YouTube, Facebook, TikTok, LinkedIn, X, Vimeo). Además, cada expedición puede "
+  "tener su propio <b>Mensaje de WhatsApp</b>, que se abre pre-escrito al consultar.", story)
 
 # 10
 H1(10, "Usuarios, roles y permisos", story)

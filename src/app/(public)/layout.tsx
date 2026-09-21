@@ -9,8 +9,16 @@ export default async function PublicLayout({
 }) {
   const settings = await getSiteSettings();
   return (
-    <div className="flex min-h-full flex-col">
-      <SiteHeader siteName={settings.siteName} />
+    <div
+      className="flex min-h-full flex-col"
+      style={
+        {
+          "--color-accent": settings.accentColor,
+          "--color-accent-dark": settings.accentColor,
+        } as React.CSSProperties
+      }
+    >
+      <SiteHeader siteName={settings.siteName} logoUrl={settings.logoUrl} />
       <main className="flex-1">{children}</main>
       <SiteFooter settings={settings} />
     </div>

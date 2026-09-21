@@ -44,6 +44,11 @@ export default async function PanelLayout({
       label: "Consultas",
       show: hasPermission(user, PERMISSIONS.INQUIRY_READ),
     },
+    {
+      href: "/admin/configuracion",
+      label: "Config",
+      show: hasPermission(user, PERMISSIONS.SETTINGS_MANAGE),
+    },
   ].filter((l) => l.show);
 
   return (
