@@ -22,6 +22,19 @@ export type SiteSettingsData = {
   primaryColor: string;
   accentColor: string;
   theme: string;
+  homeExpsTitle: string;
+  homeExpsSubtitle: string;
+  ctaTitle: string;
+  ctaText: string;
+  ctaButton: string;
+};
+
+const DEFAULT_TEXTS = {
+  homeExpsTitle: "Próximas expediciones",
+  homeExpsSubtitle: "Salidas guiadas con cupos limitados.",
+  ctaTitle: "¿Buscás una expedición a medida?",
+  ctaText: "Contanos qué tenés en mente y armamos la travesía con vos.",
+  ctaButton: "Escribinos",
 };
 
 const FALLBACK: SiteSettingsData = {
@@ -35,6 +48,7 @@ const FALLBACK: SiteSettingsData = {
   primaryColor: "#1c1917",
   accentColor: "#ea580c",
   theme: "cinematic",
+  ...DEFAULT_TEXTS,
 };
 
 /** Configuración global del sitio (fila singleton). Cacheada por request. */
@@ -53,6 +67,11 @@ export const getSiteSettings = cache(async (): Promise<SiteSettingsData> => {
       primaryColor: s.primaryColor,
       accentColor: s.accentColor,
       theme: s.theme,
+      homeExpsTitle: s.homeExpsTitle || DEFAULT_TEXTS.homeExpsTitle,
+      homeExpsSubtitle: s.homeExpsSubtitle || DEFAULT_TEXTS.homeExpsSubtitle,
+      ctaTitle: s.ctaTitle || DEFAULT_TEXTS.ctaTitle,
+      ctaText: s.ctaText || DEFAULT_TEXTS.ctaText,
+      ctaButton: s.ctaButton || DEFAULT_TEXTS.ctaButton,
     };
   } catch {
     return FALLBACK;

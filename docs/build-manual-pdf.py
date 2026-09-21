@@ -334,6 +334,10 @@ P("<b>WhatsApp</b> (formato internacional, solo números), <b>Email</b> y <b>Tel
   "aparecen en el pie y en la página de Contacto. Cargás también las <b>redes sociales</b> "
   "(Instagram, YouTube, Facebook, TikTok, LinkedIn, X, Vimeo). Además, cada expedición puede "
   "tener su propio <b>Mensaje de WhatsApp</b>, que se abre pre-escrito al consultar.", story)
+H2("Textos de la home", story)
+P("También editás desde acá los <b>textos de la portada</b>: el título y subtítulo de la "
+  "sección de expediciones, y el título, texto y botón del llamado a la acción del final. Si "
+  "dejás un texto vacío, se usa el que viene por defecto. <b>Todo se edita sin tocar código.</b>", story)
 
 # 10
 H1(10, "Usuarios, roles y permisos", story)

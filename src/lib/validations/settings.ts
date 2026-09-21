@@ -27,6 +27,11 @@ export const settingsInputSchema = z.object({
     })
     .partial()
     .optional(),
+  homeExpsTitle: optString,
+  homeExpsSubtitle: optString,
+  ctaTitle: optString,
+  ctaText: optString,
+  ctaButton: optString,
 });
 
 export type SettingsInput = z.infer<typeof settingsInputSchema>;

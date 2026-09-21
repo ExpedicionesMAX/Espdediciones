@@ -20,6 +20,11 @@ export type SettingsFormValues = {
   socialLinkedin: string;
   socialX: string;
   socialVimeo: string;
+  homeExpsTitle: string;
+  homeExpsSubtitle: string;
+  ctaTitle: string;
+  ctaText: string;
+  ctaButton: string;
 };
 
 const labelCls = "mb-1 block text-sm font-medium text-ink";
@@ -124,6 +129,30 @@ export function SettingsForm({ values }: { values: SettingsFormValues }) {
             <label htmlFor="social_vimeo" className={labelCls}>Vimeo</label>
             <input id="social_vimeo" name="social_vimeo" defaultValue={values.socialVimeo} className={inputCls} />
           </div>
+        </div>
+      </Card>
+
+      <Card title="Textos de la home" description="Los títulos y el llamado a la acción de la portada. Vacío = usa el texto por defecto.">
+        <div>
+          <label htmlFor="homeExpsTitle" className={labelCls}>Título de la sección de expediciones</label>
+          <input id="homeExpsTitle" name="homeExpsTitle" defaultValue={values.homeExpsTitle} placeholder="Próximas expediciones" className={inputCls} />
+        </div>
+        <div>
+          <label htmlFor="homeExpsSubtitle" className={labelCls}>Subtítulo de esa sección</label>
+          <input id="homeExpsSubtitle" name="homeExpsSubtitle" defaultValue={values.homeExpsSubtitle} placeholder="Salidas guiadas con cupos limitados." className={inputCls} />
+        </div>
+        <hr className="border-stone-100" />
+        <div>
+          <label htmlFor="ctaTitle" className={labelCls}>Título del llamado a la acción (final de la home)</label>
+          <input id="ctaTitle" name="ctaTitle" defaultValue={values.ctaTitle} placeholder="¿Buscás una expedición a medida?" className={inputCls} />
+        </div>
+        <div>
+          <label htmlFor="ctaText" className={labelCls}>Texto del llamado a la acción</label>
+          <textarea id="ctaText" name="ctaText" rows={2} defaultValue={values.ctaText} placeholder="Contanos qué tenés en mente…" className={inputCls} />
+        </div>
+        <div>
+          <label htmlFor="ctaButton" className={labelCls}>Texto del botón</label>
+          <input id="ctaButton" name="ctaButton" defaultValue={values.ctaButton} placeholder="Escribinos" className={`${inputCls} max-w-xs`} />
         </div>
       </Card>
 

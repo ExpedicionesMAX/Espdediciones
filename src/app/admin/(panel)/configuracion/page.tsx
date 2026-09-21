@@ -25,6 +25,11 @@ export default async function SettingsPage() {
     socialLinkedin: s.social.linkedin ?? "",
     socialX: s.social.x ?? "",
     socialVimeo: s.social.vimeo ?? "",
+    homeExpsTitle: s.homeExpsTitle,
+    homeExpsSubtitle: s.homeExpsSubtitle,
+    ctaTitle: s.ctaTitle,
+    ctaText: s.ctaText,
+    ctaButton: s.ctaButton,
   };
 
   return (

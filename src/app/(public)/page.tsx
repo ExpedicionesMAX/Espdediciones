@@ -132,11 +132,9 @@ export default async function HomePage() {
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <h2 className="font-display text-3xl font-semibold text-ink sm:text-4xl">
-                Próximas expediciones
+                {settings.homeExpsTitle}
               </h2>
-              <p className="mt-2 text-stone-600">
-                Salidas guiadas con cupos limitados.
-              </p>
+              <p className="mt-2 text-stone-600">{settings.homeExpsSubtitle}</p>
             </div>
             <Link
               href="/expediciones"
@@ -194,16 +192,14 @@ export default async function HomePage() {
       {/* CTA */}
       <section className="mx-auto max-w-6xl px-4 py-20 text-center sm:px-6">
         <h2 className="mx-auto max-w-2xl font-display text-3xl font-semibold text-ink sm:text-4xl">
-          ¿Buscás una expedición a medida?
+          {settings.ctaTitle}
         </h2>
-        <p className="mx-auto mt-4 max-w-xl text-stone-600">
-          Contanos qué tenés en mente y armamos la travesía con vos.
-        </p>
+        <p className="mx-auto mt-4 max-w-xl text-stone-600">{settings.ctaText}</p>
         <Link
           href="/contacto"
           className="mt-8 inline-block rounded-full bg-ink px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-stone-800"
         >
-          Escribinos
+          {settings.ctaButton}
         </Link>
       </section>
     </>

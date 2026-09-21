@@ -38,6 +38,11 @@ export async function updateSettings(
       x: formData.get("social_x"),
       vimeo: formData.get("social_vimeo"),
     },
+    homeExpsTitle: formData.get("homeExpsTitle"),
+    homeExpsSubtitle: formData.get("homeExpsSubtitle"),
+    ctaTitle: formData.get("ctaTitle"),
+    ctaText: formData.get("ctaText"),
+    ctaButton: formData.get("ctaButton"),
   });
 
   if (!parsed.success) {
@@ -70,6 +75,11 @@ export async function updateSettings(
     contactPhone: d.contactPhone ?? null,
     accentColor: d.accentColor,
     social: socialValue,
+    homeExpsTitle: d.homeExpsTitle ?? null,
+    homeExpsSubtitle: d.homeExpsSubtitle ?? null,
+    ctaTitle: d.ctaTitle ?? null,
+    ctaText: d.ctaText ?? null,
+    ctaButton: d.ctaButton ?? null,
   };
 
   await prisma.siteSettings.upsert({

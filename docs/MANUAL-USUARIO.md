@@ -376,9 +376,14 @@ depender de nadie**. Los cambios se ven al instante en el sitio público.
 - Instagram, YouTube, Facebook, TikTok, LinkedIn, X y Vimeo: pegás la URL de las que uses y
   aparecen en el pie del sitio.
 
-> **Además**, en cada expedición podés definir su propio **Mensaje de WhatsApp**: cuando un
-> visitante toca *Consultar por WhatsApp*, se abre con ese texto ya escrito, identificando la
-> expedición.
+**Textos de la home**
+- El **título** y **subtítulo** de la sección de expediciones de la portada.
+- El **título, texto y botón** del llamado a la acción del final de la home.
+- Si dejás un texto vacío, se usa el que viene por defecto.
+
+> **Todo se edita sin tocar código.** Además, en cada expedición podés definir su propio
+> **Mensaje de WhatsApp**: cuando un visitante toca *Consultar por WhatsApp*, se abre con ese
+> texto ya escrito, identificando la expedición.
 
 ---
 

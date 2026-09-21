@@ -466,7 +466,15 @@ model SiteSettings {
   primaryColor   String  @default("#1c1917")
   accentColor    String  @default("#ea580c")
   theme          String  @default("cinematic")
-  updatedAt      DateTime @updatedAt
+
+  // Textos editables de la home
+  homeExpsTitle    String?
+  homeExpsSubtitle String?
+  ctaTitle         String?
+  ctaText          String?
+  ctaButton        String?
+
+  updatedAt DateTime @updatedAt
 }
 
 // ─────────────────────────────────────────────────────────────
