@@ -421,6 +421,8 @@ Lo que ve un visitante:
   dificultad, destino y **buscador**.
 - **Detalle de expedición** (`/expediciones/slug`): la página completa (portada, datos, itinerario, galería, video, incluye/no incluye, requisitos, equipamiento, guías, preguntas frecuentes, precio, cupos y formulario de consulta).
 - **Destinos** (`/destinos`) y **Guías** (`/guias`): listados y perfiles.
+- **Comunidad** (`/comunidad`): un muro con **todos los testimonios aprobados** de todas las
+  expediciones (prueba social). Se llena solo a medida que aprobás testimonios en el panel.
 - **Contacto** (`/contacto`): formulario de consulta y WhatsApp.
 - **Tus páginas propias** (ej. `/nosotros`, `/faq`): las que crees en **Páginas**.
 

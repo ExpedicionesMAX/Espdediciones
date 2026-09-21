@@ -363,6 +363,8 @@ UL(["<b>Inicio:</b> portada con la expedición destacada, próximas expediciones
     "<b>Detalle de expedición:</b> la página completa (portada, datos, itinerario, galería, "
     "video, incluye/no incluye, requisitos, equipamiento, guías, FAQ, precio, cupos y consulta).",
     "<b>Destinos</b> y <b>Guías:</b> listados y perfiles.",
+    "<b>Comunidad:</b> un muro con todos los testimonios aprobados (prueba social); se llena "
+    "solo a medida que aprobás testimonios en el panel.",
     "<b>Contacto:</b> formulario de consulta y WhatsApp.",
     "<b>Tus páginas propias</b> (ej. /nosotros, /faq): las que crees en Páginas."], story)
 P("Todo esto se arma <b>solo</b>, a partir de lo que cargás en el panel.", story)

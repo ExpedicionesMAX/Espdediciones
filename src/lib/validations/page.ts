@@ -6,6 +6,7 @@ export const RESERVED_SLUGS = [
   "expediciones",
   "destinos",
   "guias",
+  "comunidad",
   "contacto",
   "admin",
   "api",

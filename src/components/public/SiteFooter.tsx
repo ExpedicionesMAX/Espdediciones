@@ -51,6 +51,11 @@ export function SiteFooter({ settings }: { settings: SiteSettingsData }) {
               </Link>
             </li>
             <li>
+              <Link href="/comunidad" className="hover:text-white">
+                Comunidad
+              </Link>
+            </li>
+            <li>
               <Link href="/contacto" className="hover:text-white">
                 Contacto
               </Link>

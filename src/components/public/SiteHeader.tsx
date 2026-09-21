@@ -10,6 +10,7 @@ const LINKS = [
   { href: "/expediciones", label: "Expediciones" },
   { href: "/destinos", label: "Destinos" },
   { href: "/guias", label: "Guías" },
+  { href: "/comunidad", label: "Comunidad" },
   { href: "/contacto", label: "Contacto" },
 ];
 
