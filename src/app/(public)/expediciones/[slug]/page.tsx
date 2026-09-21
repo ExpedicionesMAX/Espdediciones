@@ -8,6 +8,7 @@ import { auth } from "@/lib/auth";
 import { getSiteSettings } from "@/lib/site";
 import { getEmbedUrl } from "@/lib/video";
 import { InquiryForm } from "@/components/public/InquiryForm";
+import { ReservationForm } from "@/components/public/ReservationForm";
 import {
   ACTIVITY_LABELS,
   DIFFICULTY_LABELS,
@@ -101,6 +102,8 @@ export default async function ExpeditionDetailPage({
 
   const settings = await getSiteSettings();
   const spots = spotsInfo(exp.capacity, exp.spotsTaken);
+  const reservable = visible && ["OPEN", "LIMITED", "FULL"].includes(exp.status);
+  const isFull = exp.status === "FULL";
   const embed = getEmbedUrl(exp.videoUrl);
   const faqs = (exp.faqs as { q: string; a: string }[] | null) ?? [];
   const allGuides = [exp.leadGuide, ...exp.guides].filter(
@@ -349,6 +352,23 @@ export default async function ExpeditionDetailPage({
               </div>
             </section>
           )}
+
+          {/* INSCRIPCIÓN */}
+          {reservable && (
+            <section id="inscribirme">
+              <h2 className="font-display text-2xl font-semibold text-ink">
+                {isFull ? "Lista de espera" : "Inscripción"}
+              </h2>
+              <p className="mt-2 text-stone-600">
+                {isFull
+                  ? "La expedición está completa. Anotate y te avisamos si se libera un lugar."
+                  : "Completá tus datos para preinscribirte. El equipo te contacta para confirmar."}
+              </p>
+              <div className="mt-6 rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
+                <ReservationForm expeditionId={exp.id} isFull={isFull} />
+              </div>
+            </section>
+          )}
         </div>
 
         {/* SIDEBAR */}
@@ -366,6 +386,14 @@ export default async function ExpeditionDetailPage({
             <p className="mt-3 text-sm font-medium text-ink">{spots.label}</p>
 
             <div className="mt-5 space-y-3">
+              {reservable && (
+                <a
+                  href="#inscribirme"
+                  className="block rounded-full bg-accent px-6 py-3 text-center text-sm font-semibold text-white hover:bg-accent-dark"
+                >
+                  {isFull ? "Lista de espera" : "Inscribirme"}
+                </a>
+              )}
               {wa && (
                 <a
                   href={wa}

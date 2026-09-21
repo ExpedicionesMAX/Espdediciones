@@ -1,0 +1,12 @@
+# Tratar los binarios como tales (evita conversión de fin de línea)
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+
+# Normalizar el texto a LF en el repo
+* text=auto eol=lf

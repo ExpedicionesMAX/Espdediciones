@@ -17,11 +17,12 @@ const NAV: NavItem[] = [
   { href: "/admin/expediciones", label: "Expediciones", permission: PERMISSIONS.EXPEDITION_READ },
   { href: "/admin/destinos", label: "Destinos", permission: PERMISSIONS.DESTINATION_MANAGE },
   { href: "/admin/guias", label: "Guías", permission: PERMISSIONS.GUIDE_MANAGE },
+  { href: "/admin/reservas", label: "Reservas", permission: PERMISSIONS.RESERVATION_READ },
   { href: "/admin/consultas", label: "Consultas / CRM", permission: PERMISSIONS.INQUIRY_READ },
 ];
 
 // Módulos previstos por el brief que se irán habilitando (no son enlaces falsos).
-const UPCOMING = ["Media Library", "Testimonios", "Reservas", "Estadísticas", "Usuarios"];
+const UPCOMING = ["Media Library", "Testimonios", "Estadísticas", "Usuarios"];
 
 export function AdminSidebar({
   user,

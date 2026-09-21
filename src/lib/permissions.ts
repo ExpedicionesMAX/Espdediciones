@@ -19,6 +19,8 @@ export const PERMISSIONS = {
   // Comercial / CRM
   INQUIRY_READ: "inquiry:read",
   INQUIRY_UPDATE: "inquiry:update",
+  RESERVATION_READ: "reservation:read",
+  RESERVATION_MANAGE: "reservation:manage",
   // Administración
   USER_MANAGE: "user:manage",
   SETTINGS_MANAGE: "settings:manage",
@@ -40,6 +42,7 @@ export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     PERMISSIONS.DESTINATION_MANAGE,
     PERMISSIONS.GUIDE_MANAGE,
     PERMISSIONS.MEDIA_MANAGE,
+    PERMISSIONS.RESERVATION_READ,
     PERMISSIONS.STATS_VIEW,
   ],
   MODERATOR: [
@@ -52,6 +55,8 @@ export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     PERMISSIONS.EXPEDITION_READ,
     PERMISSIONS.INQUIRY_READ,
     PERMISSIONS.INQUIRY_UPDATE,
+    PERMISSIONS.RESERVATION_READ,
+    PERMISSIONS.RESERVATION_MANAGE,
     PERMISSIONS.STATS_VIEW,
   ],
 };

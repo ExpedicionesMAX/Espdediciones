@@ -29,6 +29,7 @@ export default async function DashboardPage() {
     upcomingCount,
     pendingInquiries,
     totalInquiries,
+    pendingReservations,
     upcoming,
     activity,
   ] = await Promise.all([
@@ -40,6 +41,7 @@ export default async function DashboardPage() {
     }),
     prisma.contactInquiry.count({ where: { status: "PENDING" } }),
     prisma.contactInquiry.count(),
+    prisma.reservation.count({ where: { status: { in: ["PENDING", "WAITLIST"] } } }),
     prisma.expedition.findMany({
       where: publicExpeditionWhere({ startDate: { gte: now } }),
       orderBy: { startDate: "asc" },
@@ -80,8 +82,8 @@ export default async function DashboardPage() {
         <StatCard label="Próximas salidas" value={upcomingCount} />
         <StatCard label="Borradores" value={draftExpeditions} />
         <StatCard label="Consultas pendientes" value={pendingInquiries} hint={`${totalInquiries} en total`} />
+        <StatCard label="Inscripciones pendientes" value={pendingReservations} />
         <StatCard label="Consultas totales" value={totalInquiries} />
-        <StatCard label="Publicadas" value={publicExpeditions} />
       </div>
 
       <div className="mt-10 grid gap-8 lg:grid-cols-2">
