@@ -402,8 +402,26 @@ Lo que ve un visitante:
 - **Detalle de expedición** (`/expediciones/slug`): la página completa (portada, datos, itinerario, galería, video, incluye/no incluye, requisitos, equipamiento, guías, preguntas frecuentes, precio, cupos y formulario de consulta).
 - **Destinos** (`/destinos`) y **Guías** (`/guias`): listados y perfiles.
 - **Contacto** (`/contacto`): formulario de consulta y WhatsApp.
+- **Tus páginas propias** (ej. `/nosotros`, `/faq`): las que crees en **Páginas**.
 
 Todo esto se arma **solo**, a partir de lo que cargás en el panel.
+
+### 11.1 Páginas propias (Nosotros, FAQ, Filosofía…)
+
+En **Páginas** (menú del panel) creás páginas de contenido con su **propia URL**. Con
+**+ Nueva página** cargás:
+
+- **Título** *(obligatorio)* y **Slug** (la URL; si lo dejás vacío se genera solo). Algunos
+  nombres están reservados por el sistema (expediciones, destinos, guías, contacto) y no se
+  pueden usar.
+- **Subtítulo**, **imagen de portada** y **contenido** (los párrafos y saltos de línea se
+  respetan).
+- **Publicada**: si no la marcás, queda como borrador (no se ve).
+- **Mostrar en el menú** y **Orden**: si la marcás, aparece en el menú del sitio en la posición
+  que indiques.
+- **SEO**: título y descripción para Google.
+
+Así podés tener tu página **Nosotros**, **FAQ** o la que quieras, sin tocar código.
 
 ---
 

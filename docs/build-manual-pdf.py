@@ -347,8 +347,15 @@ UL(["<b>Inicio:</b> portada con la expedición destacada, próximas expediciones
     "<b>Detalle de expedición:</b> la página completa (portada, datos, itinerario, galería, "
     "video, incluye/no incluye, requisitos, equipamiento, guías, FAQ, precio, cupos y consulta).",
     "<b>Destinos</b> y <b>Guías:</b> listados y perfiles.",
-    "<b>Contacto:</b> formulario de consulta y WhatsApp."], story)
+    "<b>Contacto:</b> formulario de consulta y WhatsApp.",
+    "<b>Tus páginas propias</b> (ej. /nosotros, /faq): las que crees en Páginas."], story)
 P("Todo esto se arma <b>solo</b>, a partir de lo que cargás en el panel.", story)
+H2("Páginas propias (Nosotros, FAQ, Filosofía…)", story)
+P("En <b>Páginas</b> (menú del panel) creás páginas de contenido con su <b>propia URL</b>. "
+  "Cargás título y slug (algunos nombres están reservados por el sistema), subtítulo, portada "
+  "y contenido (se respetan párrafos y saltos de línea). Marcá <b>Publicada</b> para que se vea, "
+  "y <b>Mostrar en el menú</b> (con un orden) para que aparezca en la navegación del sitio. "
+  "Así tenés tu Nosotros o FAQ sin tocar código.", story)
 
 # 12
 H1(12, "Preguntas frecuentes", story)

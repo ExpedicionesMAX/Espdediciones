@@ -30,6 +30,11 @@ export default async function PanelLayout({
       show: hasPermission(user, PERMISSIONS.GUIDE_MANAGE),
     },
     {
+      href: "/admin/paginas",
+      label: "Páginas",
+      show: hasPermission(user, PERMISSIONS.PAGE_MANAGE),
+    },
+    {
       href: "/admin/reservas",
       label: "Reservas",
       show: hasPermission(user, PERMISSIONS.RESERVATION_READ),

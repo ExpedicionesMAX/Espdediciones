@@ -428,6 +428,28 @@ model CRMActivity {
 }
 
 // ─────────────────────────────────────────────────────────────
+// PÁGINAS DE CONTENIDO (Nosotros, FAQ, etc. — editables desde el panel)
+// ─────────────────────────────────────────────────────────────
+
+model Page {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  title          String
+  subtitle       String?
+  content        String?  @db.Text
+  coverImage     String?
+  published      Boolean  @default(false)
+  showInMenu     Boolean  @default(false)
+  menuOrder      Int      @default(0)
+  seoTitle       String?
+  seoDescription String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([published])
+}
+
+// ─────────────────────────────────────────────────────────────
 // CONFIGURACIÓN GLOBAL DEL SITIO (nada hardcodeado)
 // ─────────────────────────────────────────────────────────────
 

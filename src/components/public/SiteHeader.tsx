@@ -16,9 +16,11 @@ const LINKS = [
 export function SiteHeader({
   siteName,
   logoUrl,
+  pages = [],
 }: {
   siteName: string;
   logoUrl?: string | null;
+  pages?: { slug: string; title: string }[];
 }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -70,6 +72,15 @@ export function SiteHeader({
               {l.label}
             </Link>
           ))}
+          {pages.map((p) => (
+            <Link
+              key={p.slug}
+              href={`/${p.slug}`}
+              className="text-sm font-medium transition-opacity hover:opacity-70"
+            >
+              {p.title}
+            </Link>
+          ))}
           <Link
             href="/expediciones"
             className="rounded-full bg-accent px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-dark"
@@ -105,6 +116,15 @@ export function SiteHeader({
                 className="rounded-lg px-2 py-3 text-base font-medium hover:bg-stone-100"
               >
                 {l.label}
+              </Link>
+            ))}
+            {pages.map((p) => (
+              <Link
+                key={p.slug}
+                href={`/${p.slug}`}
+                className="rounded-lg px-2 py-3 text-base font-medium hover:bg-stone-100"
+              >
+                {p.title}
               </Link>
             ))}
           </nav>

@@ -17,6 +17,7 @@ const NAV: NavItem[] = [
   { href: "/admin/expediciones", label: "Expediciones", permission: PERMISSIONS.EXPEDITION_READ },
   { href: "/admin/destinos", label: "Destinos", permission: PERMISSIONS.DESTINATION_MANAGE },
   { href: "/admin/guias", label: "Guías", permission: PERMISSIONS.GUIDE_MANAGE },
+  { href: "/admin/paginas", label: "Páginas", permission: PERMISSIONS.PAGE_MANAGE },
   { href: "/admin/reservas", label: "Reservas", permission: PERMISSIONS.RESERVATION_READ },
   { href: "/admin/crm", label: "CRM · Contactos", permission: PERMISSIONS.CRM_READ },
   { href: "/admin/consultas", label: "Consultas", permission: PERMISSIONS.INQUIRY_READ },

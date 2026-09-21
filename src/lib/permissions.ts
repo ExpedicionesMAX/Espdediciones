@@ -14,6 +14,7 @@ export const PERMISSIONS = {
   EXPEDITION_DELETE: "expedition:delete",
   DESTINATION_MANAGE: "destination:manage",
   GUIDE_MANAGE: "guide:manage",
+  PAGE_MANAGE: "page:manage",
   MEDIA_MANAGE: "media:manage",
   CONTENT_MODERATE: "content:moderate",
   // Comercial / CRM
@@ -43,6 +44,7 @@ export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     PERMISSIONS.EXPEDITION_PUBLISH,
     PERMISSIONS.DESTINATION_MANAGE,
     PERMISSIONS.GUIDE_MANAGE,
+    PERMISSIONS.PAGE_MANAGE,
     PERMISSIONS.MEDIA_MANAGE,
     PERMISSIONS.RESERVATION_READ,
     PERMISSIONS.STATS_VIEW,
