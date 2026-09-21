@@ -305,14 +305,14 @@ H1(8, "Imágenes, videos y multimedia", story)
 P("La <b>galería</b> de cada expedición (y de cada destino) <b>mezcla fotos y videos</b>, y todo "
   "se ve <b>en pantalla completa</b>: el visitante toca una foto o video y se abre grande, con "
   "flechas para pasar al siguiente.", story)
-P("En el campo <b>Galería</b> (una URL por línea) podés poner:", story)
-UL(["<b>Links de fotos en la nube</b>: la dirección directa de la imagen (.jpg, .png, .webp). "
-    "La subís a Google Drive (enlace público), Cloudinary, Imgur, etc. y pegás el link.",
-    "<b>Videos o Reels de YouTube / Vimeo</b>: pegás el enlace del video y aparece con un botón "
+P("Tenés <b>tres formas</b> de agregar contenido a la galería:", story)
+UL(["<b>Subir una foto desde tu computadora</b>: con el botón <b>Subir foto</b> (debajo del "
+    "campo Galería). Se sube sola y su link queda agregado; podés subir varias a la vez.",
+    "<b>Link de fotos en la nube</b>: pegás la dirección directa de una imagen (.jpg, .png, "
+    ".webp) de Google Drive (enlace público), Cloudinary, etc.",
+    "<b>Video o Reel de YouTube / Vimeo</b>: pegás el enlace del video y aparece con un botón "
     "de play; al tocarlo se reproduce en pantalla completa."], story)
-P("Podés <b>mezclar</b> fotos y videos en la misma galería, en el orden que los cargues.", story)
-CALLOUT("<b>Subir un archivo desde tu computadora:</b> está preparada para Supabase Storage; se "
-        "habilita cargando sus credenciales. Mientras tanto, subís la foto a la nube y pegás su link.", story)
+P("En el campo Galería va <b>una URL por línea</b>, y podés <b>mezclar</b> fotos y videos.", story)
 P("<b>Consejo:</b> usá fotos grandes y de buena calidad (1600 px de ancho o más) para que se "
   "vean bien en pantalla completa.", story)
 

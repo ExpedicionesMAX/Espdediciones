@@ -329,20 +329,18 @@ La **galería** de cada expedición (y de cada destino) **mezcla fotos y videos*
 **en pantalla completa**: el visitante toca una foto o video y se abre grande, con flechas para
 pasar al siguiente.
 
-En el campo **Galería** (una URL por línea) podés poner:
+Tenés **tres formas** de agregar contenido a la galería:
 
-- **Links de fotos en la nube**: la dirección directa de la imagen (que termine en `.jpg`,
-  `.png`, `.webp`). Podés subirla a Google Drive (enlace público), Cloudinary, Imgur, etc. y
-  pegar el link.
-- **Videos o Reels de YouTube / Vimeo**: pegá el enlace del video
-  (`https://youtube.com/watch?v=...`) y aparece en la galería con un botón de play; al tocarlo
-  se reproduce en pantalla completa.
+- **Subir una foto desde tu computadora**: con el botón **Subir foto** (debajo del campo
+  Galería). Se sube sola y su link queda agregado. Podés subir varias a la vez.
+- **Link de fotos en la nube**: pegá la dirección directa de una imagen (que termine en `.jpg`,
+  `.png`, `.webp`) de Google Drive (enlace público), Cloudinary, etc.
+- **Video o Reel de YouTube / Vimeo**: pegá el enlace del video
+  (`https://youtube.com/watch?v=...`) y aparece con un botón de play; al tocarlo se reproduce en
+  pantalla completa.
 
-Podés **mezclar** fotos y videos en la misma galería, en el orden que los cargues.
-
-> **Subir un archivo desde tu computadora:** la subida directa está preparada para **Supabase
-> Storage**; se habilita cargando sus credenciales. Mientras tanto, subís la foto a un servicio
-> en la nube y pegás su link (funciona igual).
+En el campo **Galería** va **una URL por línea**, y podés **mezclar** fotos y videos en el
+orden que quieras.
 
 **Consejo:** usá fotos grandes y de buena calidad (idealmente 1600 px de ancho o más) para
 que se vean bien en pantalla completa.

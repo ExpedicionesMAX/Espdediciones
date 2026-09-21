@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useActionState } from "react";
 import type { ExpeditionFormState } from "@/server/actions/expeditions";
 import { ItineraryEditor, type ItineraryDayValue } from "./ItineraryEditor";
+import { GalleryField } from "./GalleryField";
 import { ACTIVITY_LABELS, DIFFICULTY_LABELS } from "@/lib/format";
 import {
   ACTIVITY_TYPES,
@@ -287,9 +288,8 @@ export function ExpeditionForm({
           {err("videoUrl") && <p className="mt-1 text-xs text-red-600">{err("videoUrl")}</p>}
         </div>
         <div>
-          <label htmlFor="gallery" className={labelCls}>Galería — fotos y videos (una URL por línea)</label>
-          <textarea id="gallery" name="gallery" rows={4} defaultValue={values.gallery} className={inputCls} placeholder={"https://foto-en-la-nube.jpg\nhttps://youtube.com/watch?v=…  (video o Reel)"} />
-          <p className={helpCls}>Podés mezclar links de fotos (de la nube) y videos de YouTube/Vimeo. Se ven en pantalla completa.</p>
+          <label htmlFor="gallery" className={labelCls}>Galería — fotos y videos</label>
+          <GalleryField name="gallery" defaultValue={values.gallery} />
         </div>
       </Card>
 
