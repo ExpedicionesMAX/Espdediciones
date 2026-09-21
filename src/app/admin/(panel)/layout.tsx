@@ -20,6 +20,11 @@ export default async function PanelLayout({
       show: hasPermission(user, PERMISSIONS.EXPEDITION_READ),
     },
     {
+      href: "/admin/calendario",
+      label: "Calendario",
+      show: hasPermission(user, PERMISSIONS.EXPEDITION_READ),
+    },
+    {
       href: "/admin/destinos",
       label: "Destinos",
       show: hasPermission(user, PERMISSIONS.DESTINATION_MANAGE),

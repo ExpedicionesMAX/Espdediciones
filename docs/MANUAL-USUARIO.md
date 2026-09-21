@@ -78,6 +78,7 @@ A la izquierda (o arriba en el celular) está el **menú**:
 
 - **Dashboard** — este resumen
 - **Expediciones** — el corazón del sistema
+- **Calendario** — tus expediciones por fecha
 - **Destinos** y **Guías** — lugares y equipo
 - **Páginas** — Nosotros, FAQ y otras páginas propias
 - **Reservas** — inscripciones de visitantes
@@ -217,6 +218,14 @@ y un **código QR** que lleva a su página. La encontrás:
 
 En la ficha, tocá **Imprimir / Guardar como PDF** (en el diálogo de impresión, elegí "Guardar
 como PDF"). También podés **descargar el QR** en PNG o SVG para folletos y afiches.
+
+### 4.7 Calendario
+
+En **Calendario** (menú del panel) ves todas tus expediciones ubicadas en su **fecha de
+inicio**, mes a mes. Cada una aparece como una etiqueta de color según su estado; **tocala para
+editarla**. Con los botones **← / Hoy / →** te movés entre meses. Es la vista ideal para
+planificar la temporada. Las expediciones **sin fecha** se avisan abajo, con un enlace para
+completarlas.
 
 ---
 

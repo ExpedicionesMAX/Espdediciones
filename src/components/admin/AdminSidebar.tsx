@@ -15,6 +15,7 @@ type NavItem = {
 const NAV: NavItem[] = [
   { href: "/admin/dashboard", label: "Dashboard" },
   { href: "/admin/expediciones", label: "Expediciones", permission: PERMISSIONS.EXPEDITION_READ },
+  { href: "/admin/calendario", label: "Calendario", permission: PERMISSIONS.EXPEDITION_READ },
   { href: "/admin/destinos", label: "Destinos", permission: PERMISSIONS.DESTINATION_MANAGE },
   { href: "/admin/guias", label: "Guías", permission: PERMISSIONS.GUIDE_MANAGE },
   { href: "/admin/paginas", label: "Páginas", permission: PERMISSIONS.PAGE_MANAGE },

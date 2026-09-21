@@ -198,8 +198,8 @@ H1(3, "El panel por dentro (Dashboard)", story)
 P("Al entrar ves el <b>resumen de la plataforma</b>: cantidad de expediciones y publicadas, "
   "próximas salidas, borradores, consultas pendientes y la actividad reciente (auditoría de "
   "quién hizo qué y cuándo).", story)
-P("A la izquierda (o arriba en el celular) está el menú: <b>Dashboard, Expediciones, Destinos, "
-  "Guías, Páginas, Reservas, Testimonios, Estadísticas, CRM, Consultas, Usuarios y "
+P("A la izquierda (o arriba en el celular) está el menú: <b>Dashboard, Expediciones, Calendario, "
+  "Destinos, Guías, Páginas, Reservas, Testimonios, Estadísticas, CRM, Consultas, Usuarios y "
   "Configuración</b>. Arriba, <b>Ver sitio</b> abre el sitio público en otra pestaña.", story)
 P("En <b>Estadísticas</b> ves las <b>visitas</b> a cada expedición (solo de visitantes, no del "
   "equipo), cuántas <b>consultas</b> e <b>inscripciones</b> generó y la <b>conversión</b> "
@@ -254,6 +254,11 @@ P("Cada expedición publicada tiene una <b>ficha técnica lista para imprimir o 
   "<b>Descargar ficha técnica</b> en el sitio, o desde <b>Ficha técnica / código QR</b> en la "
   "edición. En la ficha, tocá <b>Imprimir / Guardar como PDF</b>; también podés descargar el "
   "QR en PNG o SVG para folletos y afiches.", story)
+H2("Calendario", story)
+P("En <b>Calendario</b> (menú del panel) ves todas tus expediciones ubicadas en su <b>fecha de "
+  "inicio</b>, mes a mes. Cada una aparece como una etiqueta de color según su estado; tocala "
+  "para editarla. Con <b>← / Hoy / →</b> te movés entre meses. Es la vista ideal para planificar "
+  "la temporada; las expediciones sin fecha se avisan abajo.", story)
 
 # 5
 H1(5, "Destinos", story)
