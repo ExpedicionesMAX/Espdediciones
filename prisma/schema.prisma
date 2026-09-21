@@ -1,0 +1,334 @@
+// Plataforma de Expediciones — schema Prisma
+// Fase MVP (rebanada vertical). Modelos ampliables sin rehacer la arquitectura.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ─────────────────────────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────────────────────────
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+  MODERATOR
+  GUIDE
+  COMMERCIAL
+}
+
+enum ExpeditionStatus {
+  DRAFT
+  SCHEDULED
+  OPEN
+  LIMITED
+  FULL
+  COMPLETED
+  CANCELLED
+  ARCHIVED
+}
+
+enum Difficulty {
+  EASY // Fácil
+  MODERATE // Moderada
+  HARD // Difícil
+  TECHNICAL // Técnica
+  EXTREME // Extrema
+}
+
+enum ActivityType {
+  TREKKING
+  MOUNTAINEERING // Montañismo / Ascensión
+  EXPEDITION
+  PHOTOGRAPHY // Expedición fotográfica
+  CLIMBING // Escalada
+  TRAVESIA
+  NATURE // Naturaleza
+}
+
+enum ExpeditionTemplate {
+  CINEMATIC // Cinematográfico
+  EDITORIAL // Editorial (revista)
+  EXTREME // Extreme (deportivo)
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  PDF
+  GPX
+  KML
+  DOC
+  LOGO
+}
+
+enum InquiryStatus {
+  PENDING
+  CONTACTED
+  INFO_SENT
+  CLOSED
+  SPAM
+}
+
+// ─────────────────────────────────────────────────────────────
+// USUARIOS / RBAC
+// ─────────────────────────────────────────────────────────────
+
+model User {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  name           String?
+  hashedPassword String
+  role           Role     @default(EDITOR)
+  // Permisos granulares por-usuario que se suman a los del rol (ver src/lib/permissions.ts)
+  permissions    String[] @default([])
+  active         Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  createdExpeditions Expedition[]    @relation("ExpeditionCreatedBy")
+  activityLogs       ActivityLog[]
+  handledInquiries   ContactInquiry[] @relation("InquiryHandledBy")
+
+  @@index([role])
+}
+
+// ─────────────────────────────────────────────────────────────
+// DESTINOS
+// ─────────────────────────────────────────────────────────────
+
+model Destination {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  country     String
+  region      String?
+  description String?  @db.Text
+  coverImage  String?
+  gallery     String[] @default([])
+  latitude    Float?
+  longitude   Float?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  expeditions Expedition[]
+
+  @@index([country])
+}
+
+// ─────────────────────────────────────────────────────────────
+// GUÍAS
+// ─────────────────────────────────────────────────────────────
+
+model Guide {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  name           String
+  photo          String?
+  bio            String?  @db.Text
+  experience     String?  @db.Text
+  certifications String[] @default([])
+  specialties    String[] @default([])
+  languages      String[] @default([])
+  social         Json?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  ledExpeditions Expedition[] @relation("LeadGuide")
+  expeditions    Expedition[] @relation("ExpeditionGuides")
+}
+
+// ─────────────────────────────────────────────────────────────
+// EXPEDICIONES
+// ─────────────────────────────────────────────────────────────
+
+model Expedition {
+  id          String @id @default(cuid())
+  slug        String @unique
+  name        String
+  title       String?
+  subtitle    String?
+
+  shortDescription String? @db.Text
+  fullDescription  String? @db.Text
+
+  coverImage String?
+  gallery    String[] @default([])
+  videoUrl   String? // YouTube / Vimeo
+
+  destination   Destination? @relation(fields: [destinationId], references: [id], onDelete: SetNull)
+  destinationId String?
+  country       String?
+  region        String?
+  latitude      Float?
+  longitude     Float?
+
+  startDate            DateTime?
+  endDate              DateTime?
+  durationDays         Int?
+  distanceKm           Float?
+  elevationGain        Int?
+  maxAltitude          Int?
+  difficulty           Difficulty?
+  activityType         ActivityType?
+  minAge               Int?
+
+  capacity             Int?
+  spotsTaken           Int      @default(0)
+
+  price                Decimal? @db.Decimal(12, 2)
+  currency             String   @default("USD")
+  depositPrice         Decimal? @db.Decimal(12, 2)
+  registrationDeadline DateTime?
+
+  includes        String[] @default([])
+  excludes        String[] @default([])
+  requirements    String[] @default([])
+  equipment       String[] @default([])
+  recommendations String?  @db.Text
+  faqs            Json? // [{ q, a }]
+
+  status   ExpeditionStatus   @default(DRAFT)
+  template ExpeditionTemplate @default(CINEMATIC)
+  featured Boolean            @default(false)
+
+  // Publicación programada
+  publishedAt DateTime?
+  publishAt   DateTime?
+  unpublishAt DateTime?
+
+  // SEO
+  seoTitle       String?
+  seoDescription String?
+  seoKeywords    String[] @default([])
+  ogImage        String?
+
+  // Contacto
+  whatsappMessage String?
+
+  viewsCount   Int      @default(0)
+  inquiryCount Int      @default(0)
+
+  leadGuide   Guide?  @relation("LeadGuide", fields: [leadGuideId], references: [id], onDelete: SetNull)
+  leadGuideId String?
+  guides      Guide[] @relation("ExpeditionGuides")
+
+  itinerary ItineraryDay[]
+  inquiries ContactInquiry[]
+
+  createdBy   User?   @relation("ExpeditionCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  createdById String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([activityType])
+  @@index([difficulty])
+  @@index([destinationId])
+  @@index([startDate])
+}
+
+model ItineraryDay {
+  id            String   @id @default(cuid())
+  expedition    Expedition @relation(fields: [expeditionId], references: [id], onDelete: Cascade)
+  expeditionId  String
+  dayNumber     Int
+  title         String
+  description   String?  @db.Text
+  distanceKm    Float?
+  elevationGain Int?
+  altitude      Int?
+  accommodation String?
+  images        String[] @default([])
+
+  @@unique([expeditionId, dayNumber])
+  @@index([expeditionId])
+}
+
+// ─────────────────────────────────────────────────────────────
+// MEDIA LIBRARY
+// ─────────────────────────────────────────────────────────────
+
+model Media {
+  id          String    @id @default(cuid())
+  type        MediaType @default(IMAGE)
+  url         String
+  name        String?
+  alt         String?
+  description String?
+  tags        String[]  @default([])
+  width       Int?
+  height      Int?
+  size        Int?
+  createdAt   DateTime  @default(now())
+}
+
+// ─────────────────────────────────────────────────────────────
+// CONSULTAS DE VISITANTES (entran PENDING — nunca se publican solas)
+// ─────────────────────────────────────────────────────────────
+
+model ContactInquiry {
+  id           String        @id @default(cuid())
+  name         String
+  email        String
+  phone        String?
+  message      String        @db.Text
+  status       InquiryStatus @default(PENDING)
+  source       String? // "expedition" | "contact" | ...
+  expedition   Expedition?   @relation(fields: [expeditionId], references: [id], onDelete: SetNull)
+  expeditionId String?
+  handledBy    User?         @relation("InquiryHandledBy", fields: [handledById], references: [id], onDelete: SetNull)
+  handledById  String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([status])
+  @@index([expeditionId])
+}
+
+// ─────────────────────────────────────────────────────────────
+// CONFIGURACIÓN GLOBAL DEL SITIO (nada hardcodeado)
+// ─────────────────────────────────────────────────────────────
+
+model SiteSettings {
+  id             String  @id @default("singleton")
+  siteName       String  @default("Expediciones")
+  tagline        String?
+  logoUrl        String?
+  faviconUrl     String?
+  whatsappNumber String? // formato internacional sin +, ej: 5491100000000
+  contactEmail   String?
+  contactPhone   String?
+  social         Json? // { instagram, youtube, facebook, ... }
+  primaryColor   String  @default("#1c1917")
+  accentColor    String  @default("#ea580c")
+  theme          String  @default("cinematic")
+  updatedAt      DateTime @updatedAt
+}
+
+// ─────────────────────────────────────────────────────────────
+// AUDITORÍA
+// ─────────────────────────────────────────────────────────────
+
+model ActivityLog {
+  id         String   @id @default(cuid())
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId     String?
+  action     String // "create" | "update" | "publish" | "delete" ...
+  entityType String // "Expedition" | ...
+  entityId   String?
+  summary    String?
+  metadata   Json?
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([userId])
+}

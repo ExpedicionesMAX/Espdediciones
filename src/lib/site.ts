@@ -1,0 +1,60 @@
+import { cache } from "react";
+import { prisma } from "@/lib/prisma";
+
+export type SocialLinks = {
+  instagram?: string;
+  youtube?: string;
+  facebook?: string;
+  tiktok?: string;
+  linkedin?: string;
+  x?: string;
+  vimeo?: string;
+};
+
+export type SiteSettingsData = {
+  siteName: string;
+  tagline: string | null;
+  logoUrl: string | null;
+  whatsappNumber: string | null;
+  contactEmail: string | null;
+  contactPhone: string | null;
+  social: SocialLinks;
+  primaryColor: string;
+  accentColor: string;
+  theme: string;
+};
+
+const FALLBACK: SiteSettingsData = {
+  siteName: "Cumbre",
+  tagline: "Expediciones, montañismo y fotografía de naturaleza",
+  logoUrl: null,
+  whatsappNumber: null,
+  contactEmail: null,
+  contactPhone: null,
+  social: {},
+  primaryColor: "#1c1917",
+  accentColor: "#ea580c",
+  theme: "cinematic",
+};
+
+/** Configuración global del sitio (fila singleton). Cacheada por request. */
+export const getSiteSettings = cache(async (): Promise<SiteSettingsData> => {
+  try {
+    const s = await prisma.siteSettings.findUnique({ where: { id: "singleton" } });
+    if (!s) return FALLBACK;
+    return {
+      siteName: s.siteName,
+      tagline: s.tagline,
+      logoUrl: s.logoUrl,
+      whatsappNumber: s.whatsappNumber,
+      contactEmail: s.contactEmail,
+      contactPhone: s.contactPhone,
+      social: (s.social as SocialLinks) ?? {},
+      primaryColor: s.primaryColor,
+      accentColor: s.accentColor,
+      theme: s.theme,
+    };
+  } catch {
+    return FALLBACK;
+  }
+});
