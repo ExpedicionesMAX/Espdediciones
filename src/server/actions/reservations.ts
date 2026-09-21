@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { requirePermission } from "@/lib/auth-guard";
 import { PERMISSIONS } from "@/lib/permissions";
 import { logActivity } from "@/lib/audit";
+import { upsertContact, logContactActivity } from "@/lib/crm";
 import { reservationInputSchema } from "@/lib/validations/reservation";
 
 export type ReservationFormState = {
@@ -61,6 +62,16 @@ export async function submitReservation(
   // Si está completa, entra a lista de espera; si no, preinscripción pendiente.
   const status: ReservationStatus = exp.status === "FULL" ? "WAITLIST" : "PENDING";
 
+  const contactId = await upsertContact({
+    email: d.email,
+    name: `${d.firstName} ${d.lastName}`.trim(),
+    phone: d.phone,
+    country: d.country,
+    city: d.city,
+    source: "reservation",
+    minStage: "PRE_REGISTERED",
+  });
+
   await prisma.reservation.create({
     data: {
       firstName: d.firstName,
@@ -74,10 +85,18 @@ export async function submitReservation(
       notes: d.notes ?? null,
       status,
       expeditionId: exp.id,
+      contactId,
     },
   });
 
+  await logContactActivity(
+    contactId,
+    "reservation",
+    `Inscripción a «${exp.name}» (${status === "WAITLIST" ? "lista de espera" : "preinscripción"})`,
+  );
+
   revalidatePath("/admin/reservas");
+  revalidatePath("/admin/crm");
   revalidatePath("/admin/dashboard");
   return { ok: true, success: true, waitlist: status === "WAITLIST" };
 }

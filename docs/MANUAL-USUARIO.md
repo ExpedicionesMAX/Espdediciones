@@ -22,7 +22,7 @@ programar, HTML ni bases de datos. Todo se hace desde pantallas.
    - [Eliminar](#45-eliminar)
 5. [Destinos](#5-destinos)
 6. [Guías](#6-guías)
-7. [Consultas / CRM](#7-consultas--crm)
+7. [Consultas, Reservas y CRM](#7-consultas-reservas-y-crm)
 8. [Imágenes, videos y multimedia](#8-imágenes-videos-y-multimedia)
 9. [WhatsApp y contacto](#9-whatsapp-y-contacto)
 10. [Usuarios, roles y permisos](#10-usuarios-roles-y-permisos)
@@ -239,29 +239,59 @@ lidera o acompaña**. En la ficha de cada expedición aparece el guía asignado.
 
 ---
 
-## 7. Consultas / CRM
+## 7. Consultas, Reservas y CRM
 
-Cuando un visitante completa el formulario de **consulta** (en una expedición o en la página
-de Contacto), el mensaje llega acá. **Nunca se publica en el sitio** — es privado, para tu equipo.
+Todo lo que un visitante envía entra acá, **privado para tu equipo** — nunca se publica en el sitio.
 
-Cada consulta tiene un **estado** que representa el embudo comercial:
+### 7.1 Consultas
+
+Cuando alguien completa el formulario de **consulta** (en una expedición o en Contacto), el
+mensaje llega a **Consultas**. Cada una avanza por estados: **Pendiente → Contactado → Info
+enviada → Cerrada** (o **Spam**). Para avanzarla: elegí el nuevo estado y tocá **Actualizar**.
+
+### 7.2 Reservas / Inscripciones
+
+En la página de cada expedición publicada, el visitante puede **Inscribirse**. Si la expedición
+está **completa**, la inscripción entra a **lista de espera**. Las inscripciones llegan a
+**Reservas** con estos estados:
 
 | Estado | Significado |
 |---|---|
-| **Pendiente** | Recién llegó, sin atender |
+| **Preinscripción** | Se anotó, falta gestionar |
+| **Lista de espera** | La expedición estaba completa |
+| **Confirmada** | Lugar confirmado |
+| **Cancelada** | Dada de baja |
+
+Cada inscripción trae nombre, contacto, país/ciudad, contacto de emergencia, experiencia y
+observaciones. La inscripción es una **preinscripción, no un pago**: el equipo la revisa y
+confirma.
+
+### 7.3 CRM · Contactos
+
+El módulo **CRM** reúne automáticamente a todas las personas: cada consulta e inscripción
+**crea o actualiza una ficha de contacto** (identificada por email). Así ves a cada persona
+una sola vez, con todo su historial junto.
+
+Cada contacto tiene una **etapa del embudo comercial**:
+
+| Etapa | Significado |
+|---|---|
+| **Nuevo** | Interesado que recién apareció |
 | **Contactado** | Ya te comunicaste |
 | **Info enviada** | Le mandaste la información |
-| **Cerrada** | Gestión terminada |
-| **Spam** | Descartada |
+| **Preinscripto** | Se inscribió a una expedición |
+| **Reservado** | Reserva en curso |
+| **Confirmado** | Confirmó su lugar |
+| **Participó** | Ya hizo una expedición |
+| **Recurrente** | Cliente que vuelve |
+| **Perdido** | Descartado |
 
-En **Consultas / CRM** ves cada mensaje con nombre, email, teléfono, el texto, la fecha y —si
-corresponde— **sobre qué expedición** consultó. Podés **filtrar por estado** con los botones
-de arriba.
+En la **ficha de un contacto** podés: cambiar su etapa, agregar **etiquetas** y **notas
+internas**, y ver su **historial** completo (consultas, inscripciones y notas, en orden). Al
+inscribirse, el contacto avanza solo a «Preinscripto».
 
-Para **avanzar una consulta** en el embudo: elegí el nuevo estado en el desplegable y tocá
-**Actualizar**. Queda registrado quién la gestionó.
-
-> El contador de **Consultas pendientes** del Dashboard te avisa cuántas faltan atender.
+> El Dashboard te muestra los contadores de **Consultas pendientes**, **Inscripciones
+> pendientes** y **Contactos** para saber qué falta atender.
 
 ---
 

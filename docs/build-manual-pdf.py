@@ -261,18 +261,29 @@ P("El perfil profesional de cada guía: foto, biografía, experiencia, certifica
 
 # 7
 story.append(PageBreak())
-H1(7, "Consultas / CRM", story)
-P("Cuando un visitante completa el formulario de consulta, el mensaje llega acá —nunca se "
-  "publica en el sitio, es privado para tu equipo. Cada consulta avanza por el embudo comercial:", story)
+H1(7, "Consultas, Reservas y CRM", story)
+P("Todo lo que un visitante envía entra acá, <b>privado para tu equipo</b> — nunca se publica "
+  "en el sitio.", story)
+H2("Consultas", story)
+P("Cuando alguien completa el formulario de consulta, llega a <b>Consultas</b> y avanza por "
+  "estados: Pendiente, Contactado, Info enviada, Cerrada (o Spam). Para avanzarla, elegí el "
+  "estado y tocá <b>Actualizar</b>.", story)
+H2("Reservas / Inscripciones", story)
+P("En cada expedición publicada el visitante puede <b>Inscribirse</b>. Si está completa, entra "
+  "a <b>lista de espera</b>. Las inscripciones llegan a <b>Reservas</b>:", story)
 TBL([["Estado", "Significado"],
-     ["Pendiente", "Recién llegó, sin atender"],
-     ["Contactado", "Ya te comunicaste"],
-     ["Info enviada", "Le mandaste la información"],
-     ["Cerrada", "Gestión terminada"],
-     ["Spam", "Descartada"]],
+     ["Preinscripción", "Se anotó, falta gestionar"],
+     ["Lista de espera", "La expedición estaba completa"],
+     ["Confirmada", "Lugar confirmado"],
+     ["Cancelada", "Dada de baja"]],
     [45*mm, PAGE_W-LM-RM-45*mm], story)
-P("Podés filtrar por estado. Para avanzar una consulta: elegí el nuevo estado y tocá "
-  "<b>Actualizar</b>. Queda registrado quién la gestionó.", story)
+P("La inscripción es una <b>preinscripción, no un pago</b>: el equipo la revisa y confirma.", story)
+H2("CRM · Contactos", story)
+P("El CRM reúne a todas las personas: cada consulta e inscripción <b>crea o actualiza una ficha "
+  "de contacto</b> (por email), con todo su historial junto. Cada contacto tiene una etapa del "
+  "embudo comercial (Nuevo → Contactado → Info enviada → Preinscripto → Reservado → Confirmado "
+  "→ Participó → Recurrente). En la ficha podés cambiar la etapa, agregar etiquetas y notas "
+  "internas, y ver el historial completo. Al inscribirse, el contacto avanza solo a «Preinscripto».", story)
 
 # 8
 H1(8, "Imágenes, videos y multimedia", story)

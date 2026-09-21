@@ -21,6 +21,8 @@ export const PERMISSIONS = {
   INQUIRY_UPDATE: "inquiry:update",
   RESERVATION_READ: "reservation:read",
   RESERVATION_MANAGE: "reservation:manage",
+  CRM_READ: "crm:read",
+  CRM_MANAGE: "crm:manage",
   // Administración
   USER_MANAGE: "user:manage",
   SETTINGS_MANAGE: "settings:manage",
@@ -57,6 +59,8 @@ export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     PERMISSIONS.INQUIRY_UPDATE,
     PERMISSIONS.RESERVATION_READ,
     PERMISSIONS.RESERVATION_MANAGE,
+    PERMISSIONS.CRM_READ,
+    PERMISSIONS.CRM_MANAGE,
     PERMISSIONS.STATS_VIEW,
   ],
 };

@@ -30,6 +30,7 @@ export default async function DashboardPage() {
     pendingInquiries,
     totalInquiries,
     pendingReservations,
+    totalContacts,
     upcoming,
     activity,
   ] = await Promise.all([
@@ -42,6 +43,7 @@ export default async function DashboardPage() {
     prisma.contactInquiry.count({ where: { status: "PENDING" } }),
     prisma.contactInquiry.count(),
     prisma.reservation.count({ where: { status: { in: ["PENDING", "WAITLIST"] } } }),
+    prisma.cRMContact.count(),
     prisma.expedition.findMany({
       where: publicExpeditionWhere({ startDate: { gte: now } }),
       orderBy: { startDate: "asc" },
@@ -83,7 +85,7 @@ export default async function DashboardPage() {
         <StatCard label="Borradores" value={draftExpeditions} />
         <StatCard label="Consultas pendientes" value={pendingInquiries} hint={`${totalInquiries} en total`} />
         <StatCard label="Inscripciones pendientes" value={pendingReservations} />
-        <StatCard label="Consultas totales" value={totalInquiries} />
+        <StatCard label="Contactos (CRM)" value={totalContacts} />
       </div>
 
       <div className="mt-10 grid gap-8 lg:grid-cols-2">

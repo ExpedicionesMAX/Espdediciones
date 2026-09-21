@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
 import { requirePermission } from "@/lib/auth-guard";
 import { PERMISSIONS } from "@/lib/permissions";
 import { logActivity } from "@/lib/audit";
+import { upsertContact, logContactActivity } from "@/lib/crm";
 
 const inquirySchema = z.object({
   name: z.string().trim().min(2, "Ingresá tu nombre"),
@@ -69,6 +70,14 @@ export async function submitInquiry(
     expeditionId = exp?.id ?? null;
   }
 
+  const source = expeditionId ? "expedition" : "contact";
+  const contactId = await upsertContact({
+    email: d.email,
+    name: d.name,
+    phone: d.phone,
+    source,
+  });
+
   await prisma.contactInquiry.create({
     data: {
       name: d.name,
@@ -76,10 +85,17 @@ export async function submitInquiry(
       phone: d.phone ?? null,
       message: d.message,
       status: "PENDING",
-      source: expeditionId ? "expedition" : "contact",
+      source,
       expeditionId,
+      contactId,
     },
   });
+
+  await logContactActivity(
+    contactId,
+    "inquiry",
+    `Consulta recibida${expeditionId ? " sobre una expedición" : ""}`,
+  );
 
   if (expeditionId) {
     await prisma.expedition
@@ -91,6 +107,7 @@ export async function submitInquiry(
   }
 
   revalidatePath("/admin/consultas");
+  revalidatePath("/admin/crm");
   revalidatePath("/admin/dashboard");
   return { ok: true, success: true };
 }

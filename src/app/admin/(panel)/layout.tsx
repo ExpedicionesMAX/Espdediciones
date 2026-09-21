@@ -35,6 +35,11 @@ export default async function PanelLayout({
       show: hasPermission(user, PERMISSIONS.RESERVATION_READ),
     },
     {
+      href: "/admin/crm",
+      label: "CRM",
+      show: hasPermission(user, PERMISSIONS.CRM_READ),
+    },
+    {
       href: "/admin/consultas",
       label: "Consultas",
       show: hasPermission(user, PERMISSIONS.INQUIRY_READ),

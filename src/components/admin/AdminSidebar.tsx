@@ -18,7 +18,8 @@ const NAV: NavItem[] = [
   { href: "/admin/destinos", label: "Destinos", permission: PERMISSIONS.DESTINATION_MANAGE },
   { href: "/admin/guias", label: "Guías", permission: PERMISSIONS.GUIDE_MANAGE },
   { href: "/admin/reservas", label: "Reservas", permission: PERMISSIONS.RESERVATION_READ },
-  { href: "/admin/consultas", label: "Consultas / CRM", permission: PERMISSIONS.INQUIRY_READ },
+  { href: "/admin/crm", label: "CRM · Contactos", permission: PERMISSIONS.CRM_READ },
+  { href: "/admin/consultas", label: "Consultas", permission: PERMISSIONS.INQUIRY_READ },
 ];
 
 // Módulos previstos por el brief que se irán habilitando (no son enlaces falsos).
