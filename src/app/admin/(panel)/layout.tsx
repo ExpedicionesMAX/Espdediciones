@@ -45,6 +45,11 @@ export default async function PanelLayout({
       show: hasPermission(user, PERMISSIONS.INQUIRY_READ),
     },
     {
+      href: "/admin/testimonios",
+      label: "Testimonios",
+      show: hasPermission(user, PERMISSIONS.CONTENT_MODERATE),
+    },
+    {
       href: "/admin/configuracion",
       label: "Config",
       show: hasPermission(user, PERMISSIONS.SETTINGS_MANAGE),

@@ -84,6 +84,13 @@ enum ReservationStatus {
   CANCELLED // Cancelada
 }
 
+enum TestimonialStatus {
+  PENDING // Enviado por un visitante, sin revisar
+  APPROVED // Aprobado, visible en el sitio
+  REJECTED // Rechazado
+  ARCHIVED // Archivado
+}
+
 enum CRMStage {
   NEW // Nuevo interesado
   CONTACTED // Contactado
@@ -114,9 +121,10 @@ model User {
 
   createdExpeditions  Expedition[]     @relation("ExpeditionCreatedBy")
   activityLogs        ActivityLog[]
-  handledInquiries    ContactInquiry[] @relation("InquiryHandledBy")
-  handledReservations Reservation[]    @relation("ReservationHandledBy")
-  crmActivities       CRMActivity[]    @relation("CRMActivityBy")
+  handledInquiries      ContactInquiry[] @relation("InquiryHandledBy")
+  handledReservations   Reservation[]    @relation("ReservationHandledBy")
+  crmActivities         CRMActivity[]    @relation("CRMActivityBy")
+  moderatedTestimonials Testimonial[]    @relation("TestimonialModeratedBy")
 
   @@index([role])
 }
@@ -244,6 +252,7 @@ model Expedition {
   itinerary    ItineraryDay[]
   inquiries    ContactInquiry[]
   reservations Reservation[]
+  testimonials Testimonial[]
 
   createdBy   User?   @relation("ExpeditionCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
   createdById String?
@@ -351,6 +360,33 @@ model Reservation {
   @@index([status])
   @@index([expeditionId])
   @@index([contactId])
+}
+
+// ─────────────────────────────────────────────────────────────
+// TESTIMONIOS (enviados por visitantes, entran PENDING → moderación)
+// ─────────────────────────────────────────────────────────────
+
+model Testimonial {
+  id          String            @id @default(cuid())
+  authorName  String
+  authorEmail String?
+  text        String            @db.Text
+  photo       String?
+  rating      Int? // 1 a 5
+  status      TestimonialStatus @default(PENDING)
+
+  expedition   Expedition? @relation(fields: [expeditionId], references: [id], onDelete: SetNull)
+  expeditionId String?
+
+  moderatedBy   User?     @relation("TestimonialModeratedBy", fields: [moderatedById], references: [id], onDelete: SetNull)
+  moderatedById String?
+  moderatedAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([expeditionId])
 }
 
 // ─────────────────────────────────────────────────────────────

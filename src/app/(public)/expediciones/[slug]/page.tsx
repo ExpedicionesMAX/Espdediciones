@@ -9,6 +9,7 @@ import { getSiteSettings } from "@/lib/site";
 import { getEmbedUrl } from "@/lib/video";
 import { InquiryForm } from "@/components/public/InquiryForm";
 import { ReservationForm } from "@/components/public/ReservationForm";
+import { TestimonialForm } from "@/components/public/TestimonialForm";
 import {
   ACTIVITY_LABELS,
   DIFFICULTY_LABELS,
@@ -104,6 +105,12 @@ export default async function ExpeditionDetailPage({
   const spots = spotsInfo(exp.capacity, exp.spotsTaken);
   const reservable = visible && ["OPEN", "LIMITED", "FULL"].includes(exp.status);
   const isFull = exp.status === "FULL";
+
+  const testimonials = await prisma.testimonial.findMany({
+    where: { expeditionId: exp.id, status: "APPROVED" },
+    orderBy: { createdAt: "desc" },
+    take: 12,
+  });
   const embed = getEmbedUrl(exp.videoUrl);
   const faqs = (exp.faqs as { q: string; a: string }[] | null) ?? [];
   const allGuides = [exp.leadGuide, ...exp.guides].filter(
@@ -334,6 +341,41 @@ export default async function ExpeditionDetailPage({
               </div>
             </section>
           )}
+
+          {/* TESTIMONIOS */}
+          <section>
+            <h2 className="font-display text-2xl font-semibold text-ink">Testimonios</h2>
+            {testimonials.length > 0 ? (
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                {testimonials.map((t) => (
+                  <figure key={t.id} className="rounded-2xl border border-stone-200 bg-white p-5">
+                    {t.rating ? (
+                      <p className="text-accent">
+                        {"★".repeat(t.rating)}
+                        <span className="text-stone-300">{"★".repeat(5 - t.rating)}</span>
+                      </p>
+                    ) : null}
+                    <blockquote className="mt-2 text-stone-700">“{t.text}”</blockquote>
+                    <figcaption className="mt-3 text-sm font-medium text-ink">
+                      — {t.authorName}
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
+            ) : (
+              <p className="mt-4 text-stone-500">
+                Todavía no hay testimonios. ¿Hiciste esta expedición? Sé la primera persona en contarlo.
+              </p>
+            )}
+            {visible && (
+              <div className="mt-6 rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
+                <h3 className="font-display text-lg font-semibold text-ink">Dejá tu testimonio</h3>
+                <div className="mt-4">
+                  <TestimonialForm expeditionId={exp.id} />
+                </div>
+              </div>
+            )}
+          </section>
 
           {/* FAQ */}
           {faqs.length > 0 && (

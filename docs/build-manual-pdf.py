@@ -284,6 +284,11 @@ P("El CRM reúne a todas las personas: cada consulta e inscripción <b>crea o ac
   "embudo comercial (Nuevo → Contactado → Info enviada → Preinscripto → Reservado → Confirmado "
   "→ Participó → Recurrente). En la ficha podés cambiar la etapa, agregar etiquetas y notas "
   "internas, y ver el historial completo. Al inscribirse, el contacto avanza solo a «Preinscripto».", story)
+H2("Testimonios", story)
+P("En cada expedición publicada, un visitante puede <b>dejar su testimonio</b> (nombre, "
+  "valoración en estrellas y su experiencia). Entra como <b>Pendiente</b> y no se publica solo. "
+  "En <b>Testimonios</b> (menú del panel) lo <b>Aprobás</b> (aparece en la expedición), lo "
+  "<b>Rechazás</b> o lo <b>Archivás</b>. Solo los aprobados se muestran en el sitio.", story)
 
 # 8
 H1(8, "Imágenes, videos y multimedia", story)

@@ -290,8 +290,16 @@ En la **ficha de un contacto** podés: cambiar su etapa, agregar **etiquetas** y
 internas**, y ver su **historial** completo (consultas, inscripciones y notas, en orden). Al
 inscribirse, el contacto avanza solo a «Preinscripto».
 
+### 7.4 Testimonios
+
+En cada expedición publicada, un visitante puede **dejar su testimonio** (nombre, valoración
+en estrellas y su experiencia). Entra siempre como **Pendiente** y **no se publica solo**.
+
+En **Testimonios** (menú del panel) los revisás y decidís: **Aprobar** (aparece en la página de
+la expedición), **Rechazar** o **Archivar**. Solo los aprobados se muestran en el sitio.
+
 > El Dashboard te muestra los contadores de **Consultas pendientes**, **Inscripciones
-> pendientes** y **Contactos** para saber qué falta atender.
+> pendientes**, **Testimonios a revisar** y **Contactos** para saber qué falta atender.
 
 ---
 
