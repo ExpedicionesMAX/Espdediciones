@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { publicExpeditionWhere } from "@/lib/expeditions-query";
+import { getSiteTexts } from "@/lib/site-texts";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
@@ -10,6 +11,7 @@ export const metadata = {
 };
 
 export default async function GuidesIndexPage() {
+  const texts = await getSiteTexts();
   const guides = await prisma.guide.findMany({
     where: {
       OR: [
@@ -25,10 +27,8 @@ export default async function GuidesIndexPage() {
     <>
       <section className="bg-ink px-4 pb-12 pt-32 text-white sm:px-6">
         <div className="mx-auto max-w-6xl">
-          <h1 className="font-display text-4xl font-semibold sm:text-5xl">Guías</h1>
-          <p className="mt-3 max-w-xl text-stone-300">
-            El equipo que lidera cada travesía.
-          </p>
+          <h1 className="font-display text-4xl font-semibold sm:text-5xl">{texts.guiasTitle}</h1>
+          <p className="mt-3 max-w-xl text-stone-300">{texts.guiasSubtitle}</p>
         </div>
       </section>
 

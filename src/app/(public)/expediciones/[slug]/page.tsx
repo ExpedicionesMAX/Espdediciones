@@ -6,6 +6,7 @@ import type { Expedition } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { getSiteSettings } from "@/lib/site";
+import { getSiteTexts } from "@/lib/site-texts";
 import { buildMediaList } from "@/lib/media";
 import { MediaGallery } from "@/components/public/MediaGallery";
 import { InquiryForm } from "@/components/public/InquiryForm";
@@ -103,6 +104,7 @@ export default async function ExpeditionDetailPage({
   }
 
   const settings = await getSiteSettings();
+  const texts = await getSiteTexts();
   const spots = spotsInfo(exp.capacity, exp.spotsTaken);
   const reservable = visible && ["OPEN", "LIMITED", "FULL"].includes(exp.status);
   const isFull = exp.status === "FULL";
@@ -192,7 +194,7 @@ export default async function ExpeditionDetailPage({
         <div className="space-y-14">
           {exp.fullDescription && (
             <section>
-              <h2 className="font-display text-2xl font-semibold text-ink">La expedición</h2>
+              <h2 className="font-display text-2xl font-semibold text-ink">{texts.expLaExpedicion}</h2>
               <p className="rich-text mt-4 text-stone-700">{exp.fullDescription}</p>
             </section>
           )}
@@ -200,7 +202,7 @@ export default async function ExpeditionDetailPage({
           {/* ITINERARIO */}
           {exp.itinerary.length > 0 && (
             <section>
-              <h2 className="font-display text-2xl font-semibold text-ink">Itinerario</h2>
+              <h2 className="font-display text-2xl font-semibold text-ink">{texts.expItinerario}</h2>
               <ol className="mt-6 space-y-6 border-l border-stone-200 pl-6">
                 {exp.itinerary.map((day) => (
                   <li key={day.id} className="relative">
@@ -227,7 +229,7 @@ export default async function ExpeditionDetailPage({
           {/* GALERÍA (fotos + videos, en pantalla completa) */}
           {media.length > 0 && (
             <section>
-              <h2 className="font-display text-2xl font-semibold text-ink">Galería</h2>
+              <h2 className="font-display text-2xl font-semibold text-ink">{texts.expGaleria}</h2>
               <p className="mt-1 text-sm text-stone-500">Tocá una foto o video para verlo en pantalla completa.</p>
               <div className="mt-6">
                 <MediaGallery items={media} />
@@ -240,7 +242,7 @@ export default async function ExpeditionDetailPage({
             <section className="grid gap-8 sm:grid-cols-2">
               {exp.includes.length > 0 && (
                 <div>
-                  <h2 className="font-display text-xl font-semibold text-ink">Incluye</h2>
+                  <h2 className="font-display text-xl font-semibold text-ink">{texts.expIncluye}</h2>
                   <ul className="mt-4 space-y-2">
                     {exp.includes.map((item, i) => (
                       <li key={i} className="flex gap-2 text-sm text-stone-700">
@@ -252,7 +254,7 @@ export default async function ExpeditionDetailPage({
               )}
               {exp.excludes.length > 0 && (
                 <div>
-                  <h2 className="font-display text-xl font-semibold text-ink">No incluye</h2>
+                  <h2 className="font-display text-xl font-semibold text-ink">{texts.expNoIncluye}</h2>
                   <ul className="mt-4 space-y-2">
                     {exp.excludes.map((item, i) => (
                       <li key={i} className="flex gap-2 text-sm text-stone-500">
@@ -270,7 +272,7 @@ export default async function ExpeditionDetailPage({
             <section className="grid gap-8 sm:grid-cols-2">
               {exp.equipment.length > 0 && (
                 <div>
-                  <h2 className="font-display text-xl font-semibold text-ink">Equipamiento</h2>
+                  <h2 className="font-display text-xl font-semibold text-ink">{texts.expEquipamiento}</h2>
                   <ul className="mt-4 list-inside list-disc space-y-1 text-sm text-stone-700">
                     {exp.equipment.map((item, i) => (
                       <li key={i}>{item}</li>
@@ -280,7 +282,7 @@ export default async function ExpeditionDetailPage({
               )}
               {exp.requirements.length > 0 && (
                 <div>
-                  <h2 className="font-display text-xl font-semibold text-ink">Requisitos</h2>
+                  <h2 className="font-display text-xl font-semibold text-ink">{texts.expRequisitos}</h2>
                   <ul className="mt-4 list-inside list-disc space-y-1 text-sm text-stone-700">
                     {exp.requirements.map((item, i) => (
                       <li key={i}>{item}</li>
@@ -294,7 +296,7 @@ export default async function ExpeditionDetailPage({
           {/* GUÍAS */}
           {allGuides.length > 0 && (
             <section>
-              <h2 className="font-display text-2xl font-semibold text-ink">Guías</h2>
+              <h2 className="font-display text-2xl font-semibold text-ink">{texts.expGuias}</h2>
               <div className="mt-6 grid gap-6 sm:grid-cols-2">
                 {allGuides.map((g) =>
                   g ? (
@@ -320,7 +322,7 @@ export default async function ExpeditionDetailPage({
 
           {/* TESTIMONIOS */}
           <section>
-            <h2 className="font-display text-2xl font-semibold text-ink">Testimonios</h2>
+            <h2 className="font-display text-2xl font-semibold text-ink">{texts.expTestimonios}</h2>
             {testimonials.length > 0 ? (
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 {testimonials.map((t) => (
@@ -356,7 +358,7 @@ export default async function ExpeditionDetailPage({
           {/* FAQ */}
           {faqs.length > 0 && (
             <section>
-              <h2 className="font-display text-2xl font-semibold text-ink">Preguntas frecuentes</h2>
+              <h2 className="font-display text-2xl font-semibold text-ink">{texts.expFaq}</h2>
               <div className="mt-6 divide-y divide-stone-200 border-y border-stone-200">
                 {faqs.map((f, i) => (
                   <details key={i} className="group py-4">
@@ -375,7 +377,7 @@ export default async function ExpeditionDetailPage({
           {reservable && (
             <section id="inscribirme">
               <h2 className="font-display text-2xl font-semibold text-ink">
-                {isFull ? "Lista de espera" : "Inscripción"}
+                {isFull ? "Lista de espera" : texts.expInscripcion}
               </h2>
               <p className="mt-2 text-stone-600">
                 {isFull

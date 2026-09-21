@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { publicExpeditionWhere } from "@/lib/expeditions-query";
 import { ExpeditionCard } from "@/components/public/ExpeditionCard";
 import { ACTIVITY_LABELS, DIFFICULTY_LABELS } from "@/lib/format";
+import { getSiteTexts } from "@/lib/site-texts";
 
 export const dynamic = "force-dynamic";
 
@@ -45,6 +46,7 @@ export default async function ExpeditionsPage({
   searchParams: SearchParams;
 }) {
   const sp = await searchParams;
+  const texts = await getSiteTexts();
 
   const extra: Prisma.ExpeditionWhereInput = {};
   if (sp.q) {
@@ -86,7 +88,7 @@ export default async function ExpeditionsPage({
       <section className="bg-ink px-4 pb-12 pt-32 text-white sm:px-6">
         <div className="mx-auto max-w-6xl">
           <h1 className="font-display text-4xl font-semibold sm:text-5xl">
-            Expediciones
+            {texts.expsTitle}
           </h1>
           <p className="mt-3 max-w-xl text-stone-300">
             {expeditions.length} experiencia

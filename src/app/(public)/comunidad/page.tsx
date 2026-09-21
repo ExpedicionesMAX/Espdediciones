@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { getSiteTexts } from "@/lib/site-texts";
 
 export const dynamic = "force-dynamic";
 
@@ -9,6 +10,7 @@ export const metadata = {
 };
 
 export default async function CommunityPage() {
+  const texts = await getSiteTexts();
   const testimonials = await prisma.testimonial.findMany({
     where: { status: "APPROVED" },
     orderBy: { createdAt: "desc" },
@@ -20,10 +22,8 @@ export default async function CommunityPage() {
     <>
       <section className="bg-ink px-4 pb-14 pt-32 text-white sm:px-6">
         <div className="mx-auto max-w-6xl">
-          <h1 className="font-display text-4xl font-semibold sm:text-5xl">Comunidad</h1>
-          <p className="mt-3 max-w-xl text-stone-300">
-            Las voces de quienes ya caminaron, escalaron y fotografiaron con nosotros.
-          </p>
+          <h1 className="font-display text-4xl font-semibold sm:text-5xl">{texts.comunidadTitle}</h1>
+          <p className="mt-3 max-w-xl text-stone-300">{texts.comunidadSubtitle}</p>
         </div>
       </section>
 
@@ -77,13 +77,13 @@ export default async function CommunityPage() {
 
       <section className="border-t border-stone-200 bg-paper px-4 py-14 text-center sm:px-6">
         <h2 className="mx-auto max-w-2xl font-display text-2xl font-semibold text-ink sm:text-3xl">
-          ¿Querés ser parte de la próxima historia?
+          {texts.comunidadCtaTitle}
         </h2>
         <Link
           href="/expediciones"
           className="mt-6 inline-block rounded-full bg-ink px-8 py-3.5 text-sm font-semibold text-white hover:bg-stone-800"
         >
-          Descubrí las expediciones
+          {texts.comunidadCtaButton}
         </Link>
       </section>
     </>

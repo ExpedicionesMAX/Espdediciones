@@ -70,6 +70,11 @@ export default async function PanelLayout({
       show: hasPermission(user, PERMISSIONS.USER_MANAGE),
     },
     {
+      href: "/admin/textos",
+      label: "Textos",
+      show: hasPermission(user, PERMISSIONS.SETTINGS_MANAGE),
+    },
+    {
       href: "/admin/configuracion",
       label: "Config",
       show: hasPermission(user, PERMISSIONS.SETTINGS_MANAGE),

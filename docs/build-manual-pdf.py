@@ -199,8 +199,8 @@ P("Al entrar ves el <b>resumen de la plataforma</b>: cantidad de expediciones y 
   "próximas salidas, borradores, consultas pendientes y la actividad reciente (auditoría de "
   "quién hizo qué y cuándo).", story)
 P("A la izquierda (o arriba en el celular) está el menú: <b>Dashboard, Expediciones, Calendario, "
-  "Destinos, Guías, Páginas, Reservas, Testimonios, Estadísticas, CRM, Consultas, Usuarios y "
-  "Configuración</b>. Arriba, <b>Ver sitio</b> abre el sitio público en otra pestaña.", story)
+  "Destinos, Guías, Páginas, Reservas, Testimonios, Estadísticas, CRM, Consultas, Usuarios, "
+  "Textos del sitio y Configuración</b>. Arriba, <b>Ver sitio</b> abre el sitio público en otra pestaña.", story)
 P("En <b>Estadísticas</b> ves las <b>visitas</b> a cada expedición (solo de visitantes, no del "
   "equipo), cuántas <b>consultas</b> e <b>inscripciones</b> generó y la <b>conversión</b> "
   "(inscripciones ÷ visitas). Sirve para saber qué expediciones atraen más.", story)
@@ -337,7 +337,12 @@ P("<b>WhatsApp</b> (formato internacional, solo números), <b>Email</b> y <b>Tel
 H2("Textos de la home", story)
 P("También editás desde acá los <b>textos de la portada</b>: el título y subtítulo de la "
   "sección de expediciones, y el título, texto y botón del llamado a la acción del final. Si "
-  "dejás un texto vacío, se usa el que viene por defecto. <b>Todo se edita sin tocar código.</b>", story)
+  "dejás un texto vacío, se usa el que viene por defecto.", story)
+H2("Textos del sitio", story)
+P("En el menú <b>Textos del sitio</b> editás <b>todos los demás textos</b>: los títulos y "
+  "subtítulos de las páginas Expediciones, Destinos, Guías, Comunidad y Contacto, y hasta los "
+  "<b>rótulos de las secciones</b> de la ficha de una expedición (Itinerario, Galería, Incluye, "
+  "Requisitos, Testimonios, etc.). <b>Todo se edita sin tocar código.</b>", story)
 
 # 10
 H1(10, "Usuarios, roles y permisos", story)

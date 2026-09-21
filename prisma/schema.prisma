@@ -474,6 +474,9 @@ model SiteSettings {
   ctaText          String?
   ctaButton        String?
 
+  // Todos los demás textos del sitio (portadas de páginas y rótulos de secciones)
+  texts Json?
+
   updatedAt DateTime @updatedAt
 }
 

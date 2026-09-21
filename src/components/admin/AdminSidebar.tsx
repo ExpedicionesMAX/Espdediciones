@@ -25,6 +25,7 @@ const NAV: NavItem[] = [
   { href: "/admin/testimonios", label: "Testimonios", permission: PERMISSIONS.CONTENT_MODERATE },
   { href: "/admin/estadisticas", label: "Estadísticas", permission: PERMISSIONS.STATS_VIEW },
   { href: "/admin/usuarios", label: "Usuarios", permission: PERMISSIONS.USER_MANAGE },
+  { href: "/admin/textos", label: "Textos del sitio", permission: PERMISSIONS.SETTINGS_MANAGE },
   { href: "/admin/configuracion", label: "Configuración", permission: PERMISSIONS.SETTINGS_MANAGE },
 ];
 

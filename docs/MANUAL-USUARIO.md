@@ -86,6 +86,7 @@ A la izquierda (o arriba en el celular) está el **menú**:
 - **Estadísticas** — rendimiento del sitio
 - **CRM · Contactos** y **Consultas** — el módulo comercial
 - **Usuarios** — tu equipo y sus roles
+- **Textos del sitio** — todos los textos de las páginas
 - **Configuración** — la identidad del sitio
 
 Arriba de todo, **Ver sitio ↗** abre el sitio público en otra pestaña.
@@ -380,6 +381,13 @@ depender de nadie**. Los cambios se ven al instante en el sitio público.
 - El **título** y **subtítulo** de la sección de expediciones de la portada.
 - El **título, texto y botón** del llamado a la acción del final de la home.
 - Si dejás un texto vacío, se usa el que viene por defecto.
+
+**Textos del sitio** (menú **Textos del sitio**)
+- Ahí editás **todos los demás textos** de las páginas: los títulos y subtítulos de
+  **Expediciones, Destinos, Guías, Comunidad y Contacto**, y hasta los **rótulos de las
+  secciones** de la ficha de una expedición (Itinerario, Galería, Incluye, Requisitos,
+  Testimonios, etc.).
+- Cada campo muestra el texto por defecto como sugerencia; si lo dejás vacío, se usa ese.
 
 > **Todo se edita sin tocar código.** Además, en cada expedición podés definir su propio
 > **Mensaje de WhatsApp**: cuando un visitante toca *Consultar por WhatsApp*, se abre con ese
