@@ -4,6 +4,13 @@ Motor tipo **CMS + CRM + reservas** para una empresa de expediciones, montañism
 
 Construido por **rebanadas verticales**: esta primera entrega es el motor completo pero angosto (auth + expediciones + generación de página pública + consultas/CRM), listo para ensanchar módulo por módulo.
 
+## Documentación de usuario
+
+Para el administrador del sitio (no técnico):
+
+- **[Guía rápida](docs/GUIA-RAPIDA.md)** — publicar una expedición en 5 pasos.
+- **[Manual de usuario completo](docs/MANUAL-USUARIO.md)** — todas las pantallas y funciones del panel.
+
 ## Stack
 
 - **Next.js 16** (App Router, Server Components + Server Actions) · **React 19** · **TypeScript**
