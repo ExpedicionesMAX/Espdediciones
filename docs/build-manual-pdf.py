@@ -302,13 +302,19 @@ P("En cada expedición publicada, un visitante puede <b>dejar su testimonio</b> 
 
 # 8
 H1(8, "Imágenes, videos y multimedia", story)
-P("Hoy las imágenes se cargan <b>pegando su URL</b> (la dirección web de la foto, que termine "
-  "en .jpg, .png o .webp y sea pública). Los videos: pegás el enlace de YouTube o Vimeo y se "
-  "muestran reproducibles. La galería admite una URL por línea.", story)
-CALLOUT("La <b>subida directa de archivos</b> está preparada para Supabase Storage y se habilita "
-        "cargando sus credenciales. Ahí vas a poder subir fotos desde tu computadora sin pegar URLs.", story)
-P("<b>Consejo:</b> usá fotos grandes y de buena calidad (1600 px de ancho o más) para que los "
-  "encabezados se vean bien.", story)
+P("La <b>galería</b> de cada expedición (y de cada destino) <b>mezcla fotos y videos</b>, y todo "
+  "se ve <b>en pantalla completa</b>: el visitante toca una foto o video y se abre grande, con "
+  "flechas para pasar al siguiente.", story)
+P("En el campo <b>Galería</b> (una URL por línea) podés poner:", story)
+UL(["<b>Links de fotos en la nube</b>: la dirección directa de la imagen (.jpg, .png, .webp). "
+    "La subís a Google Drive (enlace público), Cloudinary, Imgur, etc. y pegás el link.",
+    "<b>Videos o Reels de YouTube / Vimeo</b>: pegás el enlace del video y aparece con un botón "
+    "de play; al tocarlo se reproduce en pantalla completa."], story)
+P("Podés <b>mezclar</b> fotos y videos en la misma galería, en el orden que los cargues.", story)
+CALLOUT("<b>Subir un archivo desde tu computadora:</b> está preparada para Supabase Storage; se "
+        "habilita cargando sus credenciales. Mientras tanto, subís la foto a la nube y pegás su link.", story)
+P("<b>Consejo:</b> usá fotos grandes y de buena calidad (1600 px de ancho o más) para que se "
+  "vean bien en pantalla completa.", story)
 
 # 9
 H1(9, "Configuración del sitio", story)

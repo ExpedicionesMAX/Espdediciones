@@ -5,6 +5,8 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { publicExpeditionWhere } from "@/lib/expeditions-query";
 import { ExpeditionCard } from "@/components/public/ExpeditionCard";
+import { MediaGallery } from "@/components/public/MediaGallery";
+import { buildMediaList } from "@/lib/media";
 
 export const dynamic = "force-dynamic";
 
@@ -88,12 +90,8 @@ export default async function DestinationPage({
         )}
 
         {destination.gallery.length > 0 && (
-          <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3">
-            {destination.gallery.map((src, i) => (
-              <div key={i} className="relative aspect-square overflow-hidden rounded-xl">
-                <Image src={src} alt={`${destination.name} — ${i + 1}`} fill sizes="(max-width:640px) 50vw, 33vw" className="object-cover" />
-              </div>
-            ))}
+          <div className="mt-10">
+            <MediaGallery items={buildMediaList(destination.gallery)} />
           </div>
         )}
 

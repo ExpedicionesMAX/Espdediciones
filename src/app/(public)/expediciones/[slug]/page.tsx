@@ -6,7 +6,8 @@ import type { Expedition } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { getSiteSettings } from "@/lib/site";
-import { getEmbedUrl } from "@/lib/video";
+import { buildMediaList } from "@/lib/media";
+import { MediaGallery } from "@/components/public/MediaGallery";
 import { InquiryForm } from "@/components/public/InquiryForm";
 import { ReservationForm } from "@/components/public/ReservationForm";
 import { TestimonialForm } from "@/components/public/TestimonialForm";
@@ -111,7 +112,7 @@ export default async function ExpeditionDetailPage({
     orderBy: { createdAt: "desc" },
     take: 12,
   });
-  const embed = getEmbedUrl(exp.videoUrl);
+  const media = buildMediaList(exp.gallery, exp.videoUrl);
   const faqs = (exp.faqs as { q: string; a: string }[] | null) ?? [];
   const allGuides = [exp.leadGuide, ...exp.guides].filter(
     (g, i, arr) => g && arr.findIndex((x) => x?.id === g.id) === i,
@@ -223,38 +224,13 @@ export default async function ExpeditionDetailPage({
             </section>
           )}
 
-          {/* GALERÍA */}
-          {exp.gallery.length > 0 && (
+          {/* GALERÍA (fotos + videos, en pantalla completa) */}
+          {media.length > 0 && (
             <section>
               <h2 className="font-display text-2xl font-semibold text-ink">Galería</h2>
-              <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
-                {exp.gallery.map((src, i) => (
-                  <div key={i} className="relative aspect-square overflow-hidden rounded-xl">
-                    <Image
-                      src={src}
-                      alt={`${exp.name} — foto ${i + 1}`}
-                      fill
-                      sizes="(max-width: 640px) 50vw, 33vw"
-                      className="object-cover transition-transform duration-500 hover:scale-105"
-                    />
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-
-          {/* VIDEO */}
-          {embed && (
-            <section>
-              <h2 className="font-display text-2xl font-semibold text-ink">Video</h2>
-              <div className="mt-6 aspect-video overflow-hidden rounded-xl bg-black">
-                <iframe
-                  src={embed}
-                  title={`Video — ${exp.name}`}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="h-full w-full"
-                />
+              <p className="mt-1 text-sm text-stone-500">Tocá una foto o video para verlo en pantalla completa.</p>
+              <div className="mt-6">
+                <MediaGallery items={media} />
               </div>
             </section>
           )}

@@ -323,24 +323,27 @@ la expedición), **Rechazar** o **Archivar**. Solo los aprobados se muestran en 
 
 ## 8. Imágenes, videos y multimedia
 
-Hoy las imágenes se cargan **pegando su URL** (la dirección web de la foto). Formas de obtener
-una URL de imagen:
+La **galería** de cada expedición (y de cada destino) **mezcla fotos y videos**, y todo se ve
+**en pantalla completa**: el visitante toca una foto o video y se abre grande, con flechas para
+pasar al siguiente.
 
-- Subir la foto a un servicio (Google Drive con enlace público, Cloudinary, Imgur, etc.) y
-  copiar el enlace directo a la imagen (debe terminar en `.jpg`, `.png`, `.webp`…).
-- Usar una foto ya publicada en la web (con permiso para usarla).
+En el campo **Galería** (una URL por línea) podés poner:
 
-**Videos:** pegá el enlace de **YouTube** o **Vimeo** (por ejemplo
-`https://youtube.com/watch?v=...`) y se muestra reproducible en la página.
+- **Links de fotos en la nube**: la dirección directa de la imagen (que termine en `.jpg`,
+  `.png`, `.webp`). Podés subirla a Google Drive (enlace público), Cloudinary, Imgur, etc. y
+  pegar el link.
+- **Videos o Reels de YouTube / Vimeo**: pegá el enlace del video
+  (`https://youtube.com/watch?v=...`) y aparece en la galería con un botón de play; al tocarlo
+  se reproduce en pantalla completa.
 
-**Galería:** una URL por línea.
+Podés **mezclar** fotos y videos en la misma galería, en el orden que los cargues.
 
-> **Subida directa de archivos:** está preparada para **Supabase Storage** y se habilita
-> cargando las credenciales correspondientes. Cuando esté activada, vas a poder subir fotos
-> desde tu computadora sin pegar URLs. (Ver con el equipo técnico.)
+> **Subir un archivo desde tu computadora:** la subida directa está preparada para **Supabase
+> Storage**; se habilita cargando sus credenciales. Mientras tanto, subís la foto a un servicio
+> en la nube y pegás su link (funciona igual).
 
 **Consejo:** usá fotos grandes y de buena calidad (idealmente 1600 px de ancho o más) para
-que los encabezados se vean bien.
+que se vean bien en pantalla completa.
 
 ---
 
