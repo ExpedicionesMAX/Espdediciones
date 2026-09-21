@@ -13,12 +13,12 @@ const inquirySchema = z.object({
   name: z.string().trim().min(2, "Ingresá tu nombre"),
   email: z.string().trim().email("Email inválido"),
   phone: z.preprocess(
-    (v) => (v === "" ? undefined : v),
+    (v) => (v === "" || v == null ? undefined : v),
     z.string().trim().max(40).optional(),
   ),
   message: z.string().trim().min(5, "Contanos qué necesitás").max(4000),
   expeditionId: z.preprocess(
-    (v) => (v === "" ? undefined : v),
+    (v) => (v === "" || v == null ? undefined : v),
     z.string().optional(),
   ),
 });
