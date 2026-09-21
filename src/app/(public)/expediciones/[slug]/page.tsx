@@ -453,6 +453,13 @@ export default async function ExpeditionDetailPage({
                 Enviar consulta
               </a>
             </div>
+            <a
+              href={`/expediciones/${exp.slug}/ficha`}
+              target="_blank"
+              className="mt-3 block text-center text-sm font-medium text-accent hover:text-accent-dark"
+            >
+              Descargar ficha técnica (PDF)
+            </a>
           </div>
 
           <div id="consultar" className="mt-6 rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">

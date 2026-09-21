@@ -112,6 +112,13 @@ export default async function EditExpeditionPage({
               {STATUS_LABELS[exp.status]}
             </span>
           </div>
+          <a
+            href={`/expediciones/${exp.slug}/ficha`}
+            target="_blank"
+            className="mt-2 inline-block text-sm font-medium text-accent hover:underline"
+          >
+            Ficha técnica / código QR ↗
+          </a>
         </div>
 
         {canPublish && (

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Fraunces } from "next/font/google";
+import { getBaseUrl } from "@/lib/base-url";
 import "./globals.css";
 
 const inter = Inter({
@@ -16,7 +17,7 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.AUTH_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(getBaseUrl()),
   title: {
     default: "Cumbre — Expediciones y montañismo",
     template: "%s · Cumbre",

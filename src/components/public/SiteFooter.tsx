@@ -17,7 +17,7 @@ export function SiteFooter({ settings }: { settings: SiteSettingsData }) {
   );
 
   return (
-    <footer className="bg-ink text-stone-300">
+    <footer className="bg-ink text-stone-300 print:hidden">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-4">
         <div className="md:col-span-2">
           <p className="font-display text-2xl font-semibold text-white">

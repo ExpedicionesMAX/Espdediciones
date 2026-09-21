@@ -244,6 +244,12 @@ UL(["<b>Publicar</b> la pone Abierta al instante; <b>Despublicar</b> la vuelve a
    story)
 CALLOUT("<b>Permisos:</b> publicar requiere permiso. Si tu usuario no puede publicar, aunque "
         "elijas un estado público la expedición se guarda como Borrador (el sistema te avisa).", story)
+H2("Ficha técnica y código QR", story)
+P("Cada expedición publicada tiene una <b>ficha técnica lista para imprimir o guardar como "
+  "PDF</b> y un <b>código QR</b> que lleva a su página. La abrís desde el botón "
+  "<b>Descargar ficha técnica</b> en el sitio, o desde <b>Ficha técnica / código QR</b> en la "
+  "edición. En la ficha, tocá <b>Imprimir / Guardar como PDF</b>; también podés descargar el "
+  "QR en PNG o SVG para folletos y afiches.", story)
 
 # 5
 H1(5, "Destinos", story)

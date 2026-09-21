@@ -198,6 +198,17 @@ Al final de la pantalla de edición hay una **Zona de peligro** (solo para usuar
 permiso de eliminación). Eliminar es **permanente**. En la mayoría de los casos conviene
 **Archivar** en lugar de eliminar.
 
+### 4.6 Ficha técnica y código QR
+
+Cada expedición publicada tiene una **ficha técnica lista para imprimir o guardar como PDF**,
+y un **código QR** que lleva a su página. La encontrás:
+
+- En el **sitio público**: botón *Descargar ficha técnica (PDF)* en la página de la expedición.
+- En el **panel**: dentro de la edición de la expedición, enlace *Ficha técnica / código QR*.
+
+En la ficha, tocá **Imprimir / Guardar como PDF** (en el diálogo de impresión, elegí "Guardar
+como PDF"). También podés **descargar el QR** en PNG o SVG para folletos y afiches.
+
 ---
 
 ## 5. Destinos
