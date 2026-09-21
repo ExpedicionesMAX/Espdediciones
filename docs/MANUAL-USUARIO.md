@@ -79,10 +79,12 @@ A la izquierda (o arriba en el celular) está el **menú**:
 - **Dashboard** — este resumen
 - **Expediciones** — el corazón del sistema
 - **Destinos** y **Guías** — lugares y equipo
+- **Páginas** — Nosotros, FAQ y otras páginas propias
 - **Reservas** — inscripciones de visitantes
 - **Testimonios** — moderación de opiniones
 - **Estadísticas** — rendimiento del sitio
 - **CRM · Contactos** y **Consultas** — el módulo comercial
+- **Usuarios** — tu equipo y sus roles
 - **Configuración** — la identidad del sitio
 
 Arriba de todo, **Ver sitio ↗** abre el sitio público en otra pestaña.

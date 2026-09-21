@@ -199,8 +199,8 @@ P("Al entrar ves el <b>resumen de la plataforma</b>: cantidad de expediciones y 
   "próximas salidas, borradores, consultas pendientes y la actividad reciente (auditoría de "
   "quién hizo qué y cuándo).", story)
 P("A la izquierda (o arriba en el celular) está el menú: <b>Dashboard, Expediciones, Destinos, "
-  "Guías, Reservas, Testimonios, Estadísticas, CRM, Consultas y Configuración</b>. Arriba, "
-  "<b>Ver sitio</b> abre el sitio público en otra pestaña.", story)
+  "Guías, Páginas, Reservas, Testimonios, Estadísticas, CRM, Consultas, Usuarios y "
+  "Configuración</b>. Arriba, <b>Ver sitio</b> abre el sitio público en otra pestaña.", story)
 P("En <b>Estadísticas</b> ves las <b>visitas</b> a cada expedición (solo de visitantes, no del "
   "equipo), cuántas <b>consultas</b> e <b>inscripciones</b> generó y la <b>conversión</b> "
   "(inscripciones ÷ visitas). Sirve para saber qué expediciones atraen más.", story)
