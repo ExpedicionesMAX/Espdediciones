@@ -27,6 +27,10 @@ export type SiteSettingsData = {
   ctaTitle: string;
   ctaText: string;
   ctaButton: string;
+  homeWhyTitle: string | null;
+  homeWhyItems: string[];
+  reviewsLabel: string | null;
+  reviewsUrl: string | null;
 };
 
 const DEFAULT_TEXTS = {
@@ -49,6 +53,10 @@ const FALLBACK: SiteSettingsData = {
   accentColor: "#ea580c",
   theme: "cinematic",
   ...DEFAULT_TEXTS,
+  homeWhyTitle: null,
+  homeWhyItems: [],
+  reviewsLabel: null,
+  reviewsUrl: null,
 };
 
 /** Configuración global del sitio (fila singleton). Cacheada por request. */
@@ -72,6 +80,10 @@ export const getSiteSettings = cache(async (): Promise<SiteSettingsData> => {
       ctaTitle: s.ctaTitle || DEFAULT_TEXTS.ctaTitle,
       ctaText: s.ctaText || DEFAULT_TEXTS.ctaText,
       ctaButton: s.ctaButton || DEFAULT_TEXTS.ctaButton,
+      homeWhyTitle: s.homeWhyTitle,
+      homeWhyItems: s.homeWhyItems ?? [],
+      reviewsLabel: s.reviewsLabel,
+      reviewsUrl: s.reviewsUrl,
     };
   } catch {
     return FALLBACK;

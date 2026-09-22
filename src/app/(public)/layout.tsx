@@ -1,6 +1,8 @@
 import { SiteHeader } from "@/components/public/SiteHeader";
 import { SiteFooter } from "@/components/public/SiteFooter";
+import { WhatsAppFloat } from "@/components/public/WhatsAppFloat";
 import { getSiteSettings } from "@/lib/site";
+import { whatsappUrl } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 
 export default async function PublicLayout({
@@ -18,6 +20,10 @@ export default async function PublicLayout({
       })
       .catch(() => []),
   ]);
+  const wa = whatsappUrl(
+    settings.whatsappNumber,
+    "Hola, quiero información sobre las expediciones.",
+  );
   return (
     <div
       className="flex min-h-full flex-col"
@@ -31,6 +37,7 @@ export default async function PublicLayout({
       <SiteHeader siteName={settings.siteName} logoUrl={settings.logoUrl} pages={menuPages} />
       <main className="flex-1">{children}</main>
       <SiteFooter settings={settings} />
+      {wa && <WhatsAppFloat href={wa} />}
     </div>
   );
 }

@@ -25,6 +25,10 @@ export type SettingsFormValues = {
   ctaTitle: string;
   ctaText: string;
   ctaButton: string;
+  homeWhyTitle: string;
+  homeWhyItems: string;
+  reviewsLabel: string;
+  reviewsUrl: string;
 };
 
 const labelCls = "mb-1 block text-sm font-medium text-ink";
@@ -153,6 +157,27 @@ export function SettingsForm({ values }: { values: SettingsFormValues }) {
         <div>
           <label htmlFor="ctaButton" className={labelCls}>Texto del botón</label>
           <input id="ctaButton" name="ctaButton" defaultValue={values.ctaButton} placeholder="Escribinos" className={`${inputCls} max-w-xs`} />
+        </div>
+      </Card>
+
+      <Card title="Diferenciales y reseñas (home)" description="Una banda de «por qué elegirnos» y un sello de reseñas en la portada. Vacío = no se muestran.">
+        <div>
+          <label htmlFor="homeWhyTitle" className={labelCls}>Título de la banda de diferenciales</label>
+          <input id="homeWhyTitle" name="homeWhyTitle" defaultValue={values.homeWhyTitle} placeholder="Por qué elegirnos" className={inputCls} />
+        </div>
+        <div>
+          <label htmlFor="homeWhyItems" className={labelCls}>Diferenciales (uno por línea)</label>
+          <textarea id="homeWhyItems" name="homeWhyItems" rows={4} defaultValue={values.homeWhyItems} placeholder={"Guías profesionales que conocen cada sendero\nLa mejor experiencia, sin improvisación\n+8 años transitando montañas con seguridad"} className={inputCls} />
+        </div>
+        <hr className="border-stone-100" />
+        <div>
+          <label htmlFor="reviewsLabel" className={labelCls}>Sello de reseñas</label>
+          <input id="reviewsLabel" name="reviewsLabel" defaultValue={values.reviewsLabel} placeholder="★ 5.0 · +140 reseñas en Google" className={inputCls} />
+        </div>
+        <div>
+          <label htmlFor="reviewsUrl" className={labelCls}>Link de las reseñas (opcional)</label>
+          <input id="reviewsUrl" name="reviewsUrl" defaultValue={values.reviewsUrl} placeholder="https://…" className={inputCls} />
+          {err("reviewsUrl") && <p className="mt-1 text-xs text-red-600">{err("reviewsUrl")}</p>}
         </div>
       </Card>
 

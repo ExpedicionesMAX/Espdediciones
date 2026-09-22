@@ -43,6 +43,13 @@ export async function updateSettings(
     ctaTitle: formData.get("ctaTitle"),
     ctaText: formData.get("ctaText"),
     ctaButton: formData.get("ctaButton"),
+    homeWhyTitle: formData.get("homeWhyTitle"),
+    homeWhyItems: (formData.get("homeWhyItems")?.toString() ?? "")
+      .split("\n")
+      .map((s) => s.trim())
+      .filter(Boolean),
+    reviewsLabel: formData.get("reviewsLabel"),
+    reviewsUrl: formData.get("reviewsUrl"),
   });
 
   if (!parsed.success) {
@@ -80,6 +87,10 @@ export async function updateSettings(
     ctaTitle: d.ctaTitle ?? null,
     ctaText: d.ctaText ?? null,
     ctaButton: d.ctaButton ?? null,
+    homeWhyTitle: d.homeWhyTitle ?? null,
+    homeWhyItems: d.homeWhyItems,
+    reviewsLabel: d.reviewsLabel ?? null,
+    reviewsUrl: d.reviewsUrl ?? null,
   };
 
   await prisma.siteSettings.upsert({

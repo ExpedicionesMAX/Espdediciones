@@ -30,6 +30,10 @@ export default async function SettingsPage() {
     ctaTitle: s.ctaTitle,
     ctaText: s.ctaText,
     ctaButton: s.ctaButton,
+    homeWhyTitle: s.homeWhyTitle ?? "",
+    homeWhyItems: s.homeWhyItems.join("\n"),
+    reviewsLabel: s.reviewsLabel ?? "",
+    reviewsUrl: s.reviewsUrl ?? "",
   };
 
   return (

@@ -32,6 +32,10 @@ export const settingsInputSchema = z.object({
   ctaTitle: optString,
   ctaText: optString,
   ctaButton: optString,
+  homeWhyTitle: optString,
+  homeWhyItems: z.array(z.string()).default([]),
+  reviewsLabel: optString,
+  reviewsUrl: optUrl,
 });
 
 export type SettingsInput = z.infer<typeof settingsInputSchema>;

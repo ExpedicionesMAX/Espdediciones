@@ -255,10 +255,11 @@ P("Cada expedición publicada tiene una <b>ficha técnica lista para imprimir o 
   "edición. En la ficha, tocá <b>Imprimir / Guardar como PDF</b>; también podés descargar el "
   "QR en PNG o SVG para folletos y afiches.", story)
 H2("Calendario", story)
-P("En <b>Calendario</b> (menú del panel) ves todas tus expediciones ubicadas en su <b>fecha de "
-  "inicio</b>, mes a mes. Cada una aparece como una etiqueta de color según su estado; tocala "
-  "para editarla. Con <b>← / Hoy / →</b> te movés entre meses. Es la vista ideal para planificar "
-  "la temporada; las expediciones sin fecha se avisan abajo.", story)
+P("En <b>Calendario</b> (menú del panel) ves tus expediciones en el calendario, mes a mes. Cada "
+  "una aparece <b>a lo largo de todos sus días</b> (de inicio a fin), con una etiqueta de color "
+  "según su estado; tocala para editarla. Tenés <b>filtros</b> por actividad y estado, navegación "
+  "<b>← / Hoy / →</b>, una leyenda de colores y, debajo, la <b>Agenda del mes</b> con las salidas "
+  "ordenadas por fecha. Es la vista ideal para planificar la temporada.", story)
 
 # 5
 H1(5, "Destinos", story)
@@ -338,6 +339,11 @@ H2("Textos de la home", story)
 P("También editás desde acá los <b>textos de la portada</b>: el título y subtítulo de la "
   "sección de expediciones, y el título, texto y botón del llamado a la acción del final. Si "
   "dejás un texto vacío, se usa el que viene por defecto.", story)
+H2("Diferenciales, reseñas y WhatsApp", story)
+P("Podés agregar en la home una banda <b>«por qué elegirnos»</b> (un título y una lista de "
+  "diferenciales, uno por línea) y un <b>sello de reseñas</b> para el hero (ej. «★ 5.0 · +140 "
+  "reseñas en Google») con un link opcional. Y si cargás el <b>número de WhatsApp</b>, aparece un "
+  "<b>botón verde flotante</b> en todo el sitio para que el visitante te escriba con un toque.", story)
 H2("Textos del sitio", story)
 P("En el menú <b>Textos del sitio</b> editás <b>todos los demás textos</b>: los títulos y "
   "subtítulos de las páginas Expediciones, Destinos, Guías, Comunidad y Contacto, y hasta los "

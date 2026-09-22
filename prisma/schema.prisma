@@ -474,6 +474,12 @@ model SiteSettings {
   ctaText          String?
   ctaButton        String?
 
+  // Home: banda de diferenciales y sello de reseñas
+  homeWhyTitle String?
+  homeWhyItems String[] @default([])
+  reviewsLabel String?
+  reviewsUrl   String?
+
   // Todos los demás textos del sitio (portadas de páginas y rótulos de secciones)
   texts Json?
 

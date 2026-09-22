@@ -222,11 +222,15 @@ como PDF"). También podés **descargar el QR** en PNG o SVG para folletos y afi
 
 ### 4.7 Calendario
 
-En **Calendario** (menú del panel) ves todas tus expediciones ubicadas en su **fecha de
-inicio**, mes a mes. Cada una aparece como una etiqueta de color según su estado; **tocala para
-editarla**. Con los botones **← / Hoy / →** te movés entre meses. Es la vista ideal para
-planificar la temporada. Las expediciones **sin fecha** se avisan abajo, con un enlace para
-completarlas.
+En **Calendario** (menú del panel) ves tus expediciones en el calendario, mes a mes:
+
+- Cada expedición aparece **a lo largo de todos sus días** (de la fecha de inicio a la de fin),
+  con una etiqueta de color según su estado. **Tocala para editarla.**
+- **Filtros** por actividad y estado, y navegación **← / Hoy / →** entre meses.
+- Una **leyenda** de colores por estado.
+- Debajo, la **Agenda del mes**: la lista de salidas ordenadas por fecha, con cupos y estado.
+
+Es la vista ideal para planificar la temporada.
 
 ---
 
@@ -381,6 +385,15 @@ depender de nadie**. Los cambios se ven al instante en el sitio público.
 - El **título** y **subtítulo** de la sección de expediciones de la portada.
 - El **título, texto y botón** del llamado a la acción del final de la home.
 - Si dejás un texto vacío, se usa el que viene por defecto.
+
+**Diferenciales y reseñas (home)**
+- Una banda **«por qué elegirnos»** con un título y una lista de diferenciales (uno por línea,
+  ej. *Guías profesionales*, *+8 años en montaña*). Aparece en la home solo si la cargás.
+- Un **sello de reseñas** para el hero (ej. *★ 5.0 · +140 reseñas en Google*), con un link opcional.
+
+**WhatsApp flotante**
+- Si cargaste el **número de WhatsApp**, aparece un **botón verde flotante** en todo el sitio para
+  que el visitante te escriba con un toque.
 
 **Textos del sitio** (menú **Textos del sitio**)
 - Ahí editás **todos los demás textos** de las páginas: los títulos y subtítulos de

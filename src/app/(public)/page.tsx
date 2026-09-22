@@ -104,6 +104,19 @@ export default async function HomePage() {
                     Todas las expediciones
                   </Link>
                 </div>
+                {settings.reviewsLabel &&
+                  (settings.reviewsUrl ? (
+                    <a
+                      href={settings.reviewsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-6 inline-block text-sm font-medium text-stone-200 hover:text-white"
+                    >
+                      {settings.reviewsLabel}
+                    </a>
+                  ) : (
+                    <p className="mt-6 text-sm font-medium text-stone-200">{settings.reviewsLabel}</p>
+                  ))}
               </>
             ) : (
               <>
@@ -125,6 +138,29 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* POR QUÉ ELEGIRNOS */}
+      {settings.homeWhyItems.length > 0 && (
+        <section className="border-b border-stone-200 bg-paper">
+          <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+            {settings.homeWhyTitle && (
+              <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">
+                {settings.homeWhyTitle}
+              </h2>
+            )}
+            <ul className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {settings.homeWhyItems.map((item, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <span className="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-accent/10 text-sm font-bold text-accent">
+                    ✓
+                  </span>
+                  <span className="text-stone-700">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
 
       {/* PRÓXIMAS EXPEDICIONES */}
       {expeditions.length > 0 && (
