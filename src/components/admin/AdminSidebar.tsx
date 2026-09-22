@@ -53,7 +53,7 @@ export function AdminSidebar({
         <p className="mt-1 text-xs text-stone-400">Panel de administración</p>
       </div>
 
-      <nav className="flex-1 space-y-1 px-3">
+      <nav className="min-h-0 flex-1 space-y-1 overflow-y-auto px-3">
         {visible.map((item) => {
           const active = pathname === item.href || pathname.startsWith(item.href + "/");
           return (
