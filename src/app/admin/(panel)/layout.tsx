@@ -3,6 +3,7 @@ import { requireUser } from "@/lib/auth-guard";
 import { hasPermission, PERMISSIONS } from "@/lib/permissions";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { LogoutButton } from "@/components/admin/LogoutButton";
+import { NotificationBell } from "@/components/admin/NotificationBell";
 
 export default async function PanelLayout({
   children,
@@ -14,6 +15,7 @@ export default async function PanelLayout({
 
   const mobileLinks = [
     { href: "/admin/dashboard", label: "Dashboard", show: true },
+    { href: "/admin/notificaciones", label: "Avisos", show: true },
     {
       href: "/admin/expediciones",
       label: "Expediciones",
@@ -92,7 +94,10 @@ export default async function PanelLayout({
           <Link href="/" target="_blank" className="text-sm text-stone-500 hover:text-ink">
             Ver sitio ↗
           </Link>
-          <LogoutButton />
+          <div className="flex items-center gap-2">
+            <NotificationBell />
+            <LogoutButton />
+          </div>
         </header>
 
         <nav className="flex gap-1 overflow-x-auto border-b border-stone-200 bg-white px-4 py-2 lg:hidden">

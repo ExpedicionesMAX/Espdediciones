@@ -7,6 +7,7 @@ import { requirePermission } from "@/lib/auth-guard";
 import { PERMISSIONS } from "@/lib/permissions";
 import { logActivity } from "@/lib/audit";
 import { upsertContact, logContactActivity } from "@/lib/crm";
+import { notify } from "@/lib/notifications";
 import { reservationInputSchema } from "@/lib/validations/reservation";
 
 export type ReservationFormState = {
@@ -94,6 +95,13 @@ export async function submitReservation(
     "reservation",
     `Inscripción a «${exp.name}» (${status === "WAITLIST" ? "lista de espera" : "preinscripción"})`,
   );
+
+  await notify({
+    type: "reservation",
+    title: status === "WAITLIST" ? "Nueva lista de espera" : "Nueva inscripción",
+    message: `${d.firstName} ${d.lastName} — ${exp.name}`,
+    link: "/admin/reservas",
+  });
 
   revalidatePath("/admin/reservas");
   revalidatePath("/admin/crm");

@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { requirePermission } from "@/lib/auth-guard";
 import { PERMISSIONS } from "@/lib/permissions";
 import { logActivity } from "@/lib/audit";
+import { notify } from "@/lib/notifications";
 import { testimonialInputSchema } from "@/lib/validations/testimonial";
 
 export type TestimonialFormState = {
@@ -60,6 +61,13 @@ export async function submitTestimonial(
       status: "PENDING",
       expeditionId,
     },
+  });
+
+  await notify({
+    type: "testimonial",
+    title: "Nuevo testimonio",
+    message: `De ${d.authorName}`,
+    link: "/admin/testimonios",
   });
 
   revalidatePath("/admin/testimonios");

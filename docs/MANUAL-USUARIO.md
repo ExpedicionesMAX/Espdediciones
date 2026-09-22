@@ -77,6 +77,7 @@ Al entrar ves el **resumen de la plataforma**:
 A la izquierda (o arriba en el celular) está el **menú**:
 
 - **Dashboard** — este resumen
+- **Notificaciones** — avisos internos de consultas, inscripciones y testimonios
 - **Expediciones** — el corazón del sistema
 - **Calendario** — tus expediciones por fecha
 - **Destinos** y **Guías** — lugares y equipo
@@ -334,6 +335,22 @@ la expedición), **Rechazar** o **Archivar**. Solo los aprobados se muestran en 
 
 > El Dashboard te muestra los contadores de **Consultas pendientes**, **Inscripciones
 > pendientes**, **Testimonios a revisar** y **Contactos** para saber qué falta atender.
+
+### 7.5 Notificaciones internas (Avisos)
+
+Cada vez que un visitante **manda una consulta**, se **inscribe** a una expedición o **deja un
+testimonio**, se genera un **aviso interno** que queda guardado **dentro de la plataforma**. No
+depende de ningún correo ni servicio externo: todo se ve desde el panel.
+
+- En la **campana** (arriba a la derecha del panel) aparece un **número rojo** con la cantidad
+  de avisos **sin leer**.
+- Tocando la campana, o desde **Notificaciones** en el menú, entrás al listado completo.
+- Cada aviso indica el **tipo** (Consulta, Inscripción o Testimonio), un texto corto y la
+  **fecha y hora**. Con **«Ver detalle →»** vas directo a la consulta/reserva/testimonio.
+- Podés **marcar una como leída** o **«Marcar todas como leídas»** de una sola vez.
+
+> Los avisos son un recordatorio. La gestión real (responder, cambiar estado, moderar) se sigue
+> haciendo en **Consultas**, **Reservas** y **Testimonios**.
 
 ---
 

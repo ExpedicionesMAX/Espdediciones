@@ -8,6 +8,7 @@ import { requirePermission } from "@/lib/auth-guard";
 import { PERMISSIONS } from "@/lib/permissions";
 import { logActivity } from "@/lib/audit";
 import { upsertContact, logContactActivity } from "@/lib/crm";
+import { notify } from "@/lib/notifications";
 
 const inquirySchema = z.object({
   name: z.string().trim().min(2, "Ingresá tu nombre"),
@@ -105,6 +106,13 @@ export async function submitInquiry(
       })
       .catch(() => {});
   }
+
+  await notify({
+    type: "inquiry",
+    title: "Nueva consulta",
+    message: `De ${d.name}`,
+    link: "/admin/consultas",
+  });
 
   revalidatePath("/admin/consultas");
   revalidatePath("/admin/crm");
