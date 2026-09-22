@@ -30,7 +30,7 @@ export function ExpeditionCard({ expedition }: { expedition: CardExpedition }) {
   const spots = spotsInfo(expedition.capacity, expedition.spotsTaken);
 
   return (
-    <article className="group relative overflow-hidden rounded-2xl bg-stone-900 shadow-sm ring-1 ring-black/5">
+    <article className="card-lift group relative overflow-hidden rounded-2xl bg-stone-900 shadow-sm ring-1 ring-black/5">
       <Link href={`/expediciones/${expedition.slug}`} className="block">
         <div className="relative aspect-[4/5] w-full overflow-hidden">
           {expedition.coverImage ? (

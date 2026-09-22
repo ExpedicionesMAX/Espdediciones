@@ -141,7 +141,7 @@ export default async function HomePage() {
 
       {/* POR QUÉ ELEGIRNOS */}
       {settings.homeWhyItems.length > 0 && (
-        <section className="border-b border-stone-200 bg-paper">
+        <section className="reveal border-b border-stone-200 bg-paper">
           <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
             {settings.homeWhyTitle && (
               <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">
@@ -164,7 +164,7 @@ export default async function HomePage() {
 
       {/* PRÓXIMAS EXPEDICIONES */}
       {expeditions.length > 0 && (
-        <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+        <section className="reveal mx-auto max-w-6xl px-4 py-20 sm:px-6">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <h2 className="font-display text-3xl font-semibold text-ink sm:text-4xl">
@@ -190,7 +190,7 @@ export default async function HomePage() {
 
       {/* DESTINOS */}
       {destinations.length > 0 && (
-        <section className="bg-ink py-20 text-white">
+        <section className="reveal bg-ink py-20 text-white">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <h2 className="font-display text-3xl font-semibold sm:text-4xl">
               Destinos
@@ -226,7 +226,7 @@ export default async function HomePage() {
       )}
 
       {/* CTA */}
-      <section className="mx-auto max-w-6xl px-4 py-20 text-center sm:px-6">
+      <section className="reveal mx-auto max-w-6xl px-4 py-20 text-center sm:px-6">
         <h2 className="mx-auto max-w-2xl font-display text-3xl font-semibold text-ink sm:text-4xl">
           {settings.ctaTitle}
         </h2>

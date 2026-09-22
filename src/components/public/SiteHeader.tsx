@@ -67,8 +67,8 @@ export function SiteHeader({
               key={l.href}
               href={l.href}
               className={cn(
-                "text-sm font-medium transition-opacity hover:opacity-70",
-                pathname === l.href && "underline decoration-accent decoration-2 underline-offset-8",
+                "nav-underline text-sm font-medium",
+                pathname === l.href && "text-accent",
               )}
             >
               {l.label}
@@ -78,7 +78,7 @@ export function SiteHeader({
             <Link
               key={p.slug}
               href={`/${p.slug}`}
-              className="text-sm font-medium transition-opacity hover:opacity-70"
+              className="nav-underline text-sm font-medium"
             >
               {p.title}
             </Link>

@@ -133,8 +133,47 @@ export default async function ExpeditionDetailPage({
   if (exp.elevationGain) facts.push({ label: "Desnivel", value: `+${exp.elevationGain} m` });
   if (exp.capacity) facts.push({ label: "Grupo", value: `${exp.capacity} personas` });
 
+  const priceNum = exp.price != null ? Number(exp.price) : null;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: exp.name,
+    description: exp.shortDescription ?? exp.subtitle ?? undefined,
+    startDate: exp.startDate ? exp.startDate.toISOString() : undefined,
+    endDate: exp.endDate ? exp.endDate.toISOString() : undefined,
+    image: exp.coverImage ? [exp.coverImage] : undefined,
+    eventStatus:
+      exp.status === "CANCELLED"
+        ? "https://schema.org/EventCancelled"
+        : "https://schema.org/EventScheduled",
+    location: exp.destination
+      ? {
+          "@type": "Place",
+          name: exp.destination.name,
+          address: exp.destination.country ?? undefined,
+        }
+      : undefined,
+    offers:
+      priceNum != null
+        ? {
+            "@type": "Offer",
+            price: priceNum,
+            priceCurrency: exp.currency,
+            availability:
+              exp.status === "FULL"
+                ? "https://schema.org/SoldOut"
+                : "https://schema.org/InStock",
+          }
+        : undefined,
+    organizer: { "@type": "Organization", name: settings.siteName },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {!visible && isStaff && (
         <div className="fixed left-1/2 top-20 z-50 -translate-x-1/2 rounded-full bg-amber-500 px-4 py-1.5 text-sm font-semibold text-white shadow-lg">
           Vista previa · esta expedición no está publicada
