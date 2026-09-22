@@ -121,31 +121,40 @@ export default async function EditExpeditionPage({
           </a>
         </div>
 
-        {canPublish && (
-          <div className="flex flex-wrap gap-2">
-            <form action={changeExpeditionStatus}>
-              <input type="hidden" name="id" value={exp.id} />
-              <input type="hidden" name="status" value="OPEN" />
-              <button className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700">
-                Publicar
-              </button>
-            </form>
-            <form action={changeExpeditionStatus}>
-              <input type="hidden" name="id" value={exp.id} />
-              <input type="hidden" name="status" value="DRAFT" />
-              <button className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 hover:bg-stone-100">
-                Despublicar
-              </button>
-            </form>
-            <form action={changeExpeditionStatus}>
-              <input type="hidden" name="id" value={exp.id} />
-              <input type="hidden" name="status" value="ARCHIVED" />
-              <button className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 hover:bg-stone-100">
-                Archivar
-              </button>
-            </form>
-          </div>
-        )}
+        <div className="flex flex-wrap items-center gap-2">
+          {canPublish && (
+            <>
+              <form action={changeExpeditionStatus}>
+                <input type="hidden" name="id" value={exp.id} />
+                <input type="hidden" name="status" value="OPEN" />
+                <button className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700">
+                  Publicar
+                </button>
+              </form>
+              <form action={changeExpeditionStatus}>
+                <input type="hidden" name="id" value={exp.id} />
+                <input type="hidden" name="status" value="DRAFT" />
+                <button className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 hover:bg-stone-100">
+                  Despublicar
+                </button>
+              </form>
+              <form action={changeExpeditionStatus}>
+                <input type="hidden" name="id" value={exp.id} />
+                <input type="hidden" name="status" value="ARCHIVED" />
+                <button className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 hover:bg-stone-100">
+                  Archivar
+                </button>
+              </form>
+            </>
+          )}
+          <button
+            type="submit"
+            form="expedition-form"
+            className="rounded-full bg-accent px-5 py-2 text-sm font-semibold text-white hover:bg-accent-dark"
+          >
+            Guardar
+          </button>
+        </div>
       </div>
 
       {saved && (

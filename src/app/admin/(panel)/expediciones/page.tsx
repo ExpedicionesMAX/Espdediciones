@@ -3,6 +3,7 @@ import { requirePermission } from "@/lib/auth-guard";
 import { hasPermission, PERMISSIONS } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 import { ACTIVITY_LABELS, STATUS_LABELS, STATUS_STYLES, formatDate } from "@/lib/format";
+import { DeleteExpeditionButton } from "@/components/admin/DeleteExpeditionButton";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Expediciones" };
@@ -15,6 +16,7 @@ export default async function AdminExpeditionsPage({
   const user = await requirePermission(PERMISSIONS.EXPEDITION_READ);
   const sp = await searchParams;
   const canCreate = hasPermission(user, PERMISSIONS.EXPEDITION_CREATE);
+  const canDelete = hasPermission(user, PERMISSIONS.EXPEDITION_DELETE);
 
   const expeditions = await prisma.expedition.findMany({
     orderBy: { updatedAt: "desc" },
@@ -109,10 +111,13 @@ export default async function AdminExpeditionsPage({
                     <td className="px-4 py-3 text-stone-600">
                       {e.capacity ? `${e.spotsTaken}/${e.capacity}` : "—"}
                     </td>
-                    <td className="px-4 py-3 text-right">
-                      <Link href={`/admin/expediciones/${e.id}`} className="text-sm font-medium text-accent hover:underline">
-                        Editar
-                      </Link>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center justify-end gap-4">
+                        <Link href={`/admin/expediciones/${e.id}`} className="text-sm font-medium text-accent hover:underline">
+                          Editar
+                        </Link>
+                        {canDelete && <DeleteExpeditionButton id={e.id} name={e.name} />}
+                      </div>
                     </td>
                   </tr>
                 ))

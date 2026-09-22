@@ -19,6 +19,16 @@ export function TextsForm({ stored }: { stored: Record<string, string> }) {
 
   return (
     <form action={formAction} className="space-y-6 pb-24">
+      <div className="flex items-center justify-end">
+        <button
+          type="submit"
+          disabled={pending}
+          className="rounded-full bg-accent px-5 py-2 text-sm font-semibold text-white hover:bg-accent-dark disabled:opacity-60"
+        >
+          {pending ? "Guardando…" : "Guardar textos"}
+        </button>
+      </div>
+
       {state.success && (
         <p className="rounded-lg bg-emerald-100 px-4 py-3 text-sm text-emerald-800">
           Textos guardados. Los cambios ya se ven en el sitio.

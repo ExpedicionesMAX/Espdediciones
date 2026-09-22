@@ -162,7 +162,9 @@ nombre es obligatorio** — todo lo demás lo podés completar ahora o más tard
 - **Estado**: dejalo en **Borrador** para seguir trabajando, o elegí uno público para que
   se vea (ver estados abajo).
 
-Cuando termines, tocá **Guardar** (abajo a la derecha). El sistema:
+Cuando termines, tocá **Guardar**. Lo tenés en **dos lugares**: **arriba** (junto a
+Publicar / Despublicar / Archivar) y en la **barra de abajo**. Los dos hacen lo mismo; el de
+arriba está siempre a la vista, sin necesidad de bajar hasta el final. El sistema:
 1. Guarda la expedición.
 2. **Crea su página pública** en `/expediciones/el-slug`.
 3. Te lleva a la pantalla de edición, con el aviso "Cambios guardados".
@@ -204,11 +206,20 @@ En la pantalla de edición de una expedición, arriba, tenés botones rápidos:
   amarillo **"Vista previa · esta expedición no está publicada"**. Así revisás cómo va a
   quedar antes de mostrarla.
 
-### 4.5 Eliminar
+### 4.5 Dar de baja / Eliminar
 
-Al final de la pantalla de edición hay una **Zona de peligro** (solo para usuarios con
-permiso de eliminación). Eliminar es **permanente**. En la mayoría de los casos conviene
-**Archivar** en lugar de eliminar.
+Para sacar una expedición mal hecha tenés dos caminos:
+
+- **Archivar** (recomendado): la **saca del sitio** pero la conserva por si la necesitás
+  después. Está entre los botones de arriba, en la pantalla de edición.
+- **Eliminar** (permanente): la borra para siempre. La tenés **a mano en la lista de
+  Expediciones**: en cada fila, al lado de «Editar», aparece **«Eliminar»** (en rojo). Te pide
+  **confirmar** antes de borrar. También está la **Zona de peligro** al final del editor.
+
+> Al eliminar una expedición se borran también sus **inscripciones**. Las **consultas** y los
+> **testimonios** asociados **no** se borran: quedan guardados, solo se desvinculan de esa
+> expedición. Solo los usuarios con **permiso de eliminación** ven el botón. Ante la duda,
+> **archivá** en lugar de eliminar.
 
 ### 4.6 Ficha técnica y código QR
 

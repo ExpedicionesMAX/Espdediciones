@@ -110,7 +110,7 @@ export function ExpeditionForm({
   const err = (field: string) => state.fieldErrors?.[field]?.[0];
 
   return (
-    <form action={formAction} className="space-y-6 pb-24">
+    <form id="expedition-form" action={formAction} className="space-y-6 pb-24">
       {values.id && <input type="hidden" name="id" value={values.id} />}
 
       {state.error && (
