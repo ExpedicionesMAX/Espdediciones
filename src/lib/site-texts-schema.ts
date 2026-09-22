@@ -12,6 +12,10 @@ export const SITE_TEXTS: TextField[] = [
   // Página Expediciones
   { key: "expsTitle", label: "Título", default: "Expediciones", group: "Página Expediciones" },
 
+  // Página Fechas
+  { key: "fechasTitle", label: "Título", default: "Próximas fechas", group: "Página Fechas" },
+  { key: "fechasSubtitle", label: "Subtítulo", default: "Todas nuestras salidas, ordenadas por mes.", group: "Página Fechas", multiline: true },
+
   // Página Destinos
   { key: "destinosTitle", label: "Título", default: "Destinos", group: "Página Destinos" },
   { key: "destinosSubtitle", label: "Subtítulo", default: "Los territorios donde caminamos, escalamos y fotografiamos.", group: "Página Destinos", multiline: true },

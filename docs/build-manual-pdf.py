@@ -377,6 +377,8 @@ H1(11, "Cómo se ve el sitio público", story)
 UL(["<b>Inicio:</b> portada con la expedición destacada, próximas expediciones y destinos.",
     "<b>Expediciones:</b> todas las publicadas, con filtros por actividad, dificultad, destino "
     "y buscador.",
+    "<b>Fechas:</b> las próximas salidas agrupadas por mes, con fecha, dificultad, cupos y "
+    "botón de inscripción; se arma sola con las expediciones publicadas que tengan fecha.",
     "<b>Detalle de expedición:</b> la página completa (portada, datos, itinerario, galería, "
     "video, incluye/no incluye, requisitos, equipamiento, guías, FAQ, precio, cupos y consulta).",
     "<b>Destinos</b> y <b>Guías:</b> listados y perfiles.",

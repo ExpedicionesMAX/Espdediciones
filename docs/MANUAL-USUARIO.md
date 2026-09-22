@@ -448,6 +448,8 @@ Lo que ve un visitante:
 - **Inicio** (`/`): portada con la expedición destacada, próximas expediciones y destinos.
 - **Expediciones** (`/expediciones`): todas las publicadas, con **filtros** por actividad,
   dificultad, destino y **buscador**.
+- **Fechas** (`/fechas`): las próximas salidas **agrupadas por mes**, con fecha, dificultad,
+  cupos y botón de inscripción. Se arma sola con las expediciones publicadas que tengan fecha.
 - **Detalle de expedición** (`/expediciones/slug`): la página completa (portada, datos, itinerario, galería, video, incluye/no incluye, requisitos, equipamiento, guías, preguntas frecuentes, precio, cupos y formulario de consulta).
 - **Destinos** (`/destinos`) y **Guías** (`/guias`): listados y perfiles.
 - **Comunidad** (`/comunidad`): un muro con **todos los testimonios aprobados** de todas las
