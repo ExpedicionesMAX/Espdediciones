@@ -23,6 +23,7 @@ export type SiteSettingsData = {
   accentColor: string;
   theme: string;
   displayFont: string;
+  paymentMode: string;
   homeExpsTitle: string;
   homeExpsSubtitle: string;
   ctaTitle: string;
@@ -54,6 +55,7 @@ const FALLBACK: SiteSettingsData = {
   accentColor: "#ea580c",
   theme: "cinematic",
   displayFont: "aventura",
+  paymentMode: "whatsapp",
   ...DEFAULT_TEXTS,
   homeWhyTitle: null,
   homeWhyItems: [],
@@ -78,6 +80,7 @@ export const getSiteSettings = cache(async (): Promise<SiteSettingsData> => {
       accentColor: s.accentColor,
       theme: s.theme,
       displayFont: s.displayFont,
+      paymentMode: s.paymentMode || "whatsapp",
       homeExpsTitle: s.homeExpsTitle || DEFAULT_TEXTS.homeExpsTitle,
       homeExpsSubtitle: s.homeExpsSubtitle || DEFAULT_TEXTS.homeExpsSubtitle,
       ctaTitle: s.ctaTitle || DEFAULT_TEXTS.ctaTitle,

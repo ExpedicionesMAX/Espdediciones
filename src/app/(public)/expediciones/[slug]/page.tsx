@@ -18,6 +18,7 @@ import {
   formatDateRange,
   formatPrice,
   spotsInfo,
+  toNumber,
   whatsappUrl,
 } from "@/lib/format";
 
@@ -424,7 +425,22 @@ export default async function ExpeditionDetailPage({
                   : "Completá tus datos para preinscribirte. El equipo te contacta para confirmar."}
               </p>
               <div className="mt-6 rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
-                <ReservationForm expeditionId={exp.id} isFull={isFull} />
+                <ReservationForm
+                  expeditionId={exp.id}
+                  isFull={isFull}
+                  whatsappNumber={settings.whatsappNumber}
+                  expeditionName={exp.name}
+                  priceLabel={
+                    toNumber(exp.price) !== null
+                      ? formatPrice(exp.price, exp.currency)
+                      : null
+                  }
+                  depositLabel={
+                    toNumber(exp.depositPrice) !== null
+                      ? formatPrice(exp.depositPrice, exp.currency)
+                      : null
+                  }
+                />
               </div>
             </section>
           )}

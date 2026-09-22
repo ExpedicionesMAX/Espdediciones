@@ -15,6 +15,7 @@ export type SettingsFormValues = {
   contactPhone: string;
   accentColor: string;
   displayFont: string;
+  paymentMode: string;
   socialInstagram: string;
   socialYoutube: string;
   socialFacebook: string;
@@ -111,6 +112,22 @@ export function SettingsForm({ values }: { values: SettingsFormValues }) {
             <label htmlFor="contactPhone" className={labelCls}>Teléfono</label>
             <input id="contactPhone" name="contactPhone" defaultValue={values.contactPhone} className={inputCls} />
           </div>
+        </div>
+      </Card>
+
+      <Card title="Cobro de inscripciones" description="Cómo paga el visitante después de inscribirse.">
+        <div>
+          <label htmlFor="paymentMode" className={labelCls}>Modo de cobro</label>
+          <select id="paymentMode" name="paymentMode" defaultValue={values.paymentMode} className={inputCls}>
+            <option value="whatsapp">Coordinar por WhatsApp (enviar comprobante)</option>
+            <option value="mercadopago">Mercado Pago (pago online)</option>
+          </select>
+          <p className="mt-1 text-xs text-stone-400">
+            <strong>WhatsApp:</strong> el visitante se inscribe y le aparece un botón para coordinar
+            el pago y mandar el comprobante por WhatsApp (cobrás por fuera).{" "}
+            <strong>Mercado Pago:</strong> pago online (el cliente elige seña o total) — se activa
+            cuando cargues las credenciales de Mercado Pago.
+          </p>
         </div>
       </Card>
 

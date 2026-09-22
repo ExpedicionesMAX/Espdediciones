@@ -30,6 +30,7 @@ export async function updateSettings(
     contactPhone: formData.get("contactPhone"),
     accentColor: formData.get("accentColor"),
     displayFont: formData.get("displayFont"),
+    paymentMode: formData.get("paymentMode"),
     social: {
       instagram: formData.get("social_instagram"),
       youtube: formData.get("social_youtube"),
@@ -83,6 +84,7 @@ export async function updateSettings(
     contactPhone: d.contactPhone ?? null,
     accentColor: d.accentColor,
     displayFont: d.displayFont,
+    paymentMode: d.paymentMode,
     social: socialValue,
     homeExpsTitle: d.homeExpsTitle ?? null,
     homeExpsSubtitle: d.homeExpsSubtitle ?? null,

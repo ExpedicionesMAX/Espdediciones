@@ -468,6 +468,9 @@ model SiteSettings {
   theme          String  @default("cinematic")
   displayFont    String  @default("aventura") // editorial | aventura | impacto | moderno
 
+  // Cobro: "whatsapp" (coordinar + comprobante por WhatsApp) | "mercadopago" (pago online)
+  paymentMode String @default("whatsapp")
+
   // Textos editables de la home
   homeExpsTitle    String?
   homeExpsSubtitle String?

@@ -312,6 +312,16 @@ Cada inscripción trae nombre, contacto, país/ciudad, contacto de emergencia, e
 observaciones. La inscripción es una **preinscripción, no un pago**: el equipo la revisa y
 confirma.
 
+**Cómo cobra el visitante** — lo elegís en **Configuración → Cobro de inscripciones**:
+
+- **Coordinar por WhatsApp (opción actual):** apenas se inscribe, al visitante le aparece un
+  botón **«Coordinar pago por WhatsApp»** con un mensaje ya escrito (nombre de la expedición y
+  los montos de **seña** y **total** que cargaste). Coordina el pago con vos y te manda el
+  **comprobante** por WhatsApp. El cobro lo hacés por fuera. *(Requiere tener cargado el número
+  de WhatsApp en Configuración.)*
+- **Mercado Pago (pago online):** el visitante paga en el momento y **elige seña o total**. Se
+  **activa cuando cargues las credenciales de Mercado Pago** (hasta entonces se usa WhatsApp).
+
 ### 7.3 CRM · Contactos
 
 El módulo **CRM** reúne automáticamente a todas las personas: cada consulta e inscripción

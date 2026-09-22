@@ -19,6 +19,10 @@ export const settingsInputSchema = z.object({
     (v) => (v === "" || v == null ? undefined : v),
     z.enum(["editorial", "aventura", "impacto", "moderno"]).default("aventura"),
   ),
+  paymentMode: z.preprocess(
+    (v) => (v === "" || v == null ? undefined : v),
+    z.enum(["whatsapp", "mercadopago"]).default("whatsapp"),
+  ),
   social: z
     .object({
       instagram: optUrl,
