@@ -110,7 +110,7 @@ export function ExpeditionForm({
   const err = (field: string) => state.fieldErrors?.[field]?.[0];
 
   return (
-    <form id="expedition-form" action={formAction} className="space-y-6 pb-24">
+    <form id="expedition-form" action={formAction} className="space-y-6">
       {values.id && <input type="hidden" name="id" value={values.id} />}
 
       {state.error && (
@@ -349,29 +349,27 @@ export function ExpeditionForm({
         </div>
       </Card>
 
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-stone-200 bg-white/95 px-4 py-3 backdrop-blur lg:pl-64">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3">
-          <Link href="/admin/expediciones" className="text-sm text-stone-500 hover:text-ink">
-            Cancelar
-          </Link>
-          <div className="flex items-center gap-3">
-            {values.publicSlug && (
-              <Link
-                href={`/expediciones/${values.publicSlug}`}
-                target="_blank"
-                className="text-sm font-medium text-stone-600 hover:text-ink"
-              >
-                Ver / previsualizar ↗
-              </Link>
-            )}
-            <button
-              type="submit"
-              disabled={pending}
-              className="rounded-full bg-accent px-6 py-2.5 text-sm font-semibold text-white hover:bg-accent-dark disabled:opacity-60"
+      <div className="flex items-center justify-between gap-3 rounded-2xl border border-stone-200 bg-white px-4 py-3">
+        <Link href="/admin/expediciones" className="text-sm text-stone-500 hover:text-ink">
+          Cancelar
+        </Link>
+        <div className="flex items-center gap-3">
+          {values.publicSlug && (
+            <Link
+              href={`/expediciones/${values.publicSlug}`}
+              target="_blank"
+              className="text-sm font-medium text-stone-600 hover:text-ink"
             >
-              {pending ? "Guardando…" : "Guardar"}
-            </button>
-          </div>
+              Ver / previsualizar ↗
+            </Link>
+          )}
+          <button
+            type="submit"
+            disabled={pending}
+            className="rounded-full bg-accent px-6 py-2.5 text-sm font-semibold text-white hover:bg-accent-dark disabled:opacity-60"
+          >
+            {pending ? "Guardando…" : "Guardar"}
+          </button>
         </div>
       </div>
     </form>

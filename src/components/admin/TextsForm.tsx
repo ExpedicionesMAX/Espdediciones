@@ -18,7 +18,7 @@ export function TextsForm({ stored }: { stored: Record<string, string> }) {
   }, {});
 
   return (
-    <form action={formAction} className="space-y-6 pb-24">
+    <form action={formAction} className="space-y-6">
       <div className="flex items-center justify-end">
         <button
           type="submit"
@@ -68,17 +68,15 @@ export function TextsForm({ stored }: { stored: Record<string, string> }) {
         </section>
       ))}
 
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-stone-200 bg-white/95 px-4 py-3 backdrop-blur lg:pl-64">
-        <div className="mx-auto flex max-w-4xl items-center justify-between gap-3">
-          <p className="text-xs text-stone-400">Vacío = usa el texto por defecto.</p>
-          <button
-            type="submit"
-            disabled={pending}
-            className="rounded-full bg-accent px-6 py-2.5 text-sm font-semibold text-white hover:bg-accent-dark disabled:opacity-60"
-          >
-            {pending ? "Guardando…" : "Guardar textos"}
-          </button>
-        </div>
+      <div className="flex items-center justify-between gap-3 rounded-2xl border border-stone-200 bg-white px-4 py-3">
+        <p className="text-xs text-stone-400">Vacío = usa el texto por defecto.</p>
+        <button
+          type="submit"
+          disabled={pending}
+          className="rounded-full bg-accent px-6 py-2.5 text-sm font-semibold text-white hover:bg-accent-dark disabled:opacity-60"
+        >
+          {pending ? "Guardando…" : "Guardar textos"}
+        </button>
       </div>
     </form>
   );
