@@ -466,6 +466,7 @@ model SiteSettings {
   primaryColor   String  @default("#1c1917")
   accentColor    String  @default("#ea580c")
   theme          String  @default("cinematic")
+  displayFont    String  @default("aventura") // editorial | aventura | impacto | moderno
 
   // Textos editables de la home
   homeExpsTitle    String?

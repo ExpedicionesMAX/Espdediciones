@@ -3,6 +3,7 @@ import { SiteFooter } from "@/components/public/SiteFooter";
 import { WhatsAppFloat } from "@/components/public/WhatsAppFloat";
 import { getSiteSettings } from "@/lib/site";
 import { whatsappUrl } from "@/lib/format";
+import { fontVar } from "@/lib/fonts";
 import { prisma } from "@/lib/prisma";
 
 export default async function PublicLayout({
@@ -31,6 +32,7 @@ export default async function PublicLayout({
         {
           "--color-accent": settings.accentColor,
           "--color-accent-dark": settings.accentColor,
+          "--font-display": `var(${fontVar(settings.displayFont)}), ui-sans-serif, sans-serif`,
         } as React.CSSProperties
       }
     >

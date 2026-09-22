@@ -372,6 +372,9 @@ depender de nadie**. Los cambios se ven al instante en el sitio público.
   muestra el nombre.
 - **Color de acento**: el color de los botones y detalles (en formato hex, ej. `#ea580c`).
   Al guardarlo, todo el sitio adopta ese color.
+- **Tipografía de los títulos**: elegís entre **4 estilos** para todos los títulos del sitio —
+  *Editorial* (serif elegante), *Aventura* (condensada deportiva), *Impacto* (títulos grandes
+  tipo poster) y *Moderna* (geométrica limpia). Cambiás y ves el resultado al instante.
 
 **Contacto** (aparece en el pie y en la página de Contacto)
 - **WhatsApp** en formato internacional, solo números (ej. `5491100000000`).

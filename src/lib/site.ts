@@ -22,6 +22,7 @@ export type SiteSettingsData = {
   primaryColor: string;
   accentColor: string;
   theme: string;
+  displayFont: string;
   homeExpsTitle: string;
   homeExpsSubtitle: string;
   ctaTitle: string;
@@ -52,6 +53,7 @@ const FALLBACK: SiteSettingsData = {
   primaryColor: "#1c1917",
   accentColor: "#ea580c",
   theme: "cinematic",
+  displayFont: "aventura",
   ...DEFAULT_TEXTS,
   homeWhyTitle: null,
   homeWhyItems: [],
@@ -75,6 +77,7 @@ export const getSiteSettings = cache(async (): Promise<SiteSettingsData> => {
       primaryColor: s.primaryColor,
       accentColor: s.accentColor,
       theme: s.theme,
+      displayFont: s.displayFont,
       homeExpsTitle: s.homeExpsTitle || DEFAULT_TEXTS.homeExpsTitle,
       homeExpsSubtitle: s.homeExpsSubtitle || DEFAULT_TEXTS.homeExpsSubtitle,
       ctaTitle: s.ctaTitle || DEFAULT_TEXTS.ctaTitle,

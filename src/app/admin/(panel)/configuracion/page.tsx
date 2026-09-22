@@ -18,6 +18,7 @@ export default async function SettingsPage() {
     contactEmail: s.contactEmail ?? "",
     contactPhone: s.contactPhone ?? "",
     accentColor: s.accentColor,
+    displayFont: s.displayFont,
     socialInstagram: s.social.instagram ?? "",
     socialYoutube: s.social.youtube ?? "",
     socialFacebook: s.social.facebook ?? "",

@@ -329,7 +329,9 @@ P("En <b>Configuración</b> (menú del panel) editás la información global del
 H2("Identidad", story)
 UL(["<b>Nombre del sitio</b> y <b>frase / tagline</b>.",
     "<b>Logo (URL):</b> si lo cargás, reemplaza al nombre en el encabezado; vacío muestra el nombre.",
-    "<b>Color de acento:</b> el color de botones y detalles (hex, ej. #ea580c). Todo el sitio lo adopta."], story)
+    "<b>Color de acento:</b> el color de botones y detalles (hex, ej. #ea580c). Todo el sitio lo adopta.",
+    "<b>Tipografía de los títulos:</b> elegís entre 4 estilos (Editorial serif, Aventura "
+    "condensada, Impacto tipo poster, Moderna geométrica) para todos los títulos del sitio."], story)
 H2("Contacto y redes", story)
 P("<b>WhatsApp</b> (formato internacional, solo números), <b>Email</b> y <b>Teléfono</b> "
   "aparecen en el pie y en la página de Contacto. Cargás también las <b>redes sociales</b> "

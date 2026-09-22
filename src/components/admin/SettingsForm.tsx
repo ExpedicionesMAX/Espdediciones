@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { updateSettings, type SettingsFormState } from "@/server/actions/settings";
+import { FONT_OPTIONS } from "@/lib/fonts";
 
 const initial: SettingsFormState = { ok: false };
 
@@ -13,6 +14,7 @@ export type SettingsFormValues = {
   contactEmail: string;
   contactPhone: string;
   accentColor: string;
+  displayFont: string;
   socialInstagram: string;
   socialYoutube: string;
   socialFacebook: string;
@@ -82,6 +84,15 @@ export function SettingsForm({ values }: { values: SettingsFormValues }) {
             <span className="inline-block h-8 w-8 rounded-lg border border-stone-200" style={{ backgroundColor: values.accentColor }} />
           </div>
           {err("accentColor") && <p className="mt-1 text-xs text-red-600">{err("accentColor")}</p>}
+        </div>
+        <div>
+          <label htmlFor="displayFont" className={labelCls}>Tipografía de los títulos</label>
+          <select id="displayFont" name="displayFont" defaultValue={values.displayFont} className={inputCls}>
+            {FONT_OPTIONS.map((f) => (
+              <option key={f.key} value={f.key}>{f.label}</option>
+            ))}
+          </select>
+          <p className="mt-1 text-xs text-stone-400">Cambia el estilo de todos los títulos del sitio.</p>
         </div>
       </Card>
 

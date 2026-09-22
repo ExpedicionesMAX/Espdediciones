@@ -15,6 +15,10 @@ export const settingsInputSchema = z.object({
       .regex(/^#([0-9a-fA-F]{6})$/, "Usá un color hex, ej. #ea580c")
       .default("#ea580c"),
   ),
+  displayFont: z.preprocess(
+    (v) => (v === "" || v == null ? undefined : v),
+    z.enum(["editorial", "aventura", "impacto", "moderno"]).default("aventura"),
+  ),
   social: z
     .object({
       instagram: optUrl,
