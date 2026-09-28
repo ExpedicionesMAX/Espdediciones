@@ -9,6 +9,37 @@ programar, HTML ni bases de datos. Todo se hace desde pantallas.
 
 ---
 
+## Actualización — 28/09/2026 (rediseño «viajes fotográficos»)
+
+El sitio se reorientó a **agencia de viajes fotográficos**, con contacto por **grupo de
+WhatsApp**. Cambios que reemplazan lo que digan secciones más abajo:
+
+- **Menú del sitio:** solo **Inicio**, **Expediciones Fotográficas** (con un desplegable:
+  *Viajes Coleccionables*, *Escapadas*, *Viajes a Medida* — por ahora vacías) y tus páginas
+  del CMS (**Preguntas Frecuentes**, **Sobre Nosotros**). Se quitaron del sitio público:
+  Guías, Comunidad, Destinos, Fechas y Contacto.
+- **Categoría de cada expedición:** en el editor elegís a qué línea del menú pertenece
+  (Fotográficas / Coleccionables / Escapadas / Viajes a Medida).
+- **Calendario por meses (home):** reemplaza «Próximas fechas». En el editor marcás los
+  **Meses disponibles** de cada expedición y aparece en el calendario en esos meses. El
+  visitante elige un mes y ve los viajes con su **duración** y un botón **«Quiero saber más»**.
+  No se muestran cupos, fechas exactas ni precio.
+- **Página de cada expedición:** muestra el contenido (descripción, itinerario, galería,
+  incluye/no incluye, equipo, requisitos) y **un solo botón: «Unite al grupo de WhatsApp»**.
+  Se quitaron: inscripción, enviar consulta, preguntas frecuentes, ficha técnica PDF, precio,
+  cupos y el formulario para dejar testimonio.
+- **Panel:** se ocultaron del menú **Reservas, Consultas, CRM, Guías y Destinos** (los datos
+  no se borran; simplemente ya no se usan en este diagrama). Quedan **Expediciones,
+  Calendario, Páginas, Testimonios, Estadísticas, Usuarios, Textos y Configuración**.
+- **Pendiente:** un espacio propio para que los visitantes dejen su testimonio y que vos lo
+  **ancles** a la expedición que quieras desde el panel (se hará en una próxima etapa).
+
+Las secciones 5 (Destinos), 6 (Guías) y 7 (Consultas/Reservas/CRM) describen módulos que
+**siguen existiendo en el panel pero están ocultos**; quedan como referencia por si se
+reactivan.
+
+---
+
 ## Índice
 
 1. [Conceptos básicos](#1-conceptos-básicos)
