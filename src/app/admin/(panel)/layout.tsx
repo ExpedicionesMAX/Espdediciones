@@ -27,34 +27,9 @@ export default async function PanelLayout({
       show: hasPermission(user, PERMISSIONS.EXPEDITION_READ),
     },
     {
-      href: "/admin/destinos",
-      label: "Destinos",
-      show: hasPermission(user, PERMISSIONS.DESTINATION_MANAGE),
-    },
-    {
-      href: "/admin/guias",
-      label: "Guías",
-      show: hasPermission(user, PERMISSIONS.GUIDE_MANAGE),
-    },
-    {
       href: "/admin/paginas",
       label: "Páginas",
       show: hasPermission(user, PERMISSIONS.PAGE_MANAGE),
-    },
-    {
-      href: "/admin/reservas",
-      label: "Reservas",
-      show: hasPermission(user, PERMISSIONS.RESERVATION_READ),
-    },
-    {
-      href: "/admin/crm",
-      label: "CRM",
-      show: hasPermission(user, PERMISSIONS.CRM_READ),
-    },
-    {
-      href: "/admin/consultas",
-      label: "Consultas",
-      show: hasPermission(user, PERMISSIONS.INQUIRY_READ),
     },
     {
       href: "/admin/testimonios",

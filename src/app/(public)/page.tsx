@@ -3,7 +3,9 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { publicExpeditionWhere } from "@/lib/expeditions-query";
 import { ExpeditionCard } from "@/components/public/ExpeditionCard";
+import { MonthCalendar } from "@/components/public/MonthCalendar";
 import { getSiteSettings } from "@/lib/site";
+import { whatsappUrl } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -41,7 +43,7 @@ export default async function HomePage() {
     },
   });
 
-  const [expeditions, destinations] = await Promise.all([
+  const [expeditions, calendarExps] = await Promise.all([
     prisma.expedition.findMany({
       where: publicExpeditionWhere(
         heroExp ? { slug: { not: heroExp.slug } } : undefined,
@@ -50,12 +52,24 @@ export default async function HomePage() {
       take: 6,
       select: cardSelect,
     }),
-    prisma.destination.findMany({
-      where: { expeditions: { some: publicExpeditionWhere() } },
-      take: 3,
-      select: { slug: true, name: true, country: true, coverImage: true },
+    prisma.expedition.findMany({
+      where: publicExpeditionWhere(),
+      orderBy: { name: "asc" },
+      select: {
+        slug: true,
+        name: true,
+        subtitle: true,
+        coverImage: true,
+        durationDays: true,
+        availableMonths: true,
+      },
     }),
   ]);
+
+  const wa = whatsappUrl(
+    settings.whatsappNumber,
+    "Hola, quiero saber más sobre los viajes.",
+  );
 
   return (
     <>
@@ -188,38 +202,18 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* DESTINOS */}
-      {destinations.length > 0 && (
+      {/* CALENDARIO POR MESES */}
+      {calendarExps.some((e) => e.availableMonths.length > 0) && (
         <section className="reveal bg-ink py-20 text-white">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <h2 className="font-display text-3xl font-semibold sm:text-4xl">
-              Destinos
+              Calendario de viajes
             </h2>
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
-              {destinations.map((d) => (
-                <Link
-                  key={d.slug}
-                  href={`/expediciones?destino=${d.slug}`}
-                  className="group relative block aspect-[3/2] overflow-hidden rounded-2xl"
-                >
-                  {d.coverImage && (
-                    <Image
-                      src={d.coverImage}
-                      alt={d.name}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                  <div className="absolute bottom-0 p-5">
-                    <p className="text-xs uppercase tracking-wider text-stone-300">
-                      {d.country}
-                    </p>
-                    <p className="font-display text-2xl font-semibold">{d.name}</p>
-                  </div>
-                </Link>
-              ))}
+            <p className="mt-2 max-w-xl text-stone-300">
+              Elegí un mes y descubrí qué viajes están disponibles.
+            </p>
+            <div className="mt-10 rounded-3xl bg-paper p-5 text-ink sm:p-8">
+              <MonthCalendar expeditions={calendarExps} />
             </div>
           </div>
         </section>
@@ -232,7 +226,8 @@ export default async function HomePage() {
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-stone-600">{settings.ctaText}</p>
         <Link
-          href="/contacto"
+          href={wa ?? "/expediciones"}
+          {...(wa ? { target: "_blank", rel: "noopener noreferrer" } : {})}
           className="mt-8 inline-block rounded-full bg-ink px-8 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-stone-800"
         >
           {settings.ctaButton}

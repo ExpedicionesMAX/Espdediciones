@@ -9,18 +9,7 @@ import { getSiteSettings } from "@/lib/site";
 import { getSiteTexts } from "@/lib/site-texts";
 import { buildMediaList } from "@/lib/media";
 import { MediaGallery } from "@/components/public/MediaGallery";
-import { InquiryForm } from "@/components/public/InquiryForm";
-import { ReservationForm } from "@/components/public/ReservationForm";
-import { TestimonialForm } from "@/components/public/TestimonialForm";
-import {
-  ACTIVITY_LABELS,
-  DIFFICULTY_LABELS,
-  formatDateRange,
-  formatPrice,
-  spotsInfo,
-  toNumber,
-  whatsappUrl,
-} from "@/lib/format";
+import { DIFFICULTY_LABELS, ACTIVITY_LABELS, whatsappUrl } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -51,8 +40,7 @@ export async function generateMetadata({
   if (!exp) return { title: "Expedición no encontrada" };
 
   const title = exp.seoTitle ?? exp.name;
-  const description =
-    exp.seoDescription ?? exp.shortDescription ?? undefined;
+  const description = exp.seoDescription ?? exp.shortDescription ?? undefined;
   const image = exp.ogImage ?? exp.coverImage ?? undefined;
 
   return {
@@ -84,8 +72,6 @@ export default async function ExpeditionDetailPage({
     where: { slug },
     include: {
       destination: true,
-      leadGuide: true,
-      guides: true,
       itinerary: { orderBy: { dayNumber: "asc" } },
     },
   });
@@ -106,24 +92,18 @@ export default async function ExpeditionDetailPage({
 
   const settings = await getSiteSettings();
   const texts = await getSiteTexts();
-  const spots = spotsInfo(exp.capacity, exp.spotsTaken);
-  const reservable = visible && ["OPEN", "LIMITED", "FULL"].includes(exp.status);
-  const isFull = exp.status === "FULL";
 
+  // Solo testimonios aprobados y anclados a esta expedición (los ancla el admin).
   const testimonials = await prisma.testimonial.findMany({
     where: { expeditionId: exp.id, status: "APPROVED" },
     orderBy: { createdAt: "desc" },
     take: 12,
   });
   const media = buildMediaList(exp.gallery, exp.videoUrl);
-  const faqs = (exp.faqs as { q: string; a: string }[] | null) ?? [];
-  const allGuides = [exp.leadGuide, ...exp.guides].filter(
-    (g, i, arr) => g && arr.findIndex((x) => x?.id === g.id) === i,
-  );
 
   const waMessage =
     exp.whatsappMessage ??
-    `Hola, quiero recibir información sobre la expedición ${exp.name}.`;
+    `Hola, quiero sumarme al grupo para conocer más sobre el viaje ${exp.name}.`;
   const wa = whatsappUrl(settings.whatsappNumber, waMessage);
 
   const facts: { label: string; value: string }[] = [];
@@ -132,41 +112,14 @@ export default async function ExpeditionDetailPage({
   if (exp.distanceKm) facts.push({ label: "Distancia", value: `${exp.distanceKm} km` });
   if (exp.maxAltitude) facts.push({ label: "Altitud máx.", value: `${exp.maxAltitude} m` });
   if (exp.elevationGain) facts.push({ label: "Desnivel", value: `+${exp.elevationGain} m` });
-  if (exp.capacity) facts.push({ label: "Grupo", value: `${exp.capacity} personas` });
 
-  const priceNum = exp.price != null ? Number(exp.price) : null;
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Event",
+    "@type": "TouristTrip",
     name: exp.name,
     description: exp.shortDescription ?? exp.subtitle ?? undefined,
-    startDate: exp.startDate ? exp.startDate.toISOString() : undefined,
-    endDate: exp.endDate ? exp.endDate.toISOString() : undefined,
     image: exp.coverImage ? [exp.coverImage] : undefined,
-    eventStatus:
-      exp.status === "CANCELLED"
-        ? "https://schema.org/EventCancelled"
-        : "https://schema.org/EventScheduled",
-    location: exp.destination
-      ? {
-          "@type": "Place",
-          name: exp.destination.name,
-          address: exp.destination.country ?? undefined,
-        }
-      : undefined,
-    offers:
-      priceNum != null
-        ? {
-            "@type": "Offer",
-            price: priceNum,
-            priceCurrency: exp.currency,
-            availability:
-              exp.status === "FULL"
-                ? "https://schema.org/SoldOut"
-                : "https://schema.org/InStock",
-          }
-        : undefined,
-    organizer: { "@type": "Organization", name: settings.siteName },
+    provider: { "@type": "Organization", name: settings.siteName },
   };
 
   return (
@@ -209,16 +162,16 @@ export default async function ExpeditionDetailPage({
           {exp.subtitle && (
             <p className="mt-4 max-w-2xl text-lg text-stone-200">{exp.subtitle}</p>
           )}
-          <p className="mt-4 text-sm text-stone-300">
-            {formatDateRange(exp.startDate, exp.endDate)}
-          </p>
+          {exp.durationDays ? (
+            <p className="mt-4 text-sm text-stone-300">{exp.durationDays} días de viaje</p>
+          ) : null}
         </div>
       </section>
 
       {/* QUICK FACTS */}
       {facts.length > 0 && (
         <div className="border-b border-stone-200 bg-white">
-          <div className="mx-auto grid max-w-6xl grid-cols-2 gap-px overflow-hidden px-4 py-6 sm:grid-cols-3 sm:px-6 lg:grid-cols-6">
+          <div className="mx-auto grid max-w-6xl grid-cols-2 gap-px overflow-hidden px-4 py-6 sm:grid-cols-3 sm:px-6 lg:grid-cols-5">
             {facts.map((f) => (
               <div key={f.label} className="px-2 text-center">
                 <p className="text-xs uppercase tracking-wider text-stone-500">{f.label}</p>
@@ -333,37 +286,10 @@ export default async function ExpeditionDetailPage({
             </section>
           )}
 
-          {/* GUÍAS */}
-          {allGuides.length > 0 && (
+          {/* TESTIMONIOS (solo lectura; el admin decide cuáles se anclan) */}
+          {testimonials.length > 0 && (
             <section>
-              <h2 className="font-display text-2xl font-semibold text-ink">{texts.expGuias}</h2>
-              <div className="mt-6 grid gap-6 sm:grid-cols-2">
-                {allGuides.map((g) =>
-                  g ? (
-                    <div key={g.id} className="flex gap-4">
-                      {g.photo && (
-                        <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-full">
-                          <Image src={g.photo} alt={g.name} fill sizes="64px" className="object-cover" />
-                        </div>
-                      )}
-                      <div>
-                        <p className="font-medium text-ink">{g.name}</p>
-                        {g.specialties.length > 0 && (
-                          <p className="text-xs text-accent">{g.specialties.join(" · ")}</p>
-                        )}
-                        {g.bio && <p className="mt-1 text-sm text-stone-600">{g.bio}</p>}
-                      </div>
-                    </div>
-                  ) : null,
-                )}
-              </div>
-            </section>
-          )}
-
-          {/* TESTIMONIOS */}
-          <section>
-            <h2 className="font-display text-2xl font-semibold text-ink">{texts.expTestimonios}</h2>
-            {testimonials.length > 0 ? (
+              <h2 className="font-display text-2xl font-semibold text-ink">{texts.expTestimonios}</h2>
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 {testimonials.map((t) => (
                   <figure key={t.id} className="rounded-2xl border border-stone-200 bg-white p-5">
@@ -374,137 +300,41 @@ export default async function ExpeditionDetailPage({
                       </p>
                     ) : null}
                     <blockquote className="mt-2 text-stone-700">“{t.text}”</blockquote>
-                    <figcaption className="mt-3 text-sm font-medium text-ink">
-                      — {t.authorName}
-                    </figcaption>
+                    <figcaption className="mt-3 text-sm font-medium text-ink">— {t.authorName}</figcaption>
                   </figure>
                 ))}
-              </div>
-            ) : (
-              <p className="mt-4 text-stone-500">
-                Todavía no hay testimonios. ¿Hiciste esta expedición? Sé la primera persona en contarlo.
-              </p>
-            )}
-            {visible && (
-              <div className="mt-6 rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
-                <h3 className="font-display text-lg font-semibold text-ink">Dejá tu testimonio</h3>
-                <div className="mt-4">
-                  <TestimonialForm expeditionId={exp.id} />
-                </div>
-              </div>
-            )}
-          </section>
-
-          {/* FAQ */}
-          {faqs.length > 0 && (
-            <section>
-              <h2 className="font-display text-2xl font-semibold text-ink">{texts.expFaq}</h2>
-              <div className="mt-6 divide-y divide-stone-200 border-y border-stone-200">
-                {faqs.map((f, i) => (
-                  <details key={i} className="group py-4">
-                    <summary className="flex cursor-pointer items-center justify-between font-medium text-ink">
-                      {f.q}
-                      <span className="text-accent transition-transform group-open:rotate-45">+</span>
-                    </summary>
-                    <p className="mt-2 text-sm text-stone-600">{f.a}</p>
-                  </details>
-                ))}
-              </div>
-            </section>
-          )}
-
-          {/* INSCRIPCIÓN */}
-          {reservable && (
-            <section id="inscribirme">
-              <h2 className="font-display text-2xl font-semibold text-ink">
-                {isFull ? "Lista de espera" : texts.expInscripcion}
-              </h2>
-              <p className="mt-2 text-stone-600">
-                {isFull
-                  ? "La expedición está completa. Anotate y te avisamos si se libera un lugar."
-                  : "Completá tus datos para preinscribirte. El equipo te contacta para confirmar."}
-              </p>
-              <div className="mt-6 rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
-                <ReservationForm
-                  expeditionId={exp.id}
-                  isFull={isFull}
-                  whatsappNumber={settings.whatsappNumber}
-                  expeditionName={exp.name}
-                  priceLabel={
-                    toNumber(exp.price) !== null
-                      ? formatPrice(exp.price, exp.currency)
-                      : null
-                  }
-                  depositLabel={
-                    toNumber(exp.depositPrice) !== null
-                      ? formatPrice(exp.depositPrice, exp.currency)
-                      : null
-                  }
-                />
               </div>
             </section>
           )}
         </div>
 
-        {/* SIDEBAR */}
+        {/* SIDEBAR — solo WhatsApp para sumarse al grupo */}
         <aside className="lg:sticky lg:top-24 lg:self-start">
           <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
-            <p className="text-sm text-stone-500">Desde</p>
-            <p className="font-display text-3xl font-semibold text-ink">
-              {formatPrice(exp.price, exp.currency)}
+            <h3 className="font-display text-lg font-semibold text-ink">
+              ¿Querés saber más sobre este viaje?
+            </h3>
+            <p className="mt-2 text-sm text-stone-600">
+              Sumate al grupo de WhatsApp y te contamos todos los detalles: fechas, lugares y
+              cómo participar.
             </p>
-            {exp.depositPrice != null && (
-              <p className="mt-1 text-sm text-stone-500">
-                Reserva: {formatPrice(exp.depositPrice, exp.currency)}
+            {wa ? (
+              <a
+                href={wa}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 flex items-center justify-center gap-2 rounded-full bg-emerald-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5" aria-hidden="true">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.86 9.86 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884" />
+                </svg>
+                Unite al grupo de WhatsApp
+              </a>
+            ) : (
+              <p className="mt-5 rounded-lg bg-stone-100 px-4 py-3 text-sm text-stone-500">
+                Configurá el número de WhatsApp en el panel para habilitar este botón.
               </p>
             )}
-            <p className="mt-3 text-sm font-medium text-ink">{spots.label}</p>
-
-            <div className="mt-5 space-y-3">
-              {reservable && (
-                <a
-                  href="#inscribirme"
-                  className="block rounded-full bg-accent px-6 py-3 text-center text-sm font-semibold text-white hover:bg-accent-dark"
-                >
-                  {isFull ? "Lista de espera" : "Inscribirme"}
-                </a>
-              )}
-              {wa && (
-                <a
-                  href={wa}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block rounded-full bg-emerald-600 px-6 py-3 text-center text-sm font-semibold text-white hover:bg-emerald-700"
-                >
-                  Consultar por WhatsApp
-                </a>
-              )}
-              <a
-                href="#consultar"
-                className="block rounded-full bg-ink px-6 py-3 text-center text-sm font-semibold text-white hover:bg-stone-800"
-              >
-                Enviar consulta
-              </a>
-            </div>
-            <a
-              href={`/expediciones/${exp.slug}/ficha`}
-              target="_blank"
-              className="mt-3 block text-center text-sm font-medium text-accent hover:text-accent-dark"
-            >
-              Descargar ficha técnica (PDF)
-            </a>
-          </div>
-
-          <div id="consultar" className="mt-6 rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
-            <h3 className="font-display text-lg font-semibold text-ink">
-              Pedí información
-            </h3>
-            <p className="mt-1 text-sm text-stone-600">
-              Te respondemos con todos los detalles.
-            </p>
-            <div className="mt-4">
-              <InquiryForm expeditionId={exp.id} expeditionName={exp.name} />
-            </div>
           </div>
         </aside>
       </div>

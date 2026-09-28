@@ -54,6 +54,8 @@ export default async function EditExpeditionPage({
     subtitle: exp.subtitle ?? "",
     shortDescription: exp.shortDescription ?? "",
     fullDescription: exp.fullDescription ?? "",
+    category: exp.category ?? "fotografica",
+    availableMonths: exp.availableMonths ?? [],
     activityType: exp.activityType ?? "",
     difficulty: exp.difficulty ?? "",
     destinationId: exp.destinationId ?? "",
@@ -112,13 +114,6 @@ export default async function EditExpeditionPage({
               {STATUS_LABELS[exp.status]}
             </span>
           </div>
-          <a
-            href={`/expediciones/${exp.slug}/ficha`}
-            target="_blank"
-            className="mt-2 inline-block text-sm font-medium text-accent hover:underline"
-          >
-            Ficha técnica / código QR ↗
-          </a>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">

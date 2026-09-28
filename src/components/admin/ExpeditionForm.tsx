@@ -8,10 +8,33 @@ import { GalleryField } from "./GalleryField";
 import { ACTIVITY_LABELS, DIFFICULTY_LABELS } from "@/lib/format";
 import {
   ACTIVITY_TYPES,
+  CATEGORIES,
   DIFFICULTIES,
   STATUSES,
   TEMPLATES,
 } from "@/lib/validations/expedition";
+
+const CATEGORY_TEXT: Record<(typeof CATEGORIES)[number], string> = {
+  fotografica: "Expediciones Fotográficas",
+  coleccionable: "Viajes Coleccionables",
+  escapada: "Escapadas",
+  "a-medida": "Viajes a Medida",
+};
+
+const MONTHS = [
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
+];
 
 const STATUS_TEXT: Record<(typeof STATUSES)[number], string> = {
   DRAFT: "Borrador",
@@ -39,6 +62,8 @@ export type ExpeditionFormValues = {
   subtitle: string;
   shortDescription: string;
   fullDescription: string;
+  category: string;
+  availableMonths: number[];
   activityType: string;
   difficulty: string;
   destinationId: string;
@@ -134,6 +159,41 @@ export function ExpeditionForm({
             <input id="subtitle" name="subtitle" defaultValue={values.subtitle} className={inputCls} />
           </div>
         </div>
+        <div>
+          <label htmlFor="category" className={labelCls}>Categoría (línea del menú)</label>
+          <select id="category" name="category" defaultValue={values.category || "fotografica"} className={inputCls}>
+            {CATEGORIES.map((c) => (
+              <option key={c} value={c}>{CATEGORY_TEXT[c]}</option>
+            ))}
+          </select>
+          <p className={helpCls}>Define en qué sección del menú aparece esta expedición.</p>
+        </div>
+
+        <div>
+          <span className={labelCls}>Meses disponibles (calendario público)</span>
+          <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-6">
+            {MONTHS.map((label, i) => {
+              const m = i + 1;
+              return (
+                <label
+                  key={m}
+                  className="flex items-center gap-2 rounded-lg border border-stone-200 px-2.5 py-1.5 text-sm text-ink"
+                >
+                  <input
+                    type="checkbox"
+                    name="availableMonths"
+                    value={m}
+                    defaultChecked={values.availableMonths?.includes(m)}
+                    className="h-4 w-4 rounded border-stone-300"
+                  />
+                  {label.slice(0, 3)}
+                </label>
+              );
+            })}
+          </div>
+          <p className={helpCls}>Marcá los meses en que se ofrece. Aparece en el calendario de la home.</p>
+        </div>
+
         <div className="grid gap-4 sm:grid-cols-3">
           <div>
             <label htmlFor="activityType" className={labelCls}>Actividad</label>

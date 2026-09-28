@@ -188,6 +188,11 @@ model Expedition {
   shortDescription String? @db.Text
   fullDescription  String? @db.Text
 
+  // Categoría del viaje (líneas del menú): fotografica | coleccionable | escapada | a-medida
+  category String @default("fotografica")
+  // Meses en los que la expedición está disponible (1-12). Alimenta el calendario público.
+  availableMonths Int[] @default([])
+
   coverImage String?
   gallery    String[] @default([])
   videoUrl   String? // YouTube / Vimeo
@@ -262,6 +267,7 @@ model Expedition {
 
   @@index([status])
   @@index([activityType])
+  @@index([category])
   @@index([difficulty])
   @@index([destinationId])
   @@index([startDate])

@@ -43,6 +43,8 @@ export const STATUSES = [
 
 export const TEMPLATES = ["CINEMATIC", "EDITORIAL", "EXTREME"] as const;
 
+export const CATEGORIES = ["fotografica", "coleccionable", "escapada", "a-medida"] as const;
+
 export const itineraryDaySchema = z.object({
   dayNumber: z.coerce.number().int().min(1),
   title: z.string().trim().min(1, "Título del día requerido"),
@@ -60,6 +62,9 @@ export const expeditionInputSchema = z.object({
   subtitle: optString,
   shortDescription: optString,
   fullDescription: optString,
+
+  category: z.preprocess(clean, z.enum(CATEGORIES).default("fotografica")),
+  availableMonths: z.array(z.coerce.number().int().min(1).max(12)).default([]),
 
   activityType: z.preprocess(clean, z.enum(ACTIVITY_TYPES).optional()),
   difficulty: z.preprocess(clean, z.enum(DIFFICULTIES).optional()),

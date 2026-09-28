@@ -37,27 +37,22 @@ export function SiteFooter({ settings }: { settings: SiteSettingsData }) {
           <ul className="mt-4 space-y-2 text-sm">
             <li>
               <Link href="/expediciones" className="hover:text-white">
-                Expediciones
+                Expediciones Fotográficas
               </Link>
             </li>
             <li>
-              <Link href="/destinos" className="hover:text-white">
-                Destinos
+              <Link href="/expediciones?categoria=coleccionable" className="hover:text-white">
+                Viajes Coleccionables
               </Link>
             </li>
             <li>
-              <Link href="/guias" className="hover:text-white">
-                Guías
+              <Link href="/expediciones?categoria=escapada" className="hover:text-white">
+                Escapadas
               </Link>
             </li>
             <li>
-              <Link href="/comunidad" className="hover:text-white">
-                Comunidad
-              </Link>
-            </li>
-            <li>
-              <Link href="/contacto" className="hover:text-white">
-                Contacto
+              <Link href="/expediciones?categoria=a-medida" className="hover:text-white">
+                Viajes a Medida
               </Link>
             </li>
           </ul>

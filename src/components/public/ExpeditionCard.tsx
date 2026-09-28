@@ -1,13 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ActivityType, Difficulty } from "@prisma/client";
-import {
-  ACTIVITY_LABELS,
-  DIFFICULTY_LABELS,
-  formatDateRange,
-  formatPrice,
-  spotsInfo,
-} from "@/lib/format";
+import { ACTIVITY_LABELS, DIFFICULTY_LABELS } from "@/lib/format";
 
 export type CardExpedition = {
   slug: string;
@@ -27,8 +21,6 @@ export type CardExpedition = {
 };
 
 export function ExpeditionCard({ expedition }: { expedition: CardExpedition }) {
-  const spots = spotsInfo(expedition.capacity, expedition.spotsTaken);
-
   return (
     <article className="card-lift group relative overflow-hidden rounded-2xl bg-stone-900 shadow-sm ring-1 ring-black/5">
       <Link href={`/expediciones/${expedition.slug}`} className="block">
@@ -70,16 +62,12 @@ export function ExpeditionCard({ expedition }: { expedition: CardExpedition }) {
             <h3 className="mt-1 font-display text-xl font-semibold leading-tight">
               {expedition.name}
             </h3>
-            <p className="mt-2 text-sm text-stone-300">
-              {formatDateRange(expedition.startDate, expedition.endDate)}
-              {expedition.durationDays ? ` · ${expedition.durationDays} días` : ""}
-            </p>
-            <div className="mt-3 flex items-center justify-between">
-              <span className="text-sm font-semibold">
-                {formatPrice(expedition.price, expedition.currency)}
-              </span>
-              <span className="text-xs text-stone-300">{spots.label}</span>
-            </div>
+            {expedition.durationDays ? (
+              <p className="mt-2 text-sm text-stone-300">{expedition.durationDays} días</p>
+            ) : null}
+            <span className="mt-3 inline-block text-sm font-semibold text-white/90">
+              Quiero saber más →
+            </span>
           </div>
         </div>
       </Link>

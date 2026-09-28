@@ -17,12 +17,7 @@ const NAV: NavItem[] = [
   { href: "/admin/notificaciones", label: "Notificaciones" },
   { href: "/admin/expediciones", label: "Expediciones", permission: PERMISSIONS.EXPEDITION_READ },
   { href: "/admin/calendario", label: "Calendario", permission: PERMISSIONS.EXPEDITION_READ },
-  { href: "/admin/destinos", label: "Destinos", permission: PERMISSIONS.DESTINATION_MANAGE },
-  { href: "/admin/guias", label: "Guías", permission: PERMISSIONS.GUIDE_MANAGE },
   { href: "/admin/paginas", label: "Páginas", permission: PERMISSIONS.PAGE_MANAGE },
-  { href: "/admin/reservas", label: "Reservas", permission: PERMISSIONS.RESERVATION_READ },
-  { href: "/admin/crm", label: "CRM · Contactos", permission: PERMISSIONS.CRM_READ },
-  { href: "/admin/consultas", label: "Consultas", permission: PERMISSIONS.INQUIRY_READ },
   { href: "/admin/testimonios", label: "Testimonios", permission: PERMISSIONS.CONTENT_MODERATE },
   { href: "/admin/estadisticas", label: "Estadísticas", permission: PERMISSIONS.STATS_VIEW },
   { href: "/admin/usuarios", label: "Usuarios", permission: PERMISSIONS.USER_MANAGE },
@@ -30,8 +25,9 @@ const NAV: NavItem[] = [
   { href: "/admin/configuracion", label: "Configuración", permission: PERMISSIONS.SETTINGS_MANAGE },
 ];
 
-// Módulos previstos por el brief que se irán habilitando (no son enlaces falsos).
-const UPCOMING = ["Media Library (subida de archivos)"];
+// Ocultos del nuevo diagrama (rutas y datos siguen existiendo, pero no se enlazan):
+// Destinos, Guías, Reservas, CRM, Consultas.
+const UPCOMING: string[] = [];
 
 export function AdminSidebar({
   user,
@@ -72,17 +68,21 @@ export function AdminSidebar({
           );
         })}
 
-        <p className="px-3 pb-1 pt-6 text-xs font-semibold uppercase tracking-wider text-stone-500">
-          Próximamente
-        </p>
-        {UPCOMING.map((label) => (
-          <span
-            key={label}
-            className="block cursor-not-allowed rounded-lg px-3 py-2 text-sm text-stone-600"
-          >
-            {label}
-          </span>
-        ))}
+        {UPCOMING.length > 0 && (
+          <>
+            <p className="px-3 pb-1 pt-6 text-xs font-semibold uppercase tracking-wider text-stone-500">
+              Próximamente
+            </p>
+            {UPCOMING.map((label) => (
+              <span
+                key={label}
+                className="block cursor-not-allowed rounded-lg px-3 py-2 text-sm text-stone-600"
+              >
+                {label}
+              </span>
+            ))}
+          </>
+        )}
       </nav>
 
       <div className="border-t border-white/10 px-5 py-4">

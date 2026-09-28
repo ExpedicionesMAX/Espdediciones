@@ -2,17 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
 
-const LINKS = [
-  { href: "/", label: "Inicio" },
-  { href: "/expediciones", label: "Expediciones" },
-  { href: "/fechas", label: "Fechas" },
-  { href: "/destinos", label: "Destinos" },
-  { href: "/guias", label: "Guías" },
-  { href: "/comunidad", label: "Comunidad" },
-  { href: "/contacto", label: "Contacto" },
+const EXPEDICIONES = { href: "/expediciones", label: "Expediciones Fotográficas" };
+
+const SUBCATS = [
+  { href: "/expediciones?categoria=coleccionable", label: "Viajes Coleccionables" },
+  { href: "/expediciones?categoria=escapada", label: "Escapadas" },
+  { href: "/expediciones?categoria=a-medida", label: "Viajes a Medida" },
 ];
 
 export function SiteHeader({
@@ -26,7 +24,9 @@ export function SiteHeader({
 }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [expOpen, setExpOpen] = useState(false);
   const pathname = usePathname();
+  const dropRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -35,9 +35,24 @@ export function SiteHeader({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => setOpen(false), [pathname]);
+  useEffect(() => {
+    setOpen(false);
+    setExpOpen(false);
+  }, [pathname]);
+
+  // Cerrar el desplegable al hacer clic fuera.
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (dropRef.current && !dropRef.current.contains(e.target as Node)) {
+        setExpOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, []);
 
   const solid = scrolled || open;
+  const expActive = pathname === "/expediciones" || pathname.startsWith("/expediciones");
 
   return (
     <header
@@ -49,10 +64,7 @@ export function SiteHeader({
       )}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
-        <Link
-          href="/"
-          className="font-display text-xl font-semibold tracking-tight"
-        >
+        <Link href="/" className="font-display text-xl font-semibold tracking-tight">
           {logoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={logoUrl} alt={siteName} className="h-8 w-auto" />
@@ -62,33 +74,77 @@ export function SiteHeader({
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
-          {LINKS.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              className={cn(
-                "nav-underline text-sm font-medium",
-                pathname === l.href && "text-accent",
-              )}
-            >
-              {l.label}
-            </Link>
-          ))}
+          <Link
+            href="/"
+            className={cn("nav-underline text-sm font-medium", pathname === "/" && "text-accent")}
+          >
+            Inicio
+          </Link>
+
+          {/* Expediciones Fotográficas + desplegable */}
+          <div
+            ref={dropRef}
+            className="relative"
+            onMouseEnter={() => setExpOpen(true)}
+            onMouseLeave={() => setExpOpen(false)}
+          >
+            <div className="flex items-center gap-1">
+              <Link
+                href={EXPEDICIONES.href}
+                className={cn("nav-underline text-sm font-medium", expActive && "text-accent")}
+              >
+                {EXPEDICIONES.label}
+              </Link>
+              <button
+                type="button"
+                onClick={() => setExpOpen((v) => !v)}
+                aria-label="Ver categorías"
+                aria-expanded={expOpen}
+                className="p-0.5"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  className={cn("transition-transform", expOpen && "rotate-180")}
+                >
+                  <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            </div>
+
+            {expOpen && (
+              <div className="absolute left-0 top-full min-w-56 pt-3">
+                <div className="overflow-hidden rounded-xl border border-stone-200 bg-paper py-1 text-ink shadow-lg">
+                  {SUBCATS.map((s) => (
+                    <Link
+                      key={s.href}
+                      href={s.href}
+                      className="block px-4 py-2.5 text-sm font-medium hover:bg-stone-100"
+                    >
+                      {s.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
           {pages.map((p) => (
             <Link
               key={p.slug}
               href={`/${p.slug}`}
-              className="nav-underline text-sm font-medium"
+              className={cn(
+                "nav-underline text-sm font-medium",
+                pathname === `/${p.slug}` && "text-accent",
+              )}
             >
               {p.title}
             </Link>
           ))}
-          <Link
-            href="/expediciones"
-            className="rounded-full bg-accent px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-dark"
-          >
-            Ver expediciones
-          </Link>
         </nav>
 
         <button
@@ -111,13 +167,22 @@ export function SiteHeader({
       {open && (
         <div className="border-t border-stone-200 bg-paper px-4 pb-6 pt-2 text-ink md:hidden">
           <nav className="flex flex-col gap-1">
-            {LINKS.map((l) => (
+            <Link href="/" className="rounded-lg px-2 py-3 text-base font-medium hover:bg-stone-100">
+              Inicio
+            </Link>
+            <Link
+              href={EXPEDICIONES.href}
+              className="rounded-lg px-2 py-3 text-base font-medium hover:bg-stone-100"
+            >
+              {EXPEDICIONES.label}
+            </Link>
+            {SUBCATS.map((s) => (
               <Link
-                key={l.href}
-                href={l.href}
-                className="rounded-lg px-2 py-3 text-base font-medium hover:bg-stone-100"
+                key={s.href}
+                href={s.href}
+                className="rounded-lg px-4 py-2.5 text-sm font-medium text-stone-600 hover:bg-stone-100"
               >
-                {l.label}
+                {s.label}
               </Link>
             ))}
             {pages.map((p) => (

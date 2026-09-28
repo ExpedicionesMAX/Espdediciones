@@ -18,6 +18,8 @@ const EMPTY: ExpeditionFormValues = {
   subtitle: "",
   shortDescription: "",
   fullDescription: "",
+  category: "fotografica",
+  availableMonths: [],
   activityType: "",
   difficulty: "",
   destinationId: "",
