@@ -8,6 +8,34 @@ import { PERMISSIONS } from "@/lib/permissions";
 import { logActivity } from "@/lib/audit";
 import { settingsInputSchema } from "@/lib/validations/settings";
 
+type PillarInput = {
+  title: string;
+  description: string;
+  icon: string;
+  active: boolean;
+  order: number;
+};
+
+/** Parsea el JSON de pilares del formulario, asignando el orden por posición. */
+function parsePillars(raw: string | undefined): PillarInput[] {
+  if (!raw) return [];
+  try {
+    const arr = JSON.parse(raw);
+    if (!Array.isArray(arr)) return [];
+    return arr
+      .filter((p) => p && typeof p.title === "string" && p.title.trim())
+      .map((p, i) => ({
+        title: String(p.title).trim(),
+        description: String(p.description ?? "").trim(),
+        icon: String(p.icon ?? "").trim(),
+        active: p.active !== false,
+        order: i,
+      }));
+  } catch {
+    return [];
+  }
+}
+
 export type SettingsFormState = {
   ok: boolean;
   success?: boolean;
@@ -50,6 +78,8 @@ export async function updateSettings(
       .split("\n")
       .map((s) => s.trim())
       .filter(Boolean),
+    homeWhyPillars: parsePillars(formData.get("homeWhyPillars")?.toString()),
+    upcomingExpeditionId: formData.get("upcomingExpeditionId"),
     reviewsLabel: formData.get("reviewsLabel"),
     reviewsUrl: formData.get("reviewsUrl"),
   });
@@ -93,6 +123,11 @@ export async function updateSettings(
     ctaButton: d.ctaButton ?? null,
     homeWhyTitle: d.homeWhyTitle ?? null,
     homeWhyItems: d.homeWhyItems,
+    homeWhyPillars:
+      d.homeWhyPillars.length > 0
+        ? (d.homeWhyPillars as unknown as Prisma.InputJsonValue)
+        : Prisma.JsonNull,
+    upcomingExpeditionId: d.upcomingExpeditionId ?? null,
     reviewsLabel: d.reviewsLabel ?? null,
     reviewsUrl: d.reviewsUrl ?? null,
   };

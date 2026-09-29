@@ -1,8 +1,9 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { updateSettings, type SettingsFormState } from "@/server/actions/settings";
 import { FONT_OPTIONS } from "@/lib/fonts";
+import type { WhyPillar } from "@/lib/site";
 
 const initial: SettingsFormState = { ok: false };
 
@@ -30,6 +31,8 @@ export type SettingsFormValues = {
   ctaButton: string;
   homeWhyTitle: string;
   homeWhyItems: string;
+  homeWhyPillars: WhyPillar[];
+  upcomingExpeditionId: string;
   reviewsLabel: string;
   reviewsUrl: string;
 };
@@ -48,9 +51,33 @@ function Card({ title, description, children }: { title: string; description?: s
   );
 }
 
-export function SettingsForm({ values }: { values: SettingsFormValues }) {
+export function SettingsForm({
+  values,
+  expeditions,
+}: {
+  values: SettingsFormValues;
+  expeditions: { id: string; name: string }[];
+}) {
   const [state, formAction, pending] = useActionState(updateSettings, initial);
   const err = (f: string) => state.fieldErrors?.[f]?.[0];
+
+  const [pillars, setPillars] = useState<WhyPillar[]>(
+    values.homeWhyPillars.length > 0 ? values.homeWhyPillars : [],
+  );
+
+  const updatePillar = (i: number, patch: Partial<WhyPillar>) =>
+    setPillars((ps) => ps.map((p, idx) => (idx === i ? { ...p, ...patch } : p)));
+  const addPillar = () =>
+    setPillars((ps) => [...ps, { title: "", description: "", icon: "", active: true }]);
+  const removePillar = (i: number) => setPillars((ps) => ps.filter((_, idx) => idx !== i));
+  const movePillar = (i: number, dir: -1 | 1) =>
+    setPillars((ps) => {
+      const j = i + dir;
+      if (j < 0 || j >= ps.length) return ps;
+      const next = [...ps];
+      [next[i], next[j]] = [next[j], next[i]];
+      return next;
+    });
 
   return (
     <form action={formAction} className="max-w-2xl space-y-6">
@@ -188,16 +215,83 @@ export function SettingsForm({ values }: { values: SettingsFormValues }) {
         </div>
       </Card>
 
-      <Card title="Diferenciales y reseñas (home)" description="Una banda de «por qué elegirnos» y un sello de reseñas en la portada. Vacío = no se muestran.">
+      <Card title="Home — Próxima experiencia" description="Se muestra arriba de todo como «Próximamente». Si no elegís ninguna, se toma la de fecha más próxima.">
         <div>
-          <label htmlFor="homeWhyTitle" className={labelCls}>Título de la banda de diferenciales</label>
-          <input id="homeWhyTitle" name="homeWhyTitle" defaultValue={values.homeWhyTitle} placeholder="Por qué elegirnos" className={inputCls} />
+          <label htmlFor="upcomingExpeditionId" className={labelCls}>Próxima experiencia destacada</label>
+          <select
+            id="upcomingExpeditionId"
+            name="upcomingExpeditionId"
+            defaultValue={values.upcomingExpeditionId}
+            className={inputCls}
+          >
+            <option value="">Automática (la de fecha más próxima)</option>
+            {expeditions.map((e) => (
+              <option key={e.id} value={e.id}>{e.name}</option>
+            ))}
+          </select>
         </div>
+      </Card>
+
+      <Card title="Home — ¿Por qué nosotros?" description="Pilares que diferencian a Cumbre. Cada uno con ícono (emoji), título y descripción.">
+        <input type="hidden" name="homeWhyPillars" value={JSON.stringify(pillars)} />
         <div>
-          <label htmlFor="homeWhyItems" className={labelCls}>Diferenciales (uno por línea)</label>
-          <textarea id="homeWhyItems" name="homeWhyItems" rows={4} defaultValue={values.homeWhyItems} placeholder={"Guías profesionales que conocen cada sendero\nLa mejor experiencia, sin improvisación\n+8 años transitando montañas con seguridad"} className={inputCls} />
+          <label htmlFor="homeWhyTitle" className={labelCls}>Título de la sección</label>
+          <input id="homeWhyTitle" name="homeWhyTitle" defaultValue={values.homeWhyTitle} placeholder="¿Por qué nosotros?" className={inputCls} />
         </div>
-        <hr className="border-stone-100" />
+
+        <div className="space-y-3">
+          {pillars.length === 0 && (
+            <p className="text-sm text-stone-400">Todavía no hay pilares. Agregá el primero.</p>
+          )}
+          {pillars.map((p, i) => (
+            <div key={i} className="rounded-xl border border-stone-200 p-3">
+              <div className="flex items-center gap-2">
+                <input
+                  value={p.icon ?? ""}
+                  onChange={(e) => updatePillar(i, { icon: e.target.value })}
+                  placeholder="✦"
+                  className="w-14 rounded-lg border border-stone-300 bg-white px-2 py-2 text-center text-sm focus:border-accent focus:outline-none"
+                  aria-label="Ícono (emoji)"
+                />
+                <input
+                  value={p.title}
+                  onChange={(e) => updatePillar(i, { title: e.target.value })}
+                  placeholder="Título del pilar"
+                  className="flex-1 rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm focus:border-accent focus:outline-none"
+                />
+                <label className="flex items-center gap-1 text-xs text-stone-500">
+                  <input
+                    type="checkbox"
+                    checked={p.active !== false}
+                    onChange={(e) => updatePillar(i, { active: e.target.checked })}
+                    className="h-4 w-4 rounded border-stone-300"
+                  />
+                  Activo
+                </label>
+                <button type="button" onClick={() => movePillar(i, -1)} className="px-1 text-stone-400 hover:text-ink" aria-label="Subir">↑</button>
+                <button type="button" onClick={() => movePillar(i, 1)} className="px-1 text-stone-400 hover:text-ink" aria-label="Bajar">↓</button>
+                <button type="button" onClick={() => removePillar(i)} className="px-1 text-red-500 hover:text-red-700" aria-label="Eliminar">✕</button>
+              </div>
+              <textarea
+                value={p.description ?? ""}
+                onChange={(e) => updatePillar(i, { description: e.target.value })}
+                placeholder="Descripción breve"
+                rows={2}
+                className="mt-2 w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm focus:border-accent focus:outline-none"
+              />
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={addPillar}
+            className="rounded-lg border border-dashed border-stone-300 px-4 py-2 text-sm font-medium text-stone-600 hover:border-accent hover:text-accent"
+          >
+            + Agregar pilar
+          </button>
+        </div>
+      </Card>
+
+      <Card title="Sello de reseñas (home)" description="Un sello opcional en la portada.">
         <div>
           <label htmlFor="reviewsLabel" className={labelCls}>Sello de reseñas</label>
           <input id="reviewsLabel" name="reviewsLabel" defaultValue={values.reviewsLabel} placeholder="★ 5.0 · +140 reseñas en Google" className={inputCls} />

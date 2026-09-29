@@ -96,6 +96,7 @@ export type ExpeditionFormValues = {
   seoDescription: string;
   whatsappMessage: string;
   featured: boolean;
+  homeOrder: string;
   itinerary: ItineraryDayValue[];
 };
 
@@ -222,10 +223,23 @@ export function ExpeditionForm({
             </select>
           </div>
         </div>
-        <label className="flex items-center gap-2 text-sm text-ink">
-          <input type="checkbox" name="featured" defaultChecked={values.featured} className="h-4 w-4 rounded border-stone-300" />
-          Destacada en la home
-        </label>
+        <div className="flex flex-wrap items-center gap-6">
+          <label className="flex items-center gap-2 text-sm text-ink">
+            <input type="checkbox" name="featured" defaultChecked={values.featured} className="h-4 w-4 rounded border-stone-300" />
+            Destacada en la home
+          </label>
+          <div className="flex items-center gap-2">
+            <label htmlFor="homeOrder" className="text-sm text-ink">Orden en destacadas</label>
+            <input
+              id="homeOrder"
+              name="homeOrder"
+              type="number"
+              defaultValue={values.homeOrder || "0"}
+              className="w-20 rounded-lg border border-stone-300 bg-white px-2 py-1.5 text-sm focus:border-accent focus:outline-none"
+            />
+          </div>
+        </div>
+        <p className={helpCls}>Menor número = aparece primero en «Experiencias destacadas».</p>
       </Card>
 
       <Card title="Ubicación">

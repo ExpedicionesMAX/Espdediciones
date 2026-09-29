@@ -96,7 +96,94 @@ export async function moderateTestimonial(formData: FormData): Promise<void> {
   });
 
   revalidatePath("/admin/testimonios");
+  revalidatePath("/");
   if (updated.expedition?.slug) {
     revalidatePath(`/expediciones/${updated.expedition.slug}`);
   }
+}
+
+function reviewFields(fd: FormData) {
+  const authorName = fd.get("authorName")?.toString().trim() ?? "";
+  const text = fd.get("text")?.toString().trim() ?? "";
+  const ratingRaw = fd.get("rating")?.toString();
+  const rating = ratingRaw ? Number(ratingRaw) : null;
+  const photo = fd.get("photo")?.toString().trim() || null;
+  const expeditionId = fd.get("expeditionId")?.toString() || null;
+  const orderRaw = fd.get("order")?.toString();
+  const order = orderRaw ? Number(orderRaw) : 0;
+  return {
+    authorName,
+    text,
+    rating: rating && rating >= 1 && rating <= 5 ? rating : null,
+    photo,
+    expeditionId,
+    order: Number.isFinite(order) ? order : 0,
+  };
+}
+
+/** Reseña creada por el admin: se publica directo (APPROVED + activa). */
+export async function createReview(formData: FormData): Promise<void> {
+  const user = await requirePermission(PERMISSIONS.CONTENT_MODERATE);
+  const d = reviewFields(formData);
+  if (!d.authorName || !d.text) return;
+
+  await prisma.testimonial.create({
+    data: {
+      authorName: d.authorName,
+      text: d.text,
+      rating: d.rating,
+      photo: d.photo,
+      order: d.order,
+      active: true,
+      status: "APPROVED",
+      expeditionId: d.expeditionId,
+      moderatedById: user.id,
+      moderatedAt: new Date(),
+    },
+  });
+
+  revalidatePath("/admin/testimonios");
+  revalidatePath("/");
+}
+
+export async function updateReview(formData: FormData): Promise<void> {
+  await requirePermission(PERMISSIONS.CONTENT_MODERATE);
+  const id = formData.get("id")?.toString();
+  if (!id) return;
+  const d = reviewFields(formData);
+  if (!d.authorName || !d.text) return;
+
+  await prisma.testimonial.update({
+    where: { id },
+    data: {
+      authorName: d.authorName,
+      text: d.text,
+      rating: d.rating,
+      photo: d.photo,
+      order: d.order,
+      expeditionId: d.expeditionId,
+    },
+  });
+
+  revalidatePath("/admin/testimonios");
+  revalidatePath("/");
+}
+
+export async function toggleTestimonialActive(formData: FormData): Promise<void> {
+  await requirePermission(PERMISSIONS.CONTENT_MODERATE);
+  const id = formData.get("id")?.toString();
+  const active = formData.get("active")?.toString() === "true";
+  if (!id) return;
+  await prisma.testimonial.update({ where: { id }, data: { active } });
+  revalidatePath("/admin/testimonios");
+  revalidatePath("/");
+}
+
+export async function deleteTestimonial(formData: FormData): Promise<void> {
+  await requirePermission(PERMISSIONS.CONTENT_MODERATE);
+  const id = formData.get("id")?.toString();
+  if (!id) return;
+  await prisma.testimonial.delete({ where: { id } }).catch(() => {});
+  revalidatePath("/admin/testimonios");
+  revalidatePath("/");
 }

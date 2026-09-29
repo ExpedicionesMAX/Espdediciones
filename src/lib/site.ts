@@ -11,6 +11,14 @@ export type SocialLinks = {
   vimeo?: string;
 };
 
+export type WhyPillar = {
+  title: string;
+  description?: string;
+  icon?: string;
+  active?: boolean;
+  order?: number;
+};
+
 export type SiteSettingsData = {
   siteName: string;
   tagline: string | null;
@@ -31,8 +39,10 @@ export type SiteSettingsData = {
   ctaButton: string;
   homeWhyTitle: string | null;
   homeWhyItems: string[];
+  homeWhyPillars: WhyPillar[];
   reviewsLabel: string | null;
   reviewsUrl: string | null;
+  upcomingExpeditionId: string | null;
 };
 
 const DEFAULT_TEXTS = {
@@ -59,8 +69,10 @@ const FALLBACK: SiteSettingsData = {
   ...DEFAULT_TEXTS,
   homeWhyTitle: null,
   homeWhyItems: [],
+  homeWhyPillars: [],
   reviewsLabel: null,
   reviewsUrl: null,
+  upcomingExpeditionId: null,
 };
 
 /** Configuración global del sitio (fila singleton). Cacheada por request. */
@@ -88,8 +100,12 @@ export const getSiteSettings = cache(async (): Promise<SiteSettingsData> => {
       ctaButton: s.ctaButton || DEFAULT_TEXTS.ctaButton,
       homeWhyTitle: s.homeWhyTitle,
       homeWhyItems: s.homeWhyItems ?? [],
+      homeWhyPillars: Array.isArray(s.homeWhyPillars)
+        ? (s.homeWhyPillars as WhyPillar[])
+        : [],
       reviewsLabel: s.reviewsLabel,
       reviewsUrl: s.reviewsUrl,
+      upcomingExpeditionId: s.upcomingExpeditionId,
     };
   } catch {
     return FALLBACK;

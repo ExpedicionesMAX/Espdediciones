@@ -42,6 +42,18 @@ export const settingsInputSchema = z.object({
   ctaButton: optString,
   homeWhyTitle: optString,
   homeWhyItems: z.array(z.string()).default([]),
+  homeWhyPillars: z
+    .array(
+      z.object({
+        title: z.string().trim().min(1),
+        description: z.string().trim().optional().default(""),
+        icon: z.string().trim().optional().default(""),
+        active: z.boolean().optional().default(true),
+        order: z.number().int().optional().default(0),
+      }),
+    )
+    .default([]),
+  upcomingExpeditionId: optString,
   reviewsLabel: optString,
   reviewsUrl: optUrl,
 });

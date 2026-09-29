@@ -232,6 +232,7 @@ model Expedition {
   status   ExpeditionStatus   @default(DRAFT)
   template ExpeditionTemplate @default(CINEMATIC)
   featured Boolean            @default(false)
+  homeOrder Int               @default(0) // orden en "Experiencias destacadas" de la home
 
   // Publicación programada
   publishedAt DateTime?
@@ -377,9 +378,13 @@ model Testimonial {
   authorName  String
   authorEmail String?
   text        String            @db.Text
-  photo       String?
+  photo       String? // avatar / foto de la persona
   rating      Int? // 1 a 5
   status      TestimonialStatus @default(PENDING)
+
+  // Reseñas de la home: activar/desactivar y ordenar desde el admin
+  active Boolean @default(true)
+  order  Int     @default(0)
 
   expedition   Expedition? @relation(fields: [expeditionId], references: [id], onDelete: SetNull)
   expeditionId String?
@@ -487,8 +492,13 @@ model SiteSettings {
   // Home: banda de diferenciales y sello de reseñas
   homeWhyTitle String?
   homeWhyItems String[] @default([])
+  // ¿Por qué nosotros? pilares editables: [{ title, description, icon, active, order }]
+  homeWhyPillars Json?
   reviewsLabel String?
   reviewsUrl   String?
+
+  // Home: expedición marcada como "Próxima" (si es null, se toma la de fecha más próxima)
+  upcomingExpeditionId String?
 
   // Todos los demás textos del sitio (portadas de páginas y rótulos de secciones)
   texts Json?

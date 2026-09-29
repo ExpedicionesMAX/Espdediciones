@@ -5,9 +5,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
 
-const EXPEDICIONES = { href: "/expediciones", label: "Expediciones Fotográficas" };
-
-const SUBCATS = [
+const VIAJES = [
+  { href: "/expediciones", label: "Expediciones Fotográficas" },
   { href: "/expediciones?categoria=coleccionable", label: "Viajes Coleccionables" },
   { href: "/expediciones?categoria=escapada", label: "Escapadas" },
   { href: "/expediciones?categoria=a-medida", label: "Viajes a Medida" },
@@ -24,7 +23,7 @@ export function SiteHeader({
 }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [expOpen, setExpOpen] = useState(false);
+  const [viajesOpen, setViajesOpen] = useState(false);
   const pathname = usePathname();
   const dropRef = useRef<HTMLDivElement>(null);
 
@@ -37,14 +36,13 @@ export function SiteHeader({
 
   useEffect(() => {
     setOpen(false);
-    setExpOpen(false);
+    setViajesOpen(false);
   }, [pathname]);
 
-  // Cerrar el desplegable al hacer clic fuera.
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
       if (dropRef.current && !dropRef.current.contains(e.target as Node)) {
-        setExpOpen(false);
+        setViajesOpen(false);
       }
     };
     document.addEventListener("mousedown", onClick);
@@ -52,7 +50,25 @@ export function SiteHeader({
   }, []);
 
   const solid = scrolled || open;
-  const expActive = pathname === "/expediciones" || pathname.startsWith("/expediciones");
+  const viajesActive = pathname.startsWith("/expediciones");
+
+  // Sobre Nosotros va antes del menú; el resto (FAQ, etc.) después.
+  const beforePages = pages.filter((p) => /sobre|nosotros/i.test(p.title));
+  const afterPages = pages.filter((p) => !/sobre|nosotros/i.test(p.title));
+
+  const pageLink = (p: { slug: string; title: string }, mobile = false) => (
+    <Link
+      key={p.slug}
+      href={`/${p.slug}`}
+      className={
+        mobile
+          ? "rounded-lg px-2 py-3 text-base font-medium hover:bg-stone-100"
+          : cn("nav-underline text-sm font-medium", pathname === `/${p.slug}` && "text-accent")
+      }
+    >
+      {p.title}
+    </Link>
+  );
 
   return (
     <header
@@ -74,52 +90,42 @@ export function SiteHeader({
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
-          <Link
-            href="/"
-            className={cn("nav-underline text-sm font-medium", pathname === "/" && "text-accent")}
-          >
-            Inicio
-          </Link>
+          {beforePages.map((p) => pageLink(p))}
 
-          {/* Expediciones Fotográficas + desplegable */}
+          {/* Nuestros Viajes + desplegable */}
           <div
             ref={dropRef}
             className="relative"
-            onMouseEnter={() => setExpOpen(true)}
-            onMouseLeave={() => setExpOpen(false)}
+            onMouseEnter={() => setViajesOpen(true)}
+            onMouseLeave={() => setViajesOpen(false)}
           >
-            <div className="flex items-center gap-1">
-              <Link
-                href={EXPEDICIONES.href}
-                className={cn("nav-underline text-sm font-medium", expActive && "text-accent")}
+            <button
+              type="button"
+              onClick={() => setViajesOpen((v) => !v)}
+              aria-expanded={viajesOpen}
+              className={cn(
+                "nav-underline flex items-center gap-1 text-sm font-medium",
+                viajesActive && "text-accent",
+              )}
+            >
+              Nuestros Viajes
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                className={cn("transition-transform", viajesOpen && "rotate-180")}
               >
-                {EXPEDICIONES.label}
-              </Link>
-              <button
-                type="button"
-                onClick={() => setExpOpen((v) => !v)}
-                aria-label="Ver categorías"
-                aria-expanded={expOpen}
-                className="p-0.5"
-              >
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.2"
-                  className={cn("transition-transform", expOpen && "rotate-180")}
-                >
-                  <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-            </div>
+                <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
 
-            {expOpen && (
-              <div className="absolute left-0 top-full min-w-56 pt-3">
+            {viajesOpen && (
+              <div className="absolute left-0 top-full min-w-60 pt-3">
                 <div className="overflow-hidden rounded-xl border border-stone-200 bg-paper py-1 text-ink shadow-lg">
-                  {SUBCATS.map((s) => (
+                  {VIAJES.map((s) => (
                     <Link
                       key={s.href}
                       href={s.href}
@@ -133,18 +139,18 @@ export function SiteHeader({
             )}
           </div>
 
-          {pages.map((p) => (
-            <Link
-              key={p.slug}
-              href={`/${p.slug}`}
-              className={cn(
-                "nav-underline text-sm font-medium",
-                pathname === `/${p.slug}` && "text-accent",
-              )}
-            >
-              {p.title}
-            </Link>
-          ))}
+          {/* Nuestros Productos — Próximamente */}
+          <Link
+            href="/productos"
+            className="nav-underline flex items-center gap-2 text-sm font-medium"
+          >
+            Nuestros Productos
+            <span className="rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-accent">
+              Próximamente
+            </span>
+          </Link>
+
+          {afterPages.map((p) => pageLink(p))}
         </nav>
 
         <button
@@ -167,16 +173,11 @@ export function SiteHeader({
       {open && (
         <div className="border-t border-stone-200 bg-paper px-4 pb-6 pt-2 text-ink md:hidden">
           <nav className="flex flex-col gap-1">
-            <Link href="/" className="rounded-lg px-2 py-3 text-base font-medium hover:bg-stone-100">
-              Inicio
-            </Link>
-            <Link
-              href={EXPEDICIONES.href}
-              className="rounded-lg px-2 py-3 text-base font-medium hover:bg-stone-100"
-            >
-              {EXPEDICIONES.label}
-            </Link>
-            {SUBCATS.map((s) => (
+            {beforePages.map((p) => pageLink(p, true))}
+            <p className="px-2 pt-3 text-xs font-semibold uppercase tracking-wider text-stone-400">
+              Nuestros Viajes
+            </p>
+            {VIAJES.map((s) => (
               <Link
                 key={s.href}
                 href={s.href}
@@ -185,15 +186,16 @@ export function SiteHeader({
                 {s.label}
               </Link>
             ))}
-            {pages.map((p) => (
-              <Link
-                key={p.slug}
-                href={`/${p.slug}`}
-                className="rounded-lg px-2 py-3 text-base font-medium hover:bg-stone-100"
-              >
-                {p.title}
-              </Link>
-            ))}
+            <Link
+              href="/productos"
+              className="flex items-center gap-2 rounded-lg px-2 py-3 text-base font-medium hover:bg-stone-100"
+            >
+              Nuestros Productos
+              <span className="rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-accent">
+                Próximamente
+              </span>
+            </Link>
+            {afterPages.map((p) => pageLink(p, true))}
           </nav>
         </div>
       )}

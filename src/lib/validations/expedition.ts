@@ -104,6 +104,7 @@ export const expeditionInputSchema = z.object({
   template: z.preprocess(clean, z.enum(TEMPLATES).default("CINEMATIC")),
   status: z.preprocess(clean, z.enum(STATUSES).default("DRAFT")),
   featured: z.coerce.boolean().default(false),
+  homeOrder: z.preprocess(clean, z.coerce.number().int().default(0)),
 
   seoTitle: optString,
   seoDescription: optString,

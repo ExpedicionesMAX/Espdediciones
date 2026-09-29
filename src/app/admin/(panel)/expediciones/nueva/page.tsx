@@ -52,6 +52,7 @@ const EMPTY: ExpeditionFormValues = {
   seoDescription: "",
   whatsappMessage: "",
   featured: false,
+  homeOrder: "0",
   itinerary: [],
 };
 

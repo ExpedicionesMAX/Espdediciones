@@ -88,6 +88,7 @@ export default async function EditExpeditionPage({
     seoDescription: exp.seoDescription ?? "",
     whatsappMessage: exp.whatsappMessage ?? "",
     featured: exp.featured,
+    homeOrder: exp.homeOrder?.toString() ?? "0",
     itinerary: exp.itinerary.map((d) => ({
       title: d.title,
       description: d.description ?? "",
