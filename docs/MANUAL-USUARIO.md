@@ -9,6 +9,30 @@ programar, HTML ni bases de datos. Todo se hace desde pantallas.
 
 ---
 
+## Actualización — 29/09/2026 (Home editorial y navegación por «Nuestros Viajes»)
+
+- **Menú:** «Cumbre» (logo) es Inicio. El menú es: **Sobre Nosotros**, **Nuestros Viajes**
+  (desplegable con las 4 categorías), **Nuestros Productos** (marcado *Próximamente*) y tus
+  páginas del CMS (F.A.Q.).
+- **Calendario:** se quitó de la web pública. **En el Admin se mantiene** (menú → Calendario)
+  para tu organización interna.
+- **Home nueva**, todo administrable desde el panel:
+  1. **Hero** de presentación.
+  2. **Próxima experiencia**: en *Configuración → Home — Próxima experiencia* elegís cuál
+     destacar como «Próximamente»; si no elegís ninguna, se usa la de fecha más próxima.
+  3. **Experiencias destacadas**: marcá *Destacada en la home* en cada expedición y usá
+     *Orden en destacadas* (menor número = primero).
+  4. **¿Por qué nosotros?**: en *Configuración → Home — ¿Por qué nosotros?* agregás pilares
+     (ícono emoji + título + descripción), los ordenás y activás/desactivás.
+  5. **Reseñas de expedicionarios**: se administran en **Reseñas y testimonios** (ver abajo).
+  6. **CTA final**.
+- **Reseñas y testimonios (panel):** ahora podés **crear** una reseña (nombre, texto, estrellas,
+  foto/avatar por URL, experiencia asociada, orden), **mostrar/ocultar** en la home,
+  **eliminar**, además de moderar las que envían los visitantes. Solo las **Aprobadas y
+  activas** salen en la home.
+
+---
+
 ## Actualización — 28/09/2026 (rediseño «viajes fotográficos»)
 
 El sitio se reorientó a **agencia de viajes fotográficos**, con contacto por **grupo de
