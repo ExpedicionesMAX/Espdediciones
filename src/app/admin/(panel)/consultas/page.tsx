@@ -107,6 +107,11 @@ export default async function InquiriesPage({
                 </div>
               </div>
 
+              {q.source === "a-medida" && (
+                <span className="mt-3 inline-block rounded-full bg-accent/15 px-2.5 py-0.5 text-xs font-semibold text-accent">
+                  Viaje a medida
+                </span>
+              )}
               <p className="mt-3 whitespace-pre-line text-sm text-stone-700">{q.message}</p>
 
               {q.expedition && (

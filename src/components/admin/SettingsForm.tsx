@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState, useState } from "react";
 import { updateSettings, type SettingsFormState } from "@/server/actions/settings";
 import { FONT_OPTIONS } from "@/lib/fonts";
@@ -191,31 +192,25 @@ export function SettingsForm({
         </div>
       </Card>
 
-      <Card title="Textos de la home" description="Los títulos y el llamado a la acción de la portada. Vacío = usa el texto por defecto.">
-        <div>
-          <label htmlFor="homeExpsTitle" className={labelCls}>Título de la sección de expediciones</label>
-          <input id="homeExpsTitle" name="homeExpsTitle" defaultValue={values.homeExpsTitle} placeholder="Próximas expediciones" className={inputCls} />
-        </div>
-        <div>
-          <label htmlFor="homeExpsSubtitle" className={labelCls}>Subtítulo de esa sección</label>
-          <input id="homeExpsSubtitle" name="homeExpsSubtitle" defaultValue={values.homeExpsSubtitle} placeholder="Salidas guiadas con cupos limitados." className={inputCls} />
-        </div>
-        <hr className="border-stone-100" />
-        <div>
-          <label htmlFor="ctaTitle" className={labelCls}>Título del llamado a la acción (final de la home)</label>
-          <input id="ctaTitle" name="ctaTitle" defaultValue={values.ctaTitle} placeholder="¿Buscás una expedición a medida?" className={inputCls} />
-        </div>
-        <div>
-          <label htmlFor="ctaText" className={labelCls}>Texto del llamado a la acción</label>
-          <textarea id="ctaText" name="ctaText" rows={2} defaultValue={values.ctaText} placeholder="Contanos qué tenés en mente…" className={inputCls} />
-        </div>
-        <div>
-          <label htmlFor="ctaButton" className={labelCls}>Texto del botón</label>
-          <input id="ctaButton" name="ctaButton" defaultValue={values.ctaButton} placeholder="Escribinos" className={`${inputCls} max-w-xs`} />
-        </div>
+      <Card title="Textos de la home" description="Los textos del inicio institucional ahora se editan en su propia sección.">
+        {/* Valores anteriores (ya no se muestran en el inicio): se reenvían tal cual para no borrarlos al guardar. */}
+        <input type="hidden" name="homeExpsTitle" value={values.homeExpsTitle} />
+        <input type="hidden" name="homeExpsSubtitle" value={values.homeExpsSubtitle} />
+        <input type="hidden" name="ctaTitle" value={values.ctaTitle} />
+        <input type="hidden" name="ctaText" value={values.ctaText} />
+        <input type="hidden" name="ctaButton" value={values.ctaButton} />
+        <p className="text-sm text-stone-600">
+          Portada, historia, filosofía, equipo, la selección de viajes, el cierre y el orden de las
+          secciones se editan en{" "}
+          <Link href="/admin/inicio" className="font-semibold text-accent hover:underline">
+            Inicio (Nosotros)
+          </Link>
+          .
+        </p>
       </Card>
 
-      <Card title="Home — Próxima experiencia" description="Se muestra arriba de todo como «Próximamente». Si no elegís ninguna, se toma la de fecha más próxima.">
+      <Card title="Home — Próxima experiencia" description="Sección opcional del inicio (se activa y ordena en «Inicio (Nosotros)»). Si no elegís ninguna, se toma la de fecha más próxima.">
+
         <div>
           <label htmlFor="upcomingExpeditionId" className={labelCls}>Próxima experiencia destacada</label>
           <select
@@ -232,7 +227,7 @@ export function SettingsForm({
         </div>
       </Card>
 
-      <Card title="Home — ¿Por qué nosotros?" description="Pilares que diferencian a Cumbre. Cada uno con ícono (emoji), título y descripción.">
+      <Card title="Home — ¿Por qué nosotros?" description="Pilares que diferencian al proyecto (ícono, título y descripción). Sección opcional del inicio: se ordena u oculta en «Inicio (Nosotros)».">
         <input type="hidden" name="homeWhyPillars" value={JSON.stringify(pillars)} />
         <div>
           <label htmlFor="homeWhyTitle" className={labelCls}>Título de la sección</label>

@@ -1,6 +1,7 @@
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
+import { ABOUT_PAGE_SLUG } from "@/lib/page-content";
 
 export const dynamic = "force-dynamic";
 
@@ -32,6 +33,8 @@ export default async function DynamicPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  // La página institucional es el inicio: /nosotros lleva a esa sección (sin duplicar contenido).
+  if (slug === ABOUT_PAGE_SLUG) permanentRedirect("/#nosotros");
   const page = await prisma.page.findUnique({ where: { slug } });
   if (!page || !page.published) notFound();
 

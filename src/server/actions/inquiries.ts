@@ -22,6 +22,11 @@ const inquirySchema = z.object({
     (v) => (v === "" || v == null ? undefined : v),
     z.string().optional(),
   ),
+  // Origen opcional: solo valores conocidos (lista blanca). Sin origen = "contact".
+  origin: z.preprocess(
+    (v) => (v === "" || v == null ? undefined : v),
+    z.enum(["a-medida"]).optional().catch(undefined),
+  ),
 });
 
 export type InquiryFormState = {
@@ -49,6 +54,7 @@ export async function submitInquiry(
     phone: formData.get("phone"),
     message: formData.get("message"),
     expeditionId: formData.get("expeditionId"),
+    origin: formData.get("origin"),
   });
 
   if (!parsed.success) {
@@ -71,7 +77,7 @@ export async function submitInquiry(
     expeditionId = exp?.id ?? null;
   }
 
-  const source = expeditionId ? "expedition" : "contact";
+  const source = expeditionId ? "expedition" : (d.origin ?? "contact");
   const contactId = await upsertContact({
     email: d.email,
     name: d.name,

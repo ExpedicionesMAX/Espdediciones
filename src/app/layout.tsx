@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Fraunces, Oswald, Anton, Montserrat } from "next/font/google";
 import { getBaseUrl } from "@/lib/base-url";
+import { getSiteSettings } from "@/lib/site";
 import "./globals.css";
 
 const inter = Inter({
@@ -38,15 +39,20 @@ const montserrat = Montserrat({
   weight: ["600", "700", "800"],
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(getBaseUrl()),
-  title: {
-    default: "Cumbre — Expediciones y montañismo",
-    template: "%s · Cumbre",
-  },
-  description:
-    "Expediciones fotográficas, montañismo, trekking y travesías de naturaleza.",
-};
+// El nombre del sitio sale de Configuración (con respaldo si la base no responde).
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  return {
+    metadataBase: new URL(getBaseUrl()),
+    title: {
+      default: settings.tagline ? `${settings.siteName} — ${settings.tagline}` : settings.siteName,
+      template: `%s · ${settings.siteName}`,
+    },
+    description:
+      settings.tagline ??
+      "Expediciones fotográficas, montañismo, trekking y travesías de naturaleza.",
+  };
+}
 
 export default function RootLayout({
   children,

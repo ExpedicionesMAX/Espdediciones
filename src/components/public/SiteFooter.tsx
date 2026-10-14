@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { SiteSettingsData } from "@/lib/site";
+import { CATALOG_CATEGORIES, CUSTOM_TRIP_PATH, catalogHref } from "@/lib/trip-categories";
 
 const SOCIAL_LABELS: Record<string, string> = {
   instagram: "Instagram",
@@ -36,22 +37,24 @@ export function SiteFooter({ settings }: { settings: SiteSettingsData }) {
           </p>
           <ul className="mt-4 space-y-2 text-sm">
             <li>
-              <Link href="/expediciones" className="hover:text-white">
-                Expediciones Fotográficas
+              <Link href="/" className="hover:text-white">
+                Nosotros
               </Link>
             </li>
             <li>
-              <Link href="/expediciones?categoria=coleccionable" className="hover:text-white">
-                Viajes Coleccionables
+              <Link href={catalogHref(null)} className="hover:text-white">
+                Nuestros Viajes
               </Link>
             </li>
+            {CATALOG_CATEGORIES.map((c) => (
+              <li key={c.key} className="pl-3">
+                <Link href={catalogHref(c.key)} className="text-stone-400 hover:text-white">
+                  {c.label}
+                </Link>
+              </li>
+            ))}
             <li>
-              <Link href="/expediciones?categoria=escapada" className="hover:text-white">
-                Escapadas
-              </Link>
-            </li>
-            <li>
-              <Link href="/expediciones?categoria=a-medida" className="hover:text-white">
+              <Link href={CUSTOM_TRIP_PATH} className="hover:text-white">
                 Viajes a Medida
               </Link>
             </li>

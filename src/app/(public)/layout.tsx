@@ -5,6 +5,7 @@ import { getSiteSettings } from "@/lib/site";
 import { whatsappUrl } from "@/lib/format";
 import { fontVar } from "@/lib/fonts";
 import { prisma } from "@/lib/prisma";
+import { ABOUT_PAGE_SLUG } from "@/lib/page-content";
 
 export default async function PublicLayout({
   children,
@@ -15,7 +16,8 @@ export default async function PublicLayout({
     getSiteSettings(),
     prisma.page
       .findMany({
-        where: { published: true, showInMenu: true },
+        // «Nosotros» ahora es el inicio: no se repite en el menú.
+        where: { published: true, showInMenu: true, slug: { not: ABOUT_PAGE_SLUG } },
         orderBy: { menuOrder: "asc" },
         select: { slug: true, title: true },
       })

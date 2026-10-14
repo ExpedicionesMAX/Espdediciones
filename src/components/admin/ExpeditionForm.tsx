@@ -161,13 +161,17 @@ export function ExpeditionForm({
           </div>
         </div>
         <div>
-          <label htmlFor="category" className={labelCls}>Categoría (línea del menú)</label>
+          <label htmlFor="category" className={labelCls}>Categoría (filtro de «Nuestros Viajes»)</label>
           <select id="category" name="category" defaultValue={values.category || "fotografica"} className={inputCls}>
-            {CATEGORIES.map((c) => (
-              <option key={c} value={c}>{CATEGORY_TEXT[c]}</option>
+            {/* «Viajes a Medida» ya no es categoría del catálogo (tiene su propia página);
+                solo se ofrece si este viaje ya la tenía, para no perder el dato. */}
+            {CATEGORIES.filter((c) => c !== "a-medida" || values.category === "a-medida").map((c) => (
+              <option key={c} value={c}>
+                {c === "a-medida" ? `${CATEGORY_TEXT[c]} (no se muestra en el catálogo)` : CATEGORY_TEXT[c]}
+              </option>
             ))}
           </select>
-          <p className={helpCls}>Define en qué sección del menú aparece esta expedición.</p>
+          <p className={helpCls}>Define en qué filtro del catálogo «Nuestros Viajes» aparece este viaje.</p>
         </div>
 
         <div>

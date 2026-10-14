@@ -17,6 +17,10 @@ const NAV: NavItem[] = [
   { href: "/admin/notificaciones", label: "Notificaciones" },
   { href: "/admin/expediciones", label: "Expediciones", permission: PERMISSIONS.EXPEDITION_READ },
   { href: "/admin/calendario", label: "Calendario", permission: PERMISSIONS.EXPEDITION_READ },
+  { href: "/admin/inicio", label: "Inicio (Nosotros)", permission: PERMISSIONS.PAGE_MANAGE },
+  { href: "/admin/viajes-a-medida", label: "Viajes a Medida", permission: PERMISSIONS.PAGE_MANAGE },
+  // Recibe las consultas del formulario de Viajes a Medida.
+  { href: "/admin/consultas", label: "Consultas", permission: PERMISSIONS.INQUIRY_READ },
   { href: "/admin/paginas", label: "Páginas", permission: PERMISSIONS.PAGE_MANAGE },
   { href: "/admin/testimonios", label: "Testimonios", permission: PERMISSIONS.CONTENT_MODERATE },
   { href: "/admin/estadisticas", label: "Estadísticas", permission: PERMISSIONS.STATS_VIEW },

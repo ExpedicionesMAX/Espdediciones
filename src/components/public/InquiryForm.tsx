@@ -11,9 +11,12 @@ const inputClass =
 export function InquiryForm({
   expeditionId,
   expeditionName,
+  origin,
 }: {
   expeditionId?: string;
   expeditionName?: string;
+  /** Origen de la consulta para el panel (p. ej. "a-medida"). */
+  origin?: "a-medida";
 }) {
   const [state, formAction, pending] = useActionState(submitInquiry, initial);
 
@@ -35,6 +38,7 @@ export function InquiryForm({
       {expeditionId && (
         <input type="hidden" name="expeditionId" value={expeditionId} />
       )}
+      {origin && <input type="hidden" name="origin" value={origin} />}
       {/* honeypot anti-bot: oculto para humanos */}
       <input
         type="text"

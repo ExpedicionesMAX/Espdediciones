@@ -27,6 +27,21 @@ export default async function PanelLayout({
       show: hasPermission(user, PERMISSIONS.EXPEDITION_READ),
     },
     {
+      href: "/admin/inicio",
+      label: "Inicio",
+      show: hasPermission(user, PERMISSIONS.PAGE_MANAGE),
+    },
+    {
+      href: "/admin/viajes-a-medida",
+      label: "A medida",
+      show: hasPermission(user, PERMISSIONS.PAGE_MANAGE),
+    },
+    {
+      href: "/admin/consultas",
+      label: "Consultas",
+      show: hasPermission(user, PERMISSIONS.INQUIRY_READ),
+    },
+    {
       href: "/admin/paginas",
       label: "Páginas",
       show: hasPermission(user, PERMISSIONS.PAGE_MANAGE),

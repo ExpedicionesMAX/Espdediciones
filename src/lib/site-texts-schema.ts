@@ -9,8 +9,15 @@ export type TextField = {
 export type SiteTexts = Record<string, string>;
 
 export const SITE_TEXTS: TextField[] = [
-  // Página Expediciones
-  { key: "expsTitle", label: "Título", default: "Expediciones", group: "Página Expediciones" },
+  // Catálogo Nuestros Viajes (/expediciones)
+  { key: "expsTitle", label: "Título", default: "Nuestros Viajes", group: "Página Nuestros Viajes" },
+  { key: "expsSubtitle", label: "Texto de presentación", default: "Distintas formas de viajar, una misma manera de mirar. Elegí cómo querés explorar.", group: "Página Nuestros Viajes", multiline: true },
+  { key: "expsAllLabel", label: "Filtro «todos los viajes»", default: "Todos", group: "Página Nuestros Viajes" },
+  { key: "catFotograficaIntro", label: "Presentación de Expediciones Fotográficas", default: "Nuestros viajes fotográficos guiados.", group: "Página Nuestros Viajes", multiline: true },
+  { key: "catEscapadaIntro", label: "Presentación de Escapadas", default: "Salidas cortas para desconectar.", group: "Página Nuestros Viajes", multiline: true },
+  { key: "catColeccionableIntro", label: "Presentación de Viajes Coleccionables", default: "Experiencias únicas para coleccionar.", group: "Página Nuestros Viajes", multiline: true },
+  { key: "expsEmptyTitle", label: "Categoría sin viajes: título", default: "Próximamente", group: "Página Nuestros Viajes" },
+  { key: "expsEmptyText", label: "Categoría sin viajes: texto", default: "Por el momento no hay experiencias publicadas en esta categoría. Mirá el resto de nuestros viajes o consultanos por uno a medida.", group: "Página Nuestros Viajes", multiline: true },
 
   // Página Fechas
   { key: "fechasTitle", label: "Título", default: "Próximas fechas", group: "Página Fechas" },

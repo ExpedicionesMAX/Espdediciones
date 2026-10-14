@@ -114,6 +114,26 @@ export function spotsInfo(
   };
 }
 
+const MONTH_NAMES = [
+  "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+  "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
+];
+
+/**
+ * Temporada de un viaje a partir de los datos cargados: rango de fechas si las
+ * hay; si no, los meses disponibles. Sin datos → null (no se muestra nada).
+ */
+export function seasonLabel(
+  startDate: Date | string | null | undefined,
+  endDate: Date | string | null | undefined,
+  months: number[] | null | undefined,
+): string | null {
+  if (startDate) return formatDateRange(startDate, endDate);
+  const valid = [...new Set(months ?? [])].filter((m) => m >= 1 && m <= 12).sort((a, b) => a - b);
+  if (valid.length === 0) return null;
+  return valid.map((m) => MONTH_NAMES[m - 1]).join(" · ");
+}
+
 /** Enlace wa.me con mensaje pre-cargado. `number` sin +, solo dígitos. */
 export function whatsappUrl(number: string | null | undefined, message?: string): string | null {
   if (!number) return null;

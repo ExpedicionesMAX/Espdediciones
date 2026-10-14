@@ -503,6 +503,12 @@ model SiteSettings {
   // Todos los demás textos del sitio (portadas de páginas y rótulos de secciones)
   texts Json?
 
+  // Inicio institucional (Nosotros): bloques, textos, imágenes, equipo, orden y visibilidad.
+  // Ver src/lib/home-content.ts. null = usa los valores por defecto.
+  homeContent Json?
+  // Página Viajes a Medida. Ver src/lib/custom-trip-content.ts. null = valores por defecto.
+  customTripContent Json?
+
   updatedAt DateTime @updatedAt
 }
 

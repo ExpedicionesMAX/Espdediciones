@@ -10,6 +10,17 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "*.supabase.co" },
     ],
   },
+  async redirects() {
+    return [
+      // Viajes a Medida dejó de ser una categoría del catálogo: los enlaces viejos van a su página.
+      {
+        source: "/expediciones",
+        has: [{ type: "query", key: "categoria", value: "a-medida" }],
+        destination: "/viajes-a-medida",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
