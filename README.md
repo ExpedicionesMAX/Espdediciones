@@ -55,6 +55,31 @@ El seed crea un **SUPER_ADMIN** con las credenciales de `.env`
 | `npm run db:migrate` | Migraciones de Prisma |
 | `npm run db:seed` | Datos demo |
 | `npm run db:studio` | Prisma Studio (explorar la base) |
+| `npm test` | Tests unitarios (`node:test` + `tsx`, sin dependencias extra) |
+| `npm run lint` | ESLint |
+
+> ⚠️ El `.env` local puede apuntar a la base de **producción**: no correr `db:seed`,
+> `db:migrate` ni `db:push` sin revisar antes el impacto (`prisma migrate diff`).
+
+## Despliegue (Vercel)
+
+- Cada push a `main` despliega automáticamente.
+- `vercel.json` fija la región de las funciones en **`gru1` (São Paulo)**, junto a la base de
+  Supabase (`sa-east-1`): cada consulta evita cruzar el continente.
+- Variables necesarias en Vercel: las mismas del `.env` (`DATABASE_URL`, `DIRECT_URL`,
+  `AUTH_SECRET`, `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`). No hay variables nuevas.
+- Subida de fotos: máx. 4 MB por archivo (Vercel corta en 4,5 MB por request); el panel achica
+  las fotos grandes antes de subirlas.
+
+## Contenido editable del sitio
+
+| Qué | Dónde se edita | Dónde se guarda |
+|---|---|---|
+| Inicio institucional (Nosotros) | Panel → Inicio (Nosotros) | `SiteSettings.homeContent` |
+| Viajes a Medida | Panel → Viajes a Medida | `SiteSettings.customTripContent` |
+| Títulos del catálogo y rótulos | Panel → Textos del sitio | `SiteSettings.texts` |
+| Contacto, redes, nombre, colores | Panel → Configuración | `SiteSettings` |
+| Viajes y su categoría | Panel → Viajes y categorías | `Expedition` |
 
 ## Roles y permisos
 

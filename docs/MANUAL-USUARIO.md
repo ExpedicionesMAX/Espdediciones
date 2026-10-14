@@ -9,6 +9,40 @@ programar, HTML ni bases de datos. Todo se hace desde pantallas.
 
 ---
 
+## Actualización — 13/10/2026 (Inicio institucional, catálogo con filtros y Viajes a Medida)
+
+**El sitio público**
+- **El inicio presenta primero el proyecto:** portada, *Nuestra historia*, *Nuestra filosofía*,
+  *Equipo* (si cargás integrantes), una selección de *Nuestros Viajes*, reseñas y un cierre con
+  los canales de contacto. `/nosotros` ahora lleva a esa sección del inicio.
+- **Nuestros Viajes** (`/expediciones`): ya no hay buscador. Arriba hay cuatro filtros:
+  *Todos*, *Expediciones Fotográficas*, *Escapadas* y *Viajes Coleccionables*.
+- **Viajes a Medida** tiene su propia página (`/viajes-a-medida`) con formulario de consulta y
+  WhatsApp. Ya **no** es una categoría del catálogo.
+- **Ficha de cada viaje:** muestra la categoría, el lugar (región y país), la temporada (los
+  meses disponibles) y la edad mínima, siempre que estén cargados. El precio y los cupos siguen
+  sin mostrarse.
+
+**El panel (menú agrupado)**
+- **Sitio web → Inicio (Nosotros):** editás portada (título, texto, foto, botones), historia,
+  filosofía, equipo, la sección de viajes, el cierre y el **orden y la visibilidad** de cada
+  sección. Los campos con la etiqueta amarilla **«Provisional»** muestran un texto sugerido:
+  reemplazalos por la información real.
+- **Sitio web → Viajes a Medida:** portada, explicación, pasos de la consulta, formulario y
+  botón de WhatsApp.
+- **Consultas y reseñas → Consultas:** las consultas del formulario de Viajes a Medida llegan
+  acá con la etiqueta «Viaje a medida» (y también a Notificaciones).
+- **Viajes y categorías:** la categoría de cada viaje define en qué filtro aparece.
+- **Cambios sin guardar:** si editás algo y querés salir sin guardar, el panel te avisa. El
+  mensaje «Guardado» aparece recién cuando el servidor confirmó que se guardó.
+- **Fotos:** las fotos grandes (por ejemplo, del celular) se achican solas antes de subirse,
+  sin perder calidad visible. Se aceptan JPG, PNG, WebP, GIF y AVIF (hasta 4 MB después de
+  achicarse).
+- **Seguridad:** si desactivás a un usuario o le cambiás el rol, el cambio rige **en el
+  momento** (antes duraba hasta que vencía su sesión).
+
+---
+
 ## Actualización — 29/09/2026 (Home editorial y navegación por «Nuestros Viajes»)
 
 - **Menú:** «Cumbre» (logo) es Inicio. El menú es: **Sobre Nosotros**, **Nuestros Viajes**

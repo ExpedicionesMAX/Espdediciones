@@ -16,7 +16,8 @@ export const authConfig = {
       const isLoggedIn = !!auth?.user;
 
       if (pathname === "/admin/login") {
-        if (isLoggedIn) {
+        // ?sesion=vencida: el token existe pero el usuario fue desactivado → mostrar el login.
+        if (isLoggedIn && !request.nextUrl.searchParams.has("sesion")) {
           return Response.redirect(new URL("/admin/dashboard", request.nextUrl));
         }
         return true;

@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useActionState } from "react";
 import { savePage, type PageFormState } from "@/server/actions/pages";
+import { useDirtyForm } from "@/components/admin/useUnsavedChanges";
+import { UnsavedBadge } from "@/components/admin/content-form-ui";
 
 export type PageFormValues = {
   id?: string;
@@ -29,9 +31,10 @@ export function PageForm({ values }: { values: PageFormValues }) {
     { ok: false },
   );
   const err = (f: string) => state.fieldErrors?.[f]?.[0];
+  const { dirty, formProps } = useDirtyForm(state);
 
   return (
-    <form action={formAction} className="max-w-2xl space-y-5">
+    <form action={formAction} {...formProps} className="max-w-2xl space-y-5">
       {values.id && <input type="hidden" name="id" value={values.id} />}
       {state.error && (
         <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{state.error}</p>
@@ -107,6 +110,7 @@ export function PageForm({ values }: { values: PageFormValues }) {
         >
           {pending ? "Guardando…" : "Guardar página"}
         </button>
+        <UnsavedBadge show={dirty && !pending} />
         {values.publicSlug && (
           <Link href={`/${values.publicSlug}`} target="_blank" className="text-sm font-medium text-stone-600 hover:text-ink">
             Ver ↗

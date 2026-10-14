@@ -16,10 +16,23 @@ export async function updateTexts(
 ): Promise<TextsFormState> {
   const user = await requirePermission(PERMISSIONS.SETTINGS_MANAGE);
 
+  // Los textos ocultos (secciones que ya no existen) no vienen en el formulario:
+  // se conserva lo que tuvieran guardado para no borrarlo.
+  const current = await prisma.siteSettings.findUnique({
+    where: { id: "singleton" },
+    select: { texts: true },
+  });
+  const stored = (current?.texts as Record<string, unknown> | null) ?? {};
+
   // Solo guardamos los textos personalizados; los vacíos usan el valor por defecto.
   const texts: Record<string, string> = {};
   for (const t of SITE_TEXTS) {
-    const v = formData.get(t.key)?.toString().trim();
+    if (t.hidden) {
+      const prev = stored[t.key];
+      if (typeof prev === "string" && prev.trim()) texts[t.key] = prev;
+      continue;
+    }
+    const v = formData.get(t.key)?.toString().trim().slice(0, 2000);
     if (v && v !== t.default) texts[t.key] = v;
   }
 

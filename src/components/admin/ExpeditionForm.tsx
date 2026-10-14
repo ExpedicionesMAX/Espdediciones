@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useActionState } from "react";
+import { useDirtyForm } from "@/components/admin/useUnsavedChanges";
 import type { ExpeditionFormState } from "@/server/actions/expeditions";
 import { ItineraryEditor, type ItineraryDayValue } from "./ItineraryEditor";
 import { GalleryField } from "./GalleryField";
@@ -134,9 +135,10 @@ export function ExpeditionForm({
   );
 
   const err = (field: string) => state.fieldErrors?.[field]?.[0];
+  const { dirty, formProps } = useDirtyForm(state);
 
   return (
-    <form id="expedition-form" action={formAction} className="space-y-6">
+    <form id="expedition-form" action={formAction} {...formProps} className="space-y-6">
       {values.id && <input type="hidden" name="id" value={values.id} />}
 
       {state.error && (
@@ -432,6 +434,12 @@ export function ExpeditionForm({
           Cancelar
         </Link>
         <div className="flex items-center gap-3">
+          {dirty && !pending && (
+            <span className="flex items-center gap-2 text-xs font-medium text-amber-700" aria-live="polite">
+              <span aria-hidden="true" className="h-2 w-2 rounded-full bg-amber-500" />
+              Cambios sin guardar
+            </span>
+          )}
           {values.publicSlug && (
             <Link
               href={`/expediciones/${values.publicSlug}`}

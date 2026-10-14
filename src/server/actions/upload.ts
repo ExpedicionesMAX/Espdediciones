@@ -3,10 +3,9 @@
 import { createClient } from "@supabase/supabase-js";
 import { requirePermission } from "@/lib/auth-guard";
 import { PERMISSIONS } from "@/lib/permissions";
+import { MAX_UPLOAD_BYTES, detectImageType } from "@/lib/image-sniff";
 
 export type UploadResult = { ok: boolean; url?: string; error?: string };
-
-const MAX_BYTES = 8 * 1024 * 1024; // 8 MB
 
 export async function uploadMediaImage(formData: FormData): Promise<UploadResult> {
   await requirePermission(PERMISSIONS.MEDIA_MANAGE);
@@ -15,11 +14,14 @@ export async function uploadMediaImage(formData: FormData): Promise<UploadResult
   if (!(file instanceof File) || file.size === 0) {
     return { ok: false, error: "No se recibió el archivo." };
   }
-  if (!file.type.startsWith("image/")) {
-    return { ok: false, error: "Solo se permiten imágenes (JPG, PNG, WebP…)." };
+  if (file.size > MAX_UPLOAD_BYTES) {
+    return { ok: false, error: "La imagen supera los 4 MB. Probá con una versión más liviana." };
   }
-  if (file.size > MAX_BYTES) {
-    return { ok: false, error: "La imagen supera los 8 MB." };
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  // El tipo se decide por el contenido real del archivo, no por lo que declara el navegador.
+  const kind = detectImageType(bytes);
+  if (!kind) {
+    return { ok: false, error: "Solo se permiten fotos JPG, PNG, WebP, GIF o AVIF." };
   }
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -31,12 +33,10 @@ export async function uploadMediaImage(formData: FormData): Promise<UploadResult
 
   const supabase = createClient(url, key, { auth: { persistSession: false } });
 
-  const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
-  const path = `expediciones/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-  const bytes = new Uint8Array(await file.arrayBuffer());
+  const path = `expediciones/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${kind.ext}`;
 
   const { error } = await supabase.storage.from(bucket).upload(path, bytes, {
-    contentType: file.type,
+    contentType: kind.mime,
     upsert: false,
   });
   if (error) {

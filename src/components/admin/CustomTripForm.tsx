@@ -9,6 +9,7 @@ import {
   type ProcessStep,
 } from "@/lib/custom-trip-content";
 import { ImageField } from "@/components/admin/ImageField";
+import { useSavedSnapshot } from "@/components/admin/useUnsavedChanges";
 import {
   Card,
   ListEditor,
@@ -31,13 +32,15 @@ export function CustomTripForm({
 }) {
   const [state, formAction, pending] = useActionState(updateCustomTripContent, initial);
   const [c, setC] = useState<CustomTripContent>(stored);
+  const payload = JSON.stringify(c);
+  const { dirty, onSubmit } = useSavedSnapshot(payload, state);
 
   const set = <K extends keyof CustomTripContent>(block: K, patch: Partial<CustomTripContent[K]>) =>
     setC((prev) => ({ ...prev, [block]: { ...(prev[block] as object), ...patch } }) as CustomTripContent);
 
   return (
-    <form action={formAction} className="max-w-3xl space-y-6">
-      <input type="hidden" name="payload" value={JSON.stringify(c)} />
+    <form action={formAction} onSubmit={onSubmit} className="max-w-3xl space-y-6">
+      <input type="hidden" name="payload" value={payload} />
 
       <p className="rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-900">
         Viajes a Medida es una página propia (<code>/viajes-a-medida</code>), separada del catálogo.
@@ -137,7 +140,7 @@ export function CustomTripForm({
       </Card>
 
       <div className="sticky bottom-4 z-10">
-        <SaveBar pending={pending} success={state.success} error={state.error} label="Guardar Viajes a Medida" />
+        <SaveBar pending={pending} success={state.success} error={state.error} label="Guardar Viajes a Medida" dirty={dirty} />
       </div>
     </form>
   );

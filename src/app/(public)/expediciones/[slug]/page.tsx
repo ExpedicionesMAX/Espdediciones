@@ -1,3 +1,4 @@
+import { cache } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -9,7 +10,15 @@ import { getSiteSettings } from "@/lib/site";
 import { getSiteTexts } from "@/lib/site-texts";
 import { buildMediaList } from "@/lib/media";
 import { MediaGallery } from "@/components/public/MediaGallery";
-import { DIFFICULTY_LABELS, ACTIVITY_LABELS, whatsappUrl } from "@/lib/format";
+import { DIFFICULTY_LABELS, ACTIVITY_LABELS, seasonLabel, whatsappUrl } from "@/lib/format";
+import { tripLocation } from "@/components/public/ExpeditionCard";
+import { getBaseUrl } from "@/lib/base-url";
+import {
+  CUSTOM_TRIP_PATH,
+  catalogHref,
+  categoryLabel,
+  isCatalogCategory,
+} from "@/lib/trip-categories";
 
 export const dynamic = "force-dynamic";
 
@@ -20,24 +29,26 @@ function isVisible(exp: Pick<Expedition, "publishedAt" | "status" | "unpublishAt
   return true;
 }
 
+/** Una sola consulta por request, compartida entre la metadata y la página. */
+const getExpedition = cache((slug: string) =>
+  prisma.expedition.findUnique({
+    where: { slug },
+    include: {
+      destination: true,
+      itinerary: { orderBy: { dayNumber: "asc" } },
+    },
+  }),
+);
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const exp = await prisma.expedition.findUnique({
-    where: { slug },
-    select: {
-      name: true,
-      seoTitle: true,
-      seoDescription: true,
-      shortDescription: true,
-      ogImage: true,
-      coverImage: true,
-    },
-  });
-  if (!exp) return { title: "Expedición no encontrada" };
+  const exp = await getExpedition(slug);
+  // Un borrador no expone su título ni su descripción a quien adivine la URL.
+  if (!exp || !isVisible(exp)) return { title: "Viaje no encontrado", robots: { index: false } };
 
   const title = exp.seoTitle ?? exp.name;
   const description = exp.seoDescription ?? exp.shortDescription ?? undefined;
@@ -67,19 +78,22 @@ export default async function ExpeditionDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-
-  const exp = await prisma.expedition.findUnique({
-    where: { slug },
-    include: {
-      destination: true,
-      itinerary: { orderBy: { dayNumber: "asc" } },
-    },
-  });
-
+  const exp = await getExpedition(slug);
   if (!exp) notFound();
 
   const visible = isVisible(exp);
-  const session = await auth();
+  // Consultas independientes en paralelo (la base está en otra región: cada ida y vuelta cuenta).
+  const [session, settings, texts, testimonials] = await Promise.all([
+    auth(),
+    getSiteSettings(),
+    getSiteTexts(),
+    // Solo testimonios aprobados, activos y anclados a esta expedición (los ancla el admin).
+    prisma.testimonial.findMany({
+      where: { expeditionId: exp.id, status: "APPROVED", active: true },
+      orderBy: { createdAt: "desc" },
+      take: 12,
+    }),
+  ]);
   const isStaff = !!session?.user;
   if (!visible && !isStaff) notFound();
 
@@ -90,16 +104,11 @@ export default async function ExpeditionDetailPage({
       .catch(() => {});
   }
 
-  const settings = await getSiteSettings();
-  const texts = await getSiteTexts();
-
-  // Solo testimonios aprobados y anclados a esta expedición (los ancla el admin).
-  const testimonials = await prisma.testimonial.findMany({
-    where: { expeditionId: exp.id, status: "APPROVED" },
-    orderBy: { createdAt: "desc" },
-    take: 12,
-  });
   const media = buildMediaList(exp.gallery, exp.videoUrl);
+  const category = isCatalogCategory(exp.category) ? exp.category : null;
+  const location = tripLocation(exp);
+  const season = seasonLabel(exp.startDate, exp.endDate, exp.availableMonths);
+  const description = exp.fullDescription || exp.shortDescription;
 
   const waMessage =
     exp.whatsappMessage ??
@@ -107,26 +116,45 @@ export default async function ExpeditionDetailPage({
   const wa = whatsappUrl(settings.whatsappNumber, waMessage);
 
   const facts: { label: string; value: string }[] = [];
+  // Solo datos cargados: lo que no existe no se muestra.
   if (exp.durationDays) facts.push({ label: "Duración", value: `${exp.durationDays} días` });
+  if (season) facts.push({ label: exp.startDate ? "Fechas" : "Temporada", value: season });
   if (exp.difficulty) facts.push({ label: "Dificultad", value: DIFFICULTY_LABELS[exp.difficulty] });
+  if (exp.minAge) facts.push({ label: "Edad mínima", value: `${exp.minAge} años` });
   if (exp.distanceKm) facts.push({ label: "Distancia", value: `${exp.distanceKm} km` });
   if (exp.maxAltitude) facts.push({ label: "Altitud máx.", value: `${exp.maxAltitude} m` });
   if (exp.elevationGain) facts.push({ label: "Desnivel", value: `+${exp.elevationGain} m` });
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "TouristTrip",
-    name: exp.name,
-    description: exp.shortDescription ?? exp.subtitle ?? undefined,
-    image: exp.coverImage ? [exp.coverImage] : undefined,
-    provider: { "@type": "Organization", name: settings.siteName },
-  };
+  const base = getBaseUrl();
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "TouristTrip",
+      name: exp.name,
+      description: exp.shortDescription ?? exp.subtitle ?? undefined,
+      image: exp.coverImage ? [exp.coverImage] : undefined,
+      url: `${base}/expediciones/${exp.slug}`,
+      provider: { "@type": "Organization", name: settings.siteName },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: texts.expsTitle, item: `${base}/expediciones` },
+        ...(category
+          ? [{ "@type": "ListItem", position: 2, name: categoryLabel(category), item: `${base}${catalogHref(category)}` }]
+          : []),
+        { "@type": "ListItem", position: category ? 3 : 2, name: exp.name },
+      ],
+    },
+  ];
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        // "<" escapado: un texto con "</script>" no puede cerrar la etiqueta.
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
       {!visible && isStaff && (
         <div className="fixed left-1/2 top-20 z-50 -translate-x-1/2 rounded-full bg-amber-500 px-4 py-1.5 text-sm font-semibold text-white shadow-lg">
@@ -143,16 +171,34 @@ export default async function ExpeditionDetailPage({
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/30" />
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-16 pt-32 text-white sm:px-6">
+          {/* Migas de navegación */}
+          <nav aria-label="Ubicación" className="mb-5 text-sm text-stone-300">
+            <ol className="flex flex-wrap items-center gap-x-2 gap-y-1">
+              <li>
+                <Link href="/expediciones" className="hover:text-white">{texts.expsTitle}</Link>
+              </li>
+              {category && (
+                <>
+                  <li aria-hidden="true">/</li>
+                  <li>
+                    <Link href={catalogHref(category)} className="hover:text-white">
+                      {categoryLabel(category)}
+                    </Link>
+                  </li>
+                </>
+              )}
+            </ol>
+          </nav>
           <div className="flex flex-wrap gap-2">
-            {exp.activityType && (
+            {(category || exp.activityType) && (
               <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-ink">
-                {ACTIVITY_LABELS[exp.activityType]}
+                {category ? categoryLabel(category) : ACTIVITY_LABELS[exp.activityType!]}
               </span>
             )}
-            {exp.destination && (
+            {location && (
               <span className="rounded-full bg-black/40 px-3 py-1 text-xs font-semibold backdrop-blur">
-                {exp.destination.name}
-                {exp.destination.country ? ` · ${exp.destination.country}` : ""}
+                {location}
+                {exp.destination?.country ? ` · ${exp.destination.country}` : ""}
               </span>
             )}
           </div>
@@ -162,33 +208,30 @@ export default async function ExpeditionDetailPage({
           {exp.subtitle && (
             <p className="mt-4 max-w-2xl text-lg text-stone-200">{exp.subtitle}</p>
           )}
-          {exp.durationDays ? (
-            <p className="mt-4 text-sm text-stone-300">{exp.durationDays} días de viaje</p>
-          ) : null}
         </div>
       </section>
 
       {/* QUICK FACTS */}
       {facts.length > 0 && (
         <div className="border-b border-stone-200 bg-white">
-          <div className="mx-auto grid max-w-6xl grid-cols-2 gap-px overflow-hidden px-4 py-6 sm:grid-cols-3 sm:px-6 lg:grid-cols-5">
+          <dl className="mx-auto grid max-w-6xl grid-cols-2 gap-y-5 px-4 py-6 sm:grid-cols-3 sm:px-6 lg:grid-cols-5">
             {facts.map((f) => (
               <div key={f.label} className="px-2 text-center">
-                <p className="text-xs uppercase tracking-wider text-stone-500">{f.label}</p>
-                <p className="mt-1 font-display text-lg font-semibold text-ink">{f.value}</p>
+                <dt className="text-xs uppercase tracking-wider text-stone-500">{f.label}</dt>
+                <dd className="mt-1 font-display text-lg font-semibold text-ink">{f.value}</dd>
               </div>
             ))}
-          </div>
+          </dl>
         </div>
       )}
 
       <div className="mx-auto grid max-w-6xl gap-12 px-4 py-14 sm:px-6 lg:grid-cols-[1fr_360px]">
         {/* MAIN */}
         <div className="space-y-14">
-          {exp.fullDescription && (
+          {description && (
             <section>
               <h2 className="font-display text-2xl font-semibold text-ink">{texts.expLaExpedicion}</h2>
-              <p className="rich-text mt-4 text-stone-700">{exp.fullDescription}</p>
+              <p className="rich-text mt-4 text-stone-700">{description}</p>
             </section>
           )}
 
@@ -205,7 +248,7 @@ export default async function ExpeditionDetailPage({
                     </p>
                     <h3 className="mt-1 font-medium text-ink">{day.title}</h3>
                     {day.description && (
-                      <p className="mt-1 text-sm text-stone-600">{day.description}</p>
+                      <p className="mt-1 whitespace-pre-line text-sm text-stone-600">{day.description}</p>
                     )}
                     <p className="mt-2 flex flex-wrap gap-x-4 text-xs text-stone-500">
                       {day.distanceKm ? <span>{day.distanceKm} km</span> : null}
@@ -335,15 +378,29 @@ export default async function ExpeditionDetailPage({
                 Configurá el número de WhatsApp en el panel para habilitar este botón.
               </p>
             )}
+            <p className="mt-5 border-t border-stone-100 pt-4 text-sm text-stone-500">
+              ¿Buscás algo distinto?{" "}
+              <Link href={CUSTOM_TRIP_PATH} className="font-semibold text-accent hover:text-accent-dark">
+                Viajes a Medida
+              </Link>
+            </p>
           </div>
         </aside>
       </div>
 
-      <div className="border-t border-stone-200 bg-paper py-10 text-center">
-        <Link href="/expediciones" className="text-sm font-semibold text-accent hover:text-accent-dark">
-          ← Ver todas las expediciones
+      <nav
+        aria-label="Más viajes"
+        className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 border-t border-stone-200 bg-paper px-4 py-10 text-sm font-semibold"
+      >
+        <Link href="/expediciones" className="text-accent hover:text-accent-dark">
+          ← Volver a {texts.expsTitle}
         </Link>
-      </div>
+        {category && (
+          <Link href={catalogHref(category)} className="text-stone-600 hover:text-ink">
+            Más {categoryLabel(category)}
+          </Link>
+        )}
+      </nav>
     </>
   );
 }

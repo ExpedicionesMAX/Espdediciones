@@ -4,13 +4,14 @@ import { hasPermission, PERMISSIONS } from "@/lib/permissions";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { LogoutButton } from "@/components/admin/LogoutButton";
 import { NotificationBell } from "@/components/admin/NotificationBell";
+import { getSiteSettings } from "@/lib/site";
 
 export default async function PanelLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const user = await requireUser();
+  const [user, settings] = await Promise.all([requireUser(), getSiteSettings()]);
   const nav = { name: user.name, role: user.role, permissions: user.permissions };
 
   const mobileLinks = [
@@ -76,7 +77,7 @@ export default async function PanelLayout({
   return (
     <div className="min-h-screen bg-stone-100">
       <aside className="fixed inset-y-0 left-0 hidden w-64 bg-ink lg:block">
-        <AdminSidebar user={nav} />
+        <AdminSidebar user={nav} siteName={settings.siteName} />
       </aside>
 
       <div className="lg:pl-64">

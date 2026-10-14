@@ -5,6 +5,8 @@ import { useActionState, useState } from "react";
 import { updateSettings, type SettingsFormState } from "@/server/actions/settings";
 import { FONT_OPTIONS } from "@/lib/fonts";
 import type { WhyPillar } from "@/lib/site";
+import { useDirtyForm } from "@/components/admin/useUnsavedChanges";
+import { UnsavedBadge } from "@/components/admin/content-form-ui";
 
 const initial: SettingsFormState = { ok: false };
 
@@ -60,6 +62,7 @@ export function SettingsForm({
   expeditions: { id: string; name: string }[];
 }) {
   const [state, formAction, pending] = useActionState(updateSettings, initial);
+  const { dirty, formProps } = useDirtyForm(state);
   const err = (f: string) => state.fieldErrors?.[f]?.[0];
 
   const [pillars, setPillars] = useState<WhyPillar[]>(
@@ -81,11 +84,11 @@ export function SettingsForm({
     });
 
   return (
-    <form action={formAction} className="max-w-2xl space-y-6">
+    <form action={formAction} {...formProps} className="max-w-2xl space-y-6">
       {state.error && (
         <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{state.error}</p>
       )}
-      {state.success && (
+      {state.success && !dirty && (
         <p className="rounded-lg bg-emerald-100 px-4 py-3 text-sm text-emerald-800">
           Configuración guardada. Los cambios ya se ven en el sitio.
         </p>
@@ -306,6 +309,7 @@ export function SettingsForm({
         >
           {pending ? "Guardando…" : "Guardar configuración"}
         </button>
+        <UnsavedBadge show={dirty && !pending} />
       </div>
     </form>
   );

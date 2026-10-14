@@ -12,6 +12,7 @@ import {
   type TeamMember,
 } from "@/lib/home-content";
 import { ImageField } from "@/components/admin/ImageField";
+import { useSavedSnapshot } from "@/components/admin/useUnsavedChanges";
 import {
   Card,
   ListEditor,
@@ -37,6 +38,8 @@ export function HomeContentForm({
 }) {
   const [state, formAction, pending] = useActionState(updateHomeContent, initial);
   const [c, setC] = useState<HomeContent>(stored);
+  const payload = JSON.stringify(c);
+  const { dirty, onSubmit } = useSavedSnapshot(payload, state);
 
   // Actualizadores por bloque
   const set = <K extends keyof HomeContent>(block: K, patch: Partial<HomeContent[K]>) =>
@@ -59,8 +62,8 @@ export function HomeContentForm({
   const sectionMeta = (key: string) => HOME_SECTIONS.find((s) => s.key === key);
 
   return (
-    <form action={formAction} className="max-w-3xl space-y-6">
-      <input type="hidden" name="payload" value={JSON.stringify(c)} />
+    <form action={formAction} onSubmit={onSubmit} className="max-w-3xl space-y-6">
+      <input type="hidden" name="payload" value={payload} />
 
       <p className="rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-900">
         Los campos marcados <ProvisionalBadge /> muestran un texto sugerido que todavía no
@@ -257,7 +260,7 @@ export function HomeContentForm({
       </Card>
 
       <div className="sticky bottom-4 z-10">
-        <SaveBar pending={pending} success={state.success} error={state.error} label="Guardar inicio" />
+        <SaveBar pending={pending} success={state.success} error={state.error} label="Guardar inicio" dirty={dirty} />
       </div>
     </form>
   );

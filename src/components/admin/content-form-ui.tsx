@@ -143,28 +143,49 @@ export function ListEditor<T>({
   );
 }
 
+/** Indicador «Cambios sin guardar» para las barras de guardado. */
+export function UnsavedBadge({ show }: { show: boolean }) {
+  if (!show) return null;
+  return (
+    <span className="flex items-center gap-2 text-xs font-medium text-amber-700" aria-live="polite">
+      <span aria-hidden="true" className="h-2 w-2 rounded-full bg-amber-500" />
+      Cambios sin guardar
+    </span>
+  );
+}
+
 /** Barra de guardado con mensajes de resultado. */
 export function SaveBar({
   pending,
   success,
   error,
   label,
+  dirty = false,
 }: {
   pending: boolean;
   success?: boolean;
   error?: string;
   label: string;
+  dirty?: boolean;
 }) {
   return (
-    <div className="space-y-3">
-      {error && <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
-      {success && (
+    <div className="space-y-3" aria-live="polite">
+      {error && <p role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
+      {/* El éxito se muestra solo cuando el servidor lo confirmó y no hubo cambios después. */}
+      {success && !dirty && !pending && (
         <p className="rounded-lg bg-emerald-100 px-4 py-3 text-sm text-emerald-800">
           Guardado. Los cambios ya se ven en el sitio.
         </p>
       )}
-      <div className="flex items-center justify-between gap-3 rounded-2xl border border-stone-200 bg-white px-4 py-3">
-        <p className="text-xs text-stone-400">Vacío = usa el texto sugerido (marcado «Provisional»).</p>
+      <div className="flex items-center justify-between gap-3 rounded-2xl border border-stone-200 bg-white px-4 py-3 shadow-sm">
+        {dirty ? (
+          <p className="flex items-center gap-2 text-xs font-medium text-amber-700">
+            <span aria-hidden="true" className="h-2 w-2 rounded-full bg-amber-500" />
+            Cambios sin guardar
+          </p>
+        ) : (
+          <p className="text-xs text-stone-400">Vacío = usa el texto sugerido (marcado «Provisional»).</p>
+        )}
         <button
           type="submit"
           disabled={pending}

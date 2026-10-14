@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { uploadMediaImage } from "@/server/actions/upload";
+import { prepareImageForUpload } from "@/lib/prepare-upload";
 
 const inputCls =
   "w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm focus:border-accent focus:outline-none";
@@ -26,7 +27,7 @@ export function GalleryField({
     try {
       for (const file of Array.from(files)) {
         const fd = new FormData();
-        fd.append("file", file);
+        fd.append("file", await prepareImageForUpload(file));
         const res = await uploadMediaImage(fd);
         if (res.ok && res.url) {
           setValue((v) => (v.trim() ? `${v.trim()}\n${res.url}` : res.url!));
@@ -35,6 +36,9 @@ export function GalleryField({
           break;
         }
       }
+    } catch {
+      // p. ej. corte de conexión o request rechazado por tamaño
+      setError("No se pudo subir la imagen. Revisá la conexión e intentá de nuevo.");
     } finally {
       setUploading(false);
       if (fileRef.current) fileRef.current.value = "";

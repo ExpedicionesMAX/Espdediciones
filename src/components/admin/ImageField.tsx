@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { uploadMediaImage } from "@/server/actions/upload";
+import { prepareImageForUpload } from "@/lib/prepare-upload";
 
 const inputCls =
   "w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm focus:border-accent focus:outline-none";
@@ -29,7 +30,7 @@ export function ImageField({
     setError(null);
     try {
       const fd = new FormData();
-      fd.append("file", file);
+      fd.append("file", await prepareImageForUpload(file));
       const res = await uploadMediaImage(fd);
       if (res.ok && res.url) onChange(res.url);
       else setError(res.error ?? "No se pudo subir la imagen.");

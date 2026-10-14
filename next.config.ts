@@ -1,6 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    serverActions: {
+      // Subida de fotos (máx. 4 MB, ver src/lib/image-sniff.ts). Vercel corta en 4,5 MB por request.
+      bodySizeLimit: "4.5mb",
+    },
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },

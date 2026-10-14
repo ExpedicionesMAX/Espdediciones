@@ -21,7 +21,20 @@ export type CardExpedition = {
   destination: { name: string } | null;
   category?: string | null;
   availableMonths?: number[];
+  region?: string | null;
+  country?: string | null;
 };
+
+/** Lugar del viaje: el destino vinculado o, si no hay, la región/país cargados en el viaje. */
+export function tripLocation(e: {
+  destination?: { name: string } | null;
+  region?: string | null;
+  country?: string | null;
+}): string | null {
+  if (e.destination?.name) return e.destination.name;
+  const parts = [e.region, e.country].filter((p): p is string => !!p && p.trim() !== "");
+  return parts.length > 0 ? parts.join(", ") : null;
+}
 
 /** Campos que necesita la tarjeta (para `select` de Prisma). */
 export const CARD_SELECT = {
@@ -40,6 +53,8 @@ export const CARD_SELECT = {
   spotsTaken: true,
   category: true,
   availableMonths: true,
+  region: true,
+  country: true,
   destination: { select: { name: true } },
 } as const;
 
@@ -49,6 +64,7 @@ export function ExpeditionCard({ expedition }: { expedition: CardExpedition }) {
     categoryLabel(expedition.category) ??
     (expedition.activityType ? ACTIVITY_LABELS[expedition.activityType] : null);
   const season = seasonLabel(expedition.startDate, expedition.endDate, expedition.availableMonths);
+  const location = tripLocation(expedition);
   const meta = [
     expedition.durationDays ? `${expedition.durationDays} días` : null,
     season,
@@ -87,9 +103,9 @@ export function ExpeditionCard({ expedition }: { expedition: CardExpedition }) {
           </div>
 
           <div className="absolute inset-x-0 bottom-0 p-5 text-white">
-            {expedition.destination && (
+            {location && (
               <p className="text-xs font-medium uppercase tracking-wider text-stone-300">
-                {expedition.destination.name}
+                {location}
               </p>
             )}
             <h3 className="mt-1 font-display text-xl font-semibold leading-tight [overflow-wrap:anywhere]">

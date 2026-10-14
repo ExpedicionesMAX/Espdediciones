@@ -9,6 +9,7 @@ import { ContentImage } from "@/components/public/ContentImage";
 import { getSiteSettings, type WhyPillar } from "@/lib/site";
 import { getAboutPageFallback, getHomeContent, getTripPhotos } from "@/lib/page-content";
 import { paragraphs } from "@/lib/content-fields";
+import { getSiteTexts } from "@/lib/site-texts";
 import type { HomeSectionKey } from "@/lib/home-content";
 import { CUSTOM_TRIP_PATH } from "@/lib/trip-categories";
 import { whatsappUrl, formatDateRange } from "@/lib/format";
@@ -58,11 +59,12 @@ function Eyebrow({ children, light = false }: { children: React.ReactNode; light
 }
 
 export default async function HomePage() {
-  const [settings, { content }, aboutPage, photos] = await Promise.all([
+  const [settings, { content }, aboutPage, photos, texts] = await Promise.all([
     getSiteSettings(),
     getHomeContent(),
     getAboutPageFallback(),
     getTripPhotos(),
+    getSiteTexts(),
   ]);
   const visible = new Set(content.sections.filter((s) => s.visible).map((s) => s.key));
   const { hero, story, philosophy, team, trips, closing } = content;
@@ -349,10 +351,8 @@ export default async function HomePage() {
       reviews.length > 0 ? (
         <section key="resenas" className="reveal bg-ink py-20 text-white">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <h2 className="font-display text-3xl font-semibold sm:text-4xl">
-              Lo que dicen nuestros expedicionarios
-            </h2>
-            <p className="mt-2 text-stone-300">Experiencias que quedan.</p>
+            <h2 className="font-display text-3xl font-semibold sm:text-4xl">{texts.homeReviewsTitle}</h2>
+            {texts.homeReviewsSubtitle && <p className="mt-2 text-stone-300">{texts.homeReviewsSubtitle}</p>}
             <div className="mt-10">
               <ReviewsCarousel reviews={reviews} />
             </div>

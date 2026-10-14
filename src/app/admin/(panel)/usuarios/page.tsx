@@ -2,7 +2,6 @@ import Link from "next/link";
 import { requirePermission } from "@/lib/auth-guard";
 import { PERMISSIONS } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
-import { formatDate } from "@/lib/format";
 import { ROLE_LABELS, ROLE_STYLES } from "@/lib/role-labels";
 import { UserCreateForm } from "@/components/admin/UserCreateForm";
 

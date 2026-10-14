@@ -3,6 +3,8 @@
 import { useActionState } from "react";
 import { updateTexts, type TextsFormState } from "@/server/actions/texts";
 import { SITE_TEXTS, type TextField } from "@/lib/site-texts-schema";
+import { useDirtyForm } from "@/components/admin/useUnsavedChanges";
+import { UnsavedBadge } from "@/components/admin/content-form-ui";
 
 const initial: TextsFormState = { ok: false };
 
@@ -11,15 +13,17 @@ const inputCls =
 
 export function TextsForm({ stored }: { stored: Record<string, string> }) {
   const [state, formAction, pending] = useActionState(updateTexts, initial);
+  const { dirty, formProps } = useDirtyForm(state);
 
-  const groups = SITE_TEXTS.reduce<Record<string, TextField[]>>((acc, f) => {
+  const groups = SITE_TEXTS.filter((f) => !f.hidden).reduce<Record<string, TextField[]>>((acc, f) => {
     (acc[f.group] ??= []).push(f);
     return acc;
   }, {});
 
   return (
-    <form action={formAction} className="space-y-6">
-      <div className="flex items-center justify-end">
+    <form action={formAction} {...formProps} className="space-y-6">
+      <div className="flex items-center justify-end gap-3">
+        <UnsavedBadge show={dirty && !pending} />
         <button
           type="submit"
           disabled={pending}
@@ -29,7 +33,7 @@ export function TextsForm({ stored }: { stored: Record<string, string> }) {
         </button>
       </div>
 
-      {state.success && (
+      {state.success && !dirty && (
         <p className="rounded-lg bg-emerald-100 px-4 py-3 text-sm text-emerald-800">
           Textos guardados. Los cambios ya se ven en el sitio.
         </p>
