@@ -1,5 +1,5 @@
 import { cache } from "react";
-import Image from "next/image";
+import { ContentImage } from "@/components/public/ContentImage";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -8,7 +8,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { getSiteSettings } from "@/lib/site";
 import { getSiteTexts } from "@/lib/site-texts";
-import { buildMediaList } from "@/lib/media";
+import { buildMediaList, tripCover } from "@/lib/media";
 import { MediaGallery } from "@/components/public/MediaGallery";
 import { DIFFICULTY_LABELS, ACTIVITY_LABELS, seasonLabel, whatsappUrl } from "@/lib/format";
 import { tripLocation } from "@/components/public/ExpeditionCard";
@@ -52,7 +52,7 @@ export async function generateMetadata({
 
   const title = exp.seoTitle ?? exp.name;
   const description = exp.seoDescription ?? exp.shortDescription ?? undefined;
-  const image = exp.ogImage ?? exp.coverImage ?? undefined;
+  const image = exp.ogImage ?? tripCover(exp) ?? undefined;
 
   return {
     title,
@@ -115,11 +115,16 @@ export default async function ExpeditionDetailPage({
     `Hola, quiero sumarme al grupo para conocer más sobre el viaje ${exp.name}.`;
   const wa = whatsappUrl(settings.whatsappNumber, waMessage);
 
-  const facts: { label: string; value: string }[] = [];
+  const cover = tripCover(exp);
+
   // Solo datos cargados: lo que no existe no se muestra.
-  if (exp.durationDays) facts.push({ label: "Duración", value: `${exp.durationDays} días` });
-  if (season) facts.push({ label: exp.startDate ? "Fechas" : "Temporada", value: season });
-  if (exp.difficulty) facts.push({ label: "Dificultad", value: DIFFICULTY_LABELS[exp.difficulty] });
+  // Los datos clave van en la portada; el resto, en la franja de abajo.
+  const heroMeta: { label: string; value: string }[] = [];
+  if (exp.durationDays) heroMeta.push({ label: "Duración", value: `${exp.durationDays} días` });
+  if (season) heroMeta.push({ label: exp.startDate ? "Fechas" : "Temporada", value: season });
+  if (exp.difficulty) heroMeta.push({ label: "Dificultad", value: DIFFICULTY_LABELS[exp.difficulty] });
+
+  const facts: { label: string; value: string }[] = [];
   if (exp.minAge) facts.push({ label: "Edad mínima", value: `${exp.minAge} años` });
   if (exp.distanceKm) facts.push({ label: "Distancia", value: `${exp.distanceKm} km` });
   if (exp.maxAltitude) facts.push({ label: "Altitud máx.", value: `${exp.maxAltitude} m` });
@@ -132,7 +137,7 @@ export default async function ExpeditionDetailPage({
       "@type": "TouristTrip",
       name: exp.name,
       description: exp.shortDescription ?? exp.subtitle ?? undefined,
-      image: exp.coverImage ? [exp.coverImage] : undefined,
+      image: cover ? [cover] : undefined,
       url: `${base}/expediciones/${exp.slug}`,
       provider: { "@type": "Organization", name: settings.siteName },
     },
@@ -163,13 +168,15 @@ export default async function ExpeditionDetailPage({
       )}
 
       {/* HERO */}
-      <section className="relative flex min-h-[80vh] items-end overflow-hidden">
-        {exp.coverImage ? (
-          <Image src={exp.coverImage} alt={exp.name} fill priority sizes="100vw" className="object-cover" />
+      <section className="relative flex min-h-[80vh] items-end overflow-hidden bg-ink">
+        {cover ? (
+          <ContentImage src={cover} alt={exp.name} sizes="100vw" priority />
         ) : (
-          <div className="absolute inset-0 bg-ink" />
+          // Sin fotos: fondo neutro de la marca, sin imágenes ajenas al viaje.
+          <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-stone-700 via-stone-800 to-ink" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/30" />
+        {/* Contraste sutil: más oscuro abajo (donde va el texto) y arriba (menú). */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40" />
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-16 pt-32 text-white sm:px-6">
           {/* Migas de navegación */}
           <nav aria-label="Ubicación" className="mb-5 text-sm text-stone-300">
@@ -208,6 +215,35 @@ export default async function ExpeditionDetailPage({
           {exp.subtitle && (
             <p className="mt-4 max-w-2xl text-lg text-stone-200">{exp.subtitle}</p>
           )}
+          {/* Datos clave, solo los que existen */}
+          {heroMeta.length > 0 && (
+            <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-stone-200">
+              {heroMeta.map((m) => (
+                <li key={m.label}>
+                  <span className="text-stone-400">{m.label}: </span>
+                  <span className="font-medium text-white">{m.value}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className="mt-8 flex flex-wrap gap-3">
+            {wa ? (
+              <a
+                href={wa}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full bg-accent px-7 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-dark"
+              >
+                Consultar por este viaje
+              </a>
+            ) : null}
+            <a
+              href="#detalle"
+              className="rounded-full border border-white/40 px-7 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+            >
+              Ver el detalle
+            </a>
+          </div>
         </div>
       </section>
 
@@ -225,7 +261,7 @@ export default async function ExpeditionDetailPage({
         </div>
       )}
 
-      <div className="mx-auto grid max-w-6xl gap-12 px-4 py-14 sm:px-6 lg:grid-cols-[1fr_360px]">
+      <div id="detalle" className="mx-auto grid max-w-6xl scroll-mt-20 gap-12 px-4 py-14 sm:px-6 lg:grid-cols-[1fr_360px]">
         {/* MAIN */}
         <div className="space-y-14">
           {description && (

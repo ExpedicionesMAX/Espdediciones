@@ -310,6 +310,28 @@ model Media {
 }
 
 // ─────────────────────────────────────────────────────────────
+// GALERÍA FOTOGRÁFICA (página pública /galeria, separada de las fotos de
+// los viajes y de «Nuestra historia»). El archivo vive en Supabase Storage;
+// acá solo la referencia y sus datos.
+// ─────────────────────────────────────────────────────────────
+
+model GalleryPhoto {
+  id          String   @id @default(cuid())
+  url         String
+  width       Int?
+  height      Int?
+  title       String?
+  description String?  @db.Text
+  alt         String?
+  published   Boolean  @default(false) // false = borrador (no se ve en el sitio)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([published, order])
+}
+
+// ─────────────────────────────────────────────────────────────
 // CONSULTAS DE VISITANTES (entran PENDING — nunca se publican solas)
 // ─────────────────────────────────────────────────────────────
 

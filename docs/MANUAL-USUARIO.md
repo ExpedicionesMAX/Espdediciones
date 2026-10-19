@@ -9,6 +9,28 @@ programar, HTML ni bases de datos. Todo se hace desde pantallas.
 
 ---
 
+## Actualización — 19/10/2026 (Galería Fotográfica, fotos de la historia y portadas)
+
+- **Galería Fotográfica** (`/galeria`, en el menú): fotos propias de expediciones y paisajes.
+  En el panel → *Sitio web → Galería Fotográfica*: **Subir fotos** (varias a la vez), completar
+  título, texto alternativo y descripción (botón **Guardar datos** de cada foto), **Publicar** o
+  **Pasar a borrador**, ordenar con las flechas o arrastrando, y **Eliminar** (pide confirmación).
+  Las fotos nuevas entran como **borrador**: no se ven en el sitio hasta que las publicás.
+- **Nuestra historia con varias fotos:** en *Inicio (Nosotros) → Nosotros / Nuestra historia →
+  Fotografías de la historia* podés subir varias, ordenarlas, quitarlas y completar texto
+  alternativo, título y pie de foto. Se aplica con **Guardar inicio**. En el sitio se pueden
+  ampliar con un clic.
+- **Imagen de portada del viaje:** en cada viaje, el bloque **«Imagen de portada del viaje»**
+  permite subir una foto, **elegir una ya existente** (fotos del viaje, de la Galería o de la
+  historia), verla y quitarla. Es independiente de la galería del viaje. Si un viaje no tiene
+  portada, se usa la primera foto de su propia galería.
+- **Categoría «Expediciones»:** el filtro que antes decía «Expediciones Fotográficas» ahora dice
+  **Expediciones**. Los viajes y sus enlaces no cambian.
+- **Fotos que ya no se usan:** cuando quitás una foto (de la galería, la historia o un viaje), el
+  archivo se borra del almacenamiento **solo si ninguna otra parte del sitio lo usa**.
+
+---
+
 ## Actualización — 13/10/2026 (Inicio institucional, catálogo con filtros y Viajes a Medida)
 
 **El sitio público**

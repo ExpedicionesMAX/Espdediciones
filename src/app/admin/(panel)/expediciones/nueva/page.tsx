@@ -2,6 +2,7 @@ import Link from "next/link";
 import { requirePermission } from "@/lib/auth-guard";
 import { hasPermission, PERMISSIONS } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
+import { getCoverLibrary } from "@/lib/cover-library";
 import { createExpedition } from "@/server/actions/expeditions";
 import {
   ExpeditionForm,
@@ -59,9 +60,10 @@ const EMPTY: ExpeditionFormValues = {
 export default async function NewExpeditionPage() {
   const user = await requirePermission(PERMISSIONS.EXPEDITION_CREATE);
 
-  const [destinations, guides] = await Promise.all([
+  const [destinations, guides, coverLibrary] = await Promise.all([
     prisma.destination.findMany({ select: { id: true, name: true }, orderBy: { name: "asc" } }),
     prisma.guide.findMany({ select: { id: true, name: true }, orderBy: { name: "asc" } }),
+    getCoverLibrary(),
   ]);
 
   return (
@@ -84,6 +86,7 @@ export default async function NewExpeditionPage() {
         destinations={destinations}
         guides={guides}
         canPublish={hasPermission(user, PERMISSIONS.EXPEDITION_PUBLISH)}
+        coverLibrary={coverLibrary}
       />
     </div>
   );

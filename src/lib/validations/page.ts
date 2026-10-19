@@ -13,6 +13,8 @@ export const RESERVED_SLUGS = [
   "api",
   "ficha",
   "viajes-a-medida",
+  "galeria",
+  "productos",
 ];
 
 export const pageInputSchema = z.object({

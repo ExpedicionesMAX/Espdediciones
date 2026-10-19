@@ -9,6 +9,7 @@ import { logActivity } from "@/lib/audit";
 import { normalizeStoredHome } from "@/lib/home-content";
 import { normalizeStoredCustomTrip } from "@/lib/custom-trip-content";
 import { CUSTOM_TRIP_PATH } from "@/lib/trip-categories";
+import { removeStorageFilesIfUnreferenced, removedUrls } from "@/lib/storage";
 
 export type PageContentFormState = { ok: boolean; success?: boolean; error?: string };
 
@@ -34,11 +35,17 @@ export async function updateHomeContent(
   if (payload === undefined) return { ok: false, error: "No se pudo leer el contenido enviado." };
 
   const content = normalizeStoredHome(payload);
+  const previous = await prisma.siteSettings.findUnique({
+    where: { id: "singleton" },
+    select: { homeContent: true },
+  });
   await prisma.siteSettings.upsert({
     where: { id: "singleton" },
     update: { homeContent: content as unknown as Prisma.InputJsonValue },
     create: { id: "singleton", homeContent: content as unknown as Prisma.InputJsonValue },
   });
+  // Fotos que se quitaron: se borra el archivo solo si ya nada del sitio lo usa.
+  await removeStorageFilesIfUnreferenced(removedUrls(previous?.homeContent, content));
 
   await logActivity({
     userId: user.id,
@@ -62,11 +69,16 @@ export async function updateCustomTripContent(
   if (payload === undefined) return { ok: false, error: "No se pudo leer el contenido enviado." };
 
   const content = normalizeStoredCustomTrip(payload);
+  const previous = await prisma.siteSettings.findUnique({
+    where: { id: "singleton" },
+    select: { customTripContent: true },
+  });
   await prisma.siteSettings.upsert({
     where: { id: "singleton" },
     update: { customTripContent: content as unknown as Prisma.InputJsonValue },
     create: { id: "singleton", customTripContent: content as unknown as Prisma.InputJsonValue },
   });
+  await removeStorageFilesIfUnreferenced(removedUrls(previous?.customTripContent, content));
 
   await logActivity({
     userId: user.id,

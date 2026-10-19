@@ -1,8 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { uploadMediaImage } from "@/server/actions/upload";
-import { prepareImageForUpload } from "@/lib/prepare-upload";
+import { uploadPhoto } from "@/lib/upload-client";
 
 const inputCls =
   "w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm focus:border-accent focus:outline-none";
@@ -13,11 +12,13 @@ export function ImageField({
   value,
   onChange,
   hint,
+  folder = "sitio",
 }: {
   id: string;
   value: string;
   onChange: (url: string) => void;
   hint?: string;
+  folder?: "expediciones" | "galeria" | "nosotros" | "sitio";
 }) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -29,13 +30,9 @@ export function ImageField({
     setUploading(true);
     setError(null);
     try {
-      const fd = new FormData();
-      fd.append("file", await prepareImageForUpload(file));
-      const res = await uploadMediaImage(fd);
-      if (res.ok && res.url) onChange(res.url);
-      else setError(res.error ?? "No se pudo subir la imagen.");
-    } catch {
-      setError("No se pudo subir la imagen.");
+      const res = await uploadPhoto(file, folder);
+      if (res.ok) onChange(res.photo.url);
+      else setError(res.error);
     } finally {
       setUploading(false);
       if (fileRef.current) fileRef.current.value = "";

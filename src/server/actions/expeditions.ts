@@ -8,6 +8,7 @@ import { requirePermission } from "@/lib/auth-guard";
 import { hasPermission, PERMISSIONS } from "@/lib/permissions";
 import { logActivity } from "@/lib/audit";
 import { uniqueSlug } from "@/lib/slug";
+import { removeStorageFilesIfUnreferenced, removedUrls } from "@/lib/storage";
 import {
   expeditionInputSchema,
   type ExpeditionInput,
@@ -145,6 +146,7 @@ function buildData(
 function revalidatePublic(slug?: string) {
   revalidatePath("/");
   revalidatePath("/expediciones");
+  revalidatePath("/viajes-a-medida"); // usa fotos de los viajes como respaldo
   if (slug) revalidatePath(`/expediciones/${slug}`);
 }
 
@@ -289,6 +291,19 @@ export async function updateExpedition(
     entityId: id,
     summary: `Editó la expedición «${input.name}»`,
   });
+
+  // Portada o fotos de la galería que se reemplazaron/quitaron: el archivo se
+  // borra solo si ninguna otra parte del sitio lo usa (otra portada, la Galería, etc.).
+  const saved = await prisma.expedition.findUnique({
+    where: { id },
+    select: { coverImage: true, ogImage: true, gallery: true },
+  });
+  await removeStorageFilesIfUnreferenced(
+    removedUrls(
+      [existing.coverImage, existing.ogImage, ...existing.gallery],
+      [saved?.coverImage, saved?.ogImage, ...(saved?.gallery ?? [])],
+    ),
+  );
 
   revalidatePath("/admin/expediciones");
   revalidatePath(`/admin/expediciones/${id}`);

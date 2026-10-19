@@ -100,6 +100,37 @@ test("resolveHome: vacío usa el valor por defecto; lo cargado lo reemplaza", ()
   assert.deepEqual(custom.philosophy.items, [{ title: "Silencio", text: "" }]);
 });
 
+test("Nuestra historia: la foto única guardada antes pasa a ser la primera de la lista", () => {
+  const legacy = normalizeStoredHome({
+    story: { body: "Texto", image: "https://x.supabase.co/a.jpg", imageAlt: "Alejandra con la cámara" },
+  });
+  assert.equal(legacy.story.images.length, 1);
+  assert.equal(legacy.story.images[0].url, "https://x.supabase.co/a.jpg");
+  assert.equal(legacy.story.images[0].alt, "Alejandra con la cámara");
+  assert.equal(legacy.story.body, "Texto", "el texto existente se conserva");
+});
+
+test("Nuestra historia: varias fotos con orden, textos y medidas; se descartan las inválidas", () => {
+  const n = normalizeStoredHome({
+    story: {
+      images: [
+        { url: "https://x.supabase.co/1.jpg", alt: "Uno", title: "T1", caption: "C1", width: 1600, height: 1067 },
+        { url: "javascript:alert(1)", alt: "malo" },
+        { url: "https://x.supabase.co/2.jpg", width: -5, height: "x" },
+      ],
+    },
+  });
+  assert.deepEqual(n.story.images.map((i) => i.url), ["https://x.supabase.co/1.jpg", "https://x.supabase.co/2.jpg"]);
+  assert.equal(n.story.images[0].width, 1600);
+  assert.equal(n.story.images[1].width, null, "medidas inválidas → null");
+  assert.equal(n.story.image, "https://x.supabase.co/1.jpg", "copia de compatibilidad = primera foto");
+});
+
+test("Nuestra historia: si se quitaron todas las fotos, no reaparece la vieja", () => {
+  const n = normalizeStoredHome({ story: { images: [], image: "https://x.supabase.co/vieja.jpg" } });
+  assert.equal(n.story.images.length, 0);
+});
+
 test("Viajes a Medida: defaults, formulario visible por defecto y pasos saneados", () => {
   const d = resolveCustomTrip(normalizeStoredCustomTrip(null));
   assert.equal(d.hero.title, CUSTOM_TRIP_DEFAULTS.hero.title);

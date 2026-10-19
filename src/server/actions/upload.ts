@@ -1,9 +1,9 @@
 "use server";
 
-import { createClient } from "@supabase/supabase-js";
 import { requirePermission } from "@/lib/auth-guard";
 import { PERMISSIONS } from "@/lib/permissions";
 import { MAX_UPLOAD_BYTES, detectImageType } from "@/lib/image-sniff";
+import { UPLOAD_FOLDERS, getStorage, type UploadFolder } from "@/lib/storage";
 
 export type UploadResult = { ok: boolean; url?: string; error?: string };
 
@@ -24,25 +24,28 @@ export async function uploadMediaImage(formData: FormData): Promise<UploadResult
     return { ok: false, error: "Solo se permiten fotos JPG, PNG, WebP, GIF o AVIF." };
   }
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  const bucket = process.env.SUPABASE_STORAGE_BUCKET || "media";
-  if (!url || !key) {
-    return { ok: false, error: "El almacenamiento no está configurado." };
+  const storage = getStorage();
+  if (!storage) {
+    return { ok: false, error: "El almacenamiento de imágenes no está configurado." };
   }
 
-  const supabase = createClient(url, key, { auth: { persistSession: false } });
+  // Carpeta dentro del bucket (solo valores conocidos; por defecto, la de siempre).
+  const requested = formData.get("folder")?.toString();
+  const folder: UploadFolder = (UPLOAD_FOLDERS as readonly string[]).includes(requested ?? "")
+    ? (requested as UploadFolder)
+    : "expediciones";
+  const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${kind.ext}`;
 
-  const path = `expediciones/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${kind.ext}`;
-
-  const { error } = await supabase.storage.from(bucket).upload(path, bytes, {
+  const { error } = await storage.client.storage.from(storage.bucket).upload(path, bytes, {
     contentType: kind.mime,
     upsert: false,
   });
   if (error) {
-    return { ok: false, error: `No se pudo subir: ${error.message}` };
+    // El detalle técnico queda en el log del servidor; al usuario, un mensaje claro.
+    console.error("[upload] error de Supabase Storage:", error.message);
+    return { ok: false, error: "No se pudo subir la imagen. Intentá de nuevo en unos minutos." };
   }
 
-  const { data } = supabase.storage.from(bucket).getPublicUrl(path);
+  const { data } = storage.client.storage.from(storage.bucket).getPublicUrl(path);
   return { ok: true, url: data.publicUrl };
 }

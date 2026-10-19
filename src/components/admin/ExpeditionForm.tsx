@@ -6,6 +6,17 @@ import { useDirtyForm } from "@/components/admin/useUnsavedChanges";
 import type { ExpeditionFormState } from "@/server/actions/expeditions";
 import { ItineraryEditor, type ItineraryDayValue } from "./ItineraryEditor";
 import { GalleryField } from "./GalleryField";
+import { CoverImageField, type LibraryImage } from "./CoverImageField";
+import { classifyMedia } from "@/lib/media";
+
+/** Primera foto (no video) de la galería del viaje: portada provisoria si no se eligió una. */
+function firstGalleryImage(gallery: string): string | null {
+  for (const line of gallery.split(/\r?\n/)) {
+    const url = line.trim();
+    if (url && classifyMedia(url).type === "image") return url;
+  }
+  return null;
+}
 import { ACTIVITY_LABELS, DIFFICULTY_LABELS } from "@/lib/format";
 import {
   ACTIVITY_TYPES,
@@ -15,8 +26,9 @@ import {
   TEMPLATES,
 } from "@/lib/validations/expedition";
 
+// La clave interna "fotografica" se mantiene (no se tocan datos ni URLs); solo cambia el nombre visible.
 const CATEGORY_TEXT: Record<(typeof CATEGORIES)[number], string> = {
-  fotografica: "Expediciones Fotográficas",
+  fotografica: "Expediciones",
   coleccionable: "Viajes Coleccionables",
   escapada: "Escapadas",
   "a-medida": "Viajes a Medida",
@@ -122,12 +134,15 @@ export function ExpeditionForm({
   destinations,
   guides,
   canPublish,
+  coverLibrary = [],
 }: {
   action: (state: ExpeditionFormState, fd: FormData) => Promise<ExpeditionFormState>;
   values: ExpeditionFormValues;
   destinations: { id: string; name: string }[];
   guides: { id: string; name: string }[];
   canPublish: boolean;
+  /** Fotos existentes que se pueden elegir como portada. */
+  coverLibrary?: LibraryImage[];
 }) {
   const [state, formAction, pending] = useActionState<ExpeditionFormState, FormData>(
     action,
@@ -135,7 +150,7 @@ export function ExpeditionForm({
   );
 
   const err = (field: string) => state.fieldErrors?.[field]?.[0];
-  const { dirty, formProps } = useDirtyForm(state);
+  const { dirty, markDirty, formProps } = useDirtyForm(state);
 
   return (
     <form id="expedition-form" action={formAction} {...formProps} className="space-y-6">
@@ -356,12 +371,19 @@ export function ExpeditionForm({
         </div>
       </Card>
 
-      <Card title="Multimedia" description="Pegá URLs de imágenes/video. La subida directa a Supabase Storage se habilita al configurar sus credenciales.">
-        <div>
-          <label htmlFor="coverImage" className={labelCls}>Imagen de portada (URL)</label>
-          <input id="coverImage" name="coverImage" defaultValue={values.coverImage} className={inputCls} placeholder="https://…" />
-          {err("coverImage") && <p className="mt-1 text-xs text-red-600">{err("coverImage")}</p>}
-        </div>
+      <Card title="Imagen de portada del viaje" description="La foto principal: encabeza la ficha del viaje y su tarjeta en «Nuestros Viajes». Es independiente de la galería de abajo.">
+        <CoverImageField
+          name="coverImage"
+          defaultValue={values.coverImage}
+          library={coverLibrary}
+          fallbackUrl={firstGalleryImage(values.gallery)}
+          onChange={markDirty}
+          error={err("coverImage")}
+        />
+      </Card>
+
+      <Card title="Multimedia" description="Video y galería de fotos del viaje (se ven dentro de la ficha).">
+
         <div>
           <label htmlFor="videoUrl" className={labelCls}>Video (YouTube / Vimeo)</label>
           <input id="videoUrl" name="videoUrl" defaultValue={values.videoUrl} className={inputCls} placeholder="https://youtube.com/watch?v=…" />

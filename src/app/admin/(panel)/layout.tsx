@@ -38,6 +38,11 @@ export default async function PanelLayout({
       show: hasPermission(user, PERMISSIONS.PAGE_MANAGE),
     },
     {
+      href: "/admin/galeria",
+      label: "Galería",
+      show: hasPermission(user, PERMISSIONS.MEDIA_MANAGE),
+    },
+    {
       href: "/admin/consultas",
       label: "Consultas",
       show: hasPermission(user, PERMISSIONS.INQUIRY_READ),

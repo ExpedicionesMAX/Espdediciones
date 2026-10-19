@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { requirePermission } from "@/lib/auth-guard";
 import { hasPermission, PERMISSIONS } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
+import { getCoverLibrary } from "@/lib/cover-library";
 import {
   updateExpedition,
   changeExpeditionStatus,
@@ -40,9 +41,10 @@ export default async function EditExpeditionPage({
   });
   if (!exp) notFound();
 
-  const [destinations, guides] = await Promise.all([
+  const [destinations, guides, coverLibrary] = await Promise.all([
     prisma.destination.findMany({ select: { id: true, name: true }, orderBy: { name: "asc" } }),
     prisma.guide.findMany({ select: { id: true, name: true }, orderBy: { name: "asc" } }),
+    getCoverLibrary(exp.gallery),
   ]);
 
   const values: ExpeditionFormValues = {
@@ -165,6 +167,7 @@ export default async function EditExpeditionPage({
         destinations={destinations}
         guides={guides}
         canPublish={canPublish}
+        coverLibrary={coverLibrary}
       />
 
       {canDelete && (

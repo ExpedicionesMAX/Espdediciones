@@ -54,6 +54,11 @@ export function SiteFooter({ settings }: { settings: SiteSettingsData }) {
               </li>
             ))}
             <li>
+              <Link href="/galeria" className="hover:text-white">
+                Galería Fotográfica
+              </Link>
+            </li>
+            <li>
               <Link href={CUSTOM_TRIP_PATH} className="hover:text-white">
                 Viajes a Medida
               </Link>

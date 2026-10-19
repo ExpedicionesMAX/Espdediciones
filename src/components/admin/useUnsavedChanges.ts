@@ -55,6 +55,8 @@ export function useDirtyForm<S extends { error?: string }>(state: S) {
   useUnsavedChanges(dirty);
   return {
     dirty,
+    /** Para cambios que no disparan un evento de formulario (p. ej. elegir una foto). */
+    markDirty: () => setDirty(true),
     formProps: { onChange: () => setDirty(true), onSubmit: () => setDirty(false) },
   };
 }

@@ -6,7 +6,8 @@
  * propia página en /viajes-a-medida y nunca aparece como filtro.
  */
 export const CATALOG_CATEGORIES = [
-  { key: "fotografica", label: "Expediciones Fotográficas" },
+  // La clave "fotografica" se conserva: los viajes, filtros y URLs (?categoria=fotografica) no cambian.
+  { key: "fotografica", label: "Expediciones" },
   { key: "escapada", label: "Escapadas" },
   { key: "coleccionable", label: "Viajes Coleccionables" },
 ] as const;

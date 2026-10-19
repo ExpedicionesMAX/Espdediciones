@@ -6,6 +6,7 @@ import { publicExpeditionWhere } from "@/lib/expeditions-query";
 import { ExpeditionCard, CARD_SELECT } from "@/components/public/ExpeditionCard";
 import { ReviewsCarousel } from "@/components/public/ReviewsCarousel";
 import { ContentImage } from "@/components/public/ContentImage";
+import { StoryPhotos, type StoryPhoto } from "@/components/public/StoryPhotos";
 import { getSiteSettings, type WhyPillar } from "@/lib/site";
 import { getAboutPageFallback, getHomeContent, getTripPhotos } from "@/lib/page-content";
 import { paragraphs } from "@/lib/content-fields";
@@ -111,9 +112,15 @@ export default async function HomePage() {
   const heroPhoto = hero.image
     ? { url: hero.image, alt: hero.imageAlt || hero.title }
     : (photos[0] ?? null);
-  const storyPhoto = story.image
-    ? { url: story.image, alt: story.imageAlt || story.title }
-    : (photos.find((p) => p.url !== heroPhoto?.url) ?? null);
+  // Fotos de la historia cargadas en el panel; si no hay, una foto real de un viaje (no ampliable).
+  const fallbackStoryPhoto = photos.find((p) => p.url !== heroPhoto?.url) ?? null;
+  const storyPhotos: StoryPhoto[] =
+    story.images.length > 0
+      ? story.images.map((img) => ({ ...img, alt: img.alt || img.title || story.title }))
+      : fallbackStoryPhoto
+        ? [{ url: fallbackStoryPhoto.url, alt: fallbackStoryPhoto.alt, width: null, height: null }]
+        : [];
+  const hasStoryPhotos = storyPhotos.length > 0;
 
   // «Nuestra historia»: lo cargado en el inicio o, si no, la página «Nosotros» del panel.
   const storyBody = paragraphs(story.body || aboutPage?.content || "");
@@ -133,18 +140,23 @@ export default async function HomePage() {
           className="scroll-mt-20"
         >
           <div
-            className={`mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-28 ${storyPhoto ? "grid items-center gap-12 lg:grid-cols-2 lg:gap-20" : ""}`}
+            className={`mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-28 ${
+              hasStoryPhotos
+                ? `grid gap-12 lg:grid-cols-2 lg:gap-16 ${storyPhotos.length > 1 ? "items-start" : "items-center"}`
+                : ""
+            }`}
           >
-            {storyPhoto && (
-              <div className="reveal relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-stone-200">
-                <ContentImage
-                  src={storyPhoto.url}
-                  alt={story.imageAlt || storyPhoto.alt}
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
+            {hasStoryPhotos && (
+              <div className="reveal">
+                <StoryPhotos photos={storyPhotos} interactive={story.images.length > 0} />
               </div>
             )}
-            <div className={storyPhoto ? "" : "mx-auto max-w-3xl"}>
+            {/* Con varias fotos, el texto va primero (a la izquierda en escritorio) y las fotos lo acompañan. */}
+            <div
+              className={
+                !hasStoryPhotos ? "mx-auto max-w-3xl" : storyPhotos.length > 1 ? "lg:order-first" : ""
+              }
+            >
               <Eyebrow>{story.eyebrow}</Eyebrow>
               <h2
                 id="nosotros-titulo"

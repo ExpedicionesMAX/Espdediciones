@@ -98,7 +98,7 @@ function HeaderInner({
       key={href}
       href={href}
       aria-current={active ? "page" : undefined}
-      className="nav-underline text-sm font-medium"
+      className="nav-underline whitespace-nowrap text-sm font-medium"
     >
       {label}
     </Link>
@@ -150,7 +150,7 @@ function HeaderInner({
           )}
         </Link>
 
-        <nav aria-label="Principal" className="hidden items-center gap-7 lg:flex">
+        <nav aria-label="Principal" className="hidden items-center gap-6 xl:flex">
           {desktopLink("/", "Nosotros", pathname === "/")}
 
           {/* Nuestros Viajes + desplegable */}
@@ -166,7 +166,7 @@ function HeaderInner({
               aria-expanded={viajesOpen}
               aria-controls="menu-viajes"
               className={cn(
-                "nav-underline flex items-center gap-1 text-sm font-medium",
+                "nav-underline flex items-center gap-1 whitespace-nowrap text-sm font-medium",
                 viajesActive && "nav-active",
               )}
             >
@@ -211,13 +211,15 @@ function HeaderInner({
             )}
           </div>
 
+          {desktopLink("/galeria", "Galería", pathname === "/galeria")}
+
           {desktopLink(CUSTOM_TRIP_PATH, "Viajes a Medida", pathname === CUSTOM_TRIP_PATH)}
 
           {/* Nuestros Productos — Próximamente */}
           <Link
             href="/productos"
             aria-current={pathname === "/productos" ? "page" : undefined}
-            className="nav-underline flex items-center gap-2 text-sm font-medium"
+            className="nav-underline flex items-center gap-2 whitespace-nowrap text-sm font-medium"
           >
             Nuestros Productos
             {badge(!solid)}
@@ -231,7 +233,7 @@ function HeaderInner({
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="lg:hidden"
+          className="xl:hidden"
           aria-label={open ? "Cerrar menú" : "Abrir menú"}
           aria-expanded={open}
           aria-controls="menu-movil"
@@ -249,7 +251,7 @@ function HeaderInner({
       {open && (
         <div
           id="menu-movil"
-          className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-stone-200 bg-paper px-4 pb-6 pt-2 text-ink lg:hidden"
+          className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-stone-200 bg-paper px-4 pb-6 pt-2 text-ink xl:hidden"
         >
           <nav aria-label="Principal" className="flex flex-col gap-1">
             {mobileLink("/", "Nosotros", pathname === "/")}
@@ -274,6 +276,7 @@ function HeaderInner({
               );
             })}
             <div className="my-2 border-t border-stone-200" />
+            {mobileLink("/galeria", "Galería Fotográfica", pathname === "/galeria")}
             {mobileLink(CUSTOM_TRIP_PATH, "Viajes a Medida", pathname === CUSTOM_TRIP_PATH)}
             <Link
               href="/productos"

@@ -30,6 +30,7 @@ const GROUPS: NavGroup[] = [
     items: [
       { href: "/admin/inicio", label: "Inicio (Nosotros)", permission: PERMISSIONS.PAGE_MANAGE },
       { href: "/admin/viajes-a-medida", label: "Viajes a Medida", permission: PERMISSIONS.PAGE_MANAGE },
+      { href: "/admin/galeria", label: "Galería Fotográfica", permission: PERMISSIONS.MEDIA_MANAGE },
       { href: "/admin/textos", label: "Textos del sitio", permission: PERMISSIONS.SETTINGS_MANAGE },
       { href: "/admin/paginas", label: "Otras páginas", permission: PERMISSIONS.PAGE_MANAGE },
     ],

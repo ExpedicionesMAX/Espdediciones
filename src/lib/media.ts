@@ -27,6 +27,19 @@ export function classifyMedia(url: string): MediaItem {
   return { type: "image", url, thumb: url };
 }
 
+/**
+ * Portada de un viaje: la elegida en el panel; si no hay, la primera foto de
+ * SU PROPIA galería (nunca de otro viaje); si tampoco hay, null (la página
+ * muestra un fondo neutro).
+ */
+export function tripCover(exp: { coverImage?: string | null; gallery?: string[] | null }): string | null {
+  if (exp.coverImage) return exp.coverImage;
+  for (const g of exp.gallery ?? []) {
+    if (g && classifyMedia(g).type === "image") return g;
+  }
+  return null;
+}
+
 /** Construye la lista de medios de una expedición (video principal + galería), sin duplicados. */
 export function buildMediaList(
   gallery: string[],

@@ -8,6 +8,7 @@ import {
 } from "@/lib/trip-categories";
 import { seasonLabel } from "@/lib/format";
 import { detectImageType } from "@/lib/image-sniff";
+import { tripCover } from "@/lib/media";
 
 test("el catálogo tiene exactamente las 3 categorías, sin Viajes a Medida", () => {
   assert.deepEqual(
@@ -24,6 +25,26 @@ test("catalogHref y categoryLabel", () => {
   assert.equal(catalogHref("escapada"), "/expediciones?categoria=escapada");
   assert.equal(categoryLabel("coleccionable"), "Viajes Coleccionables");
   assert.equal(categoryLabel("a-medida"), null);
+});
+
+test("la categoría «fotografica» se muestra como «Expediciones» sin cambiar su clave ni su URL", () => {
+  assert.equal(categoryLabel("fotografica"), "Expediciones");
+  assert.equal(catalogHref("fotografica"), "/expediciones?categoria=fotografica");
+  assert.deepEqual(
+    CATALOG_CATEGORIES.map((c) => c.label),
+    ["Expediciones", "Escapadas", "Viajes Coleccionables"],
+  );
+});
+
+test("tripCover: portada elegida; si no, primera FOTO del propio viaje; si no, null", () => {
+  assert.equal(tripCover({ coverImage: "https://a/portada.jpg", gallery: ["https://a/1.jpg"] }), "https://a/portada.jpg");
+  assert.equal(
+    tripCover({ coverImage: null, gallery: ["https://youtube.com/watch?v=abc", "https://a/1.jpg"] }),
+    "https://a/1.jpg",
+    "los videos no sirven de portada",
+  );
+  assert.equal(tripCover({ coverImage: "", gallery: [] }), null);
+  assert.equal(tripCover({}), null);
 });
 
 test("seasonLabel: meses ordenados y sin repetir; nada si no hay datos", () => {

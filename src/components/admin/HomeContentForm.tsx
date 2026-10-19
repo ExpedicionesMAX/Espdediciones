@@ -12,6 +12,7 @@ import {
   type TeamMember,
 } from "@/lib/home-content";
 import { ImageField } from "@/components/admin/ImageField";
+import { StoryImagesEditor } from "@/components/admin/StoryImagesEditor";
 import { useSavedSnapshot } from "@/components/admin/useUnsavedChanges";
 import {
   Card,
@@ -117,10 +118,9 @@ export function HomeContentForm({
           </p>
         </div>
         <div>
-          <label htmlFor="story-image" className={labelCls}>Fotografía</label>
-          <ImageField id="story-image" value={c.story.image} onChange={(v) => set("story", { image: v })} hint="Vacío = otra foto de tus viajes publicados (si hay)." />
+          <p className={labelCls}>Fotografías de la historia</p>
+          <StoryImagesEditor images={c.story.images} onChange={(images) => set("story", { images })} />
         </div>
-        <TextField id="story-alt" label="Descripción de la foto" value={c.story.imageAlt} onChange={(v) => set("story", { imageAlt: v })} />
       </Card>
 
       {/* ─── FILOSOFÍA ─── */}

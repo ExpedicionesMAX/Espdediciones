@@ -1,8 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { ActivityType, Difficulty } from "@prisma/client";
 import { ACTIVITY_LABELS, DIFFICULTY_LABELS, seasonLabel } from "@/lib/format";
 import { categoryLabel } from "@/lib/trip-categories";
+import { tripCover } from "@/lib/media";
+import { ContentImage } from "@/components/public/ContentImage";
 
 export type CardExpedition = {
   slug: string;
@@ -23,6 +24,7 @@ export type CardExpedition = {
   availableMonths?: number[];
   region?: string | null;
   country?: string | null;
+  gallery?: string[];
 };
 
 /** Lugar del viaje: el destino vinculado o, si no hay, la región/país cargados en el viaje. */
@@ -55,6 +57,7 @@ export const CARD_SELECT = {
   availableMonths: true,
   region: true,
   country: true,
+  gallery: true, // portada provisoria: primera foto del propio viaje
   destination: { select: { name: true } },
 } as const;
 
@@ -65,6 +68,7 @@ export function ExpeditionCard({ expedition }: { expedition: CardExpedition }) {
     (expedition.activityType ? ACTIVITY_LABELS[expedition.activityType] : null);
   const season = seasonLabel(expedition.startDate, expedition.endDate, expedition.availableMonths);
   const location = tripLocation(expedition);
+  const cover = tripCover(expedition);
   const meta = [
     expedition.durationDays ? `${expedition.durationDays} días` : null,
     season,
@@ -74,18 +78,16 @@ export function ExpeditionCard({ expedition }: { expedition: CardExpedition }) {
     <article className="card-lift group relative overflow-hidden rounded-2xl bg-stone-900 shadow-sm ring-1 ring-black/5">
       <Link href={`/expediciones/${expedition.slug}`} className="block">
         <div className="relative aspect-[4/5] w-full overflow-hidden">
-          {expedition.coverImage ? (
-            <Image
-              src={expedition.coverImage}
+          {cover ? (
+            <ContentImage
+              src={cover}
               alt={expedition.name}
-              fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
+              className="transition-transform duration-700 group-hover:scale-105"
             />
           ) : (
-            <div className="flex h-full items-center justify-center bg-stone-800 text-stone-500">
-              Sin imagen
-            </div>
+            // Sin fotos todavía: fondo neutro de la marca (nunca una foto ajena al viaje).
+            <div aria-hidden="true" className="h-full w-full bg-gradient-to-br from-stone-700 via-stone-800 to-ink" />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 

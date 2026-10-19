@@ -43,6 +43,17 @@ const DEFAULT_VISIBILITY: Record<HomeSectionKey, boolean> = {
 export type HomeSection = { key: HomeSectionKey; visible: boolean };
 export type PhilosophyItem = { title: string; text: string };
 export type TeamMember = { name: string; role: string; bio: string; photo: string };
+/** Foto de «Nuestra historia»: su propia URL, textos y dimensiones (para no recortarla). */
+export type StoryImage = {
+  url: string;
+  alt: string;
+  title: string;
+  caption: string;
+  width: number | null;
+  height: number | null;
+};
+
+export const MAX_STORY_IMAGES = 24;
 
 export type HomeContent = {
   hero: {
@@ -61,6 +72,9 @@ export type HomeContent = {
     title: string;
     intro: string;
     body: string;
+    /** Fotos de la historia, en orden. */
+    images: StoryImage[];
+    /** Compatibilidad: copia de la primera foto (versiones anteriores guardaban una sola). */
     image: string;
     imageAlt: string;
   };
@@ -107,7 +121,8 @@ export const HOME_DEFAULTS: HomeContent = {
     title: "Nuestra historia",
     intro: "",
     body: "", // vacío → usa el contenido de la página «Nosotros» del panel
-    image: "", // vacío → usa una foto de los viajes publicados
+    images: [], // sin fotos → usa una foto de los viajes publicados
+    image: "",
     imageAlt: "",
   },
   philosophy: {
@@ -171,6 +186,47 @@ function normalizeSections(value: unknown): HomeSection[] {
   return out;
 }
 
+function dimension(v: unknown): number | null {
+  return typeof v === "number" && Number.isInteger(v) && v > 0 && v <= 20000 ? v : null;
+}
+
+/** Normaliza una foto de la historia (URL saneada; sin URL válida → se descarta). */
+export function normalizeStoryImage(raw: unknown): StoryImage | null {
+  const o = obj(raw);
+  const url = imageUrl(o.url);
+  if (!url) return null;
+  return {
+    url,
+    alt: str(o.alt, 250),
+    title: str(o.title, 150),
+    caption: str(o.caption, 600),
+    width: dimension(o.width),
+    height: dimension(o.height),
+  };
+}
+
+function normalizeStory(story: Record<string, unknown>): HomeContent["story"] {
+  let images = arr(story.images)
+    .map(normalizeStoryImage)
+    .filter((i): i is StoryImage => i !== null)
+    .slice(0, MAX_STORY_IMAGES);
+  // Migración: contenido guardado antes, con una sola foto, pasa a ser la primera de la lista.
+  const legacy = imageUrl(story.image);
+  if (images.length === 0 && legacy && !Array.isArray(story.images)) {
+    images = [{ url: legacy, alt: str(story.imageAlt, 250), title: "", caption: "", width: null, height: null }];
+  }
+  return {
+    eyebrow: str(story.eyebrow, 80),
+    title: str(story.title, 200),
+    intro: str(story.intro, 800),
+    body: str(story.body, 12000),
+    images,
+    // Copia de compatibilidad de la primera foto.
+    image: images[0]?.url ?? "",
+    imageAlt: images[0]?.alt ?? "",
+  };
+}
+
 /**
  * Normaliza el JSON guardado SIN aplicar defaults: devuelve exactamente lo que
  * el administrador cargó (vacío = no cargado). Tolerante a datos viejos o rotos.
@@ -196,14 +252,7 @@ export function normalizeStoredHome(value: unknown): HomeContent {
       secondaryLabel: str(hero.secondaryLabel, 60),
       secondaryHref: safeHref(hero.secondaryHref),
     },
-    story: {
-      eyebrow: str(story.eyebrow, 80),
-      title: str(story.title, 200),
-      intro: str(story.intro, 800),
-      body: str(story.body, 12000),
-      image: imageUrl(story.image),
-      imageAlt: str(story.imageAlt, 200),
-    },
+    story: normalizeStory(story),
     philosophy: {
       eyebrow: str(philosophy.eyebrow, 80),
       title: str(philosophy.title, 200),
@@ -254,7 +303,15 @@ export function resolveHome(stored: HomeContent): HomeContent {
   const t = stored.team;
   return {
     hero: pickStrings(stored.hero, d.hero),
-    story: pickStrings(stored.story, d.story),
+    story: {
+      ...pickStrings(
+        { eyebrow: stored.story.eyebrow, title: stored.story.title, intro: stored.story.intro, body: stored.story.body },
+        { eyebrow: d.story.eyebrow, title: d.story.title, intro: d.story.intro, body: d.story.body },
+      ),
+      images: stored.story.images,
+      image: stored.story.image,
+      imageAlt: stored.story.imageAlt,
+    },
     philosophy: {
       ...pickStrings(
         { eyebrow: p.eyebrow, title: p.title, intro: p.intro },

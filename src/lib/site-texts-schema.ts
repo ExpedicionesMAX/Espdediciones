@@ -19,11 +19,17 @@ export const SITE_TEXTS: TextField[] = [
   { key: "expsTitle", label: "Título", default: "Nuestros Viajes", group: "Página Nuestros Viajes" },
   { key: "expsSubtitle", label: "Texto de presentación", default: "Distintas formas de viajar, una misma manera de mirar. Elegí cómo querés explorar.", group: "Página Nuestros Viajes", multiline: true },
   { key: "expsAllLabel", label: "Filtro «todos los viajes»", default: "Todos", group: "Página Nuestros Viajes" },
-  { key: "catFotograficaIntro", label: "Presentación de Expediciones Fotográficas", default: "Nuestros viajes fotográficos guiados.", group: "Página Nuestros Viajes", multiline: true },
+  { key: "catFotograficaIntro", label: "Presentación de Expediciones", default: "Nuestros viajes fotográficos guiados.", group: "Página Nuestros Viajes", multiline: true },
   { key: "catEscapadaIntro", label: "Presentación de Escapadas", default: "Salidas cortas para desconectar.", group: "Página Nuestros Viajes", multiline: true },
   { key: "catColeccionableIntro", label: "Presentación de Viajes Coleccionables", default: "Experiencias únicas para coleccionar.", group: "Página Nuestros Viajes", multiline: true },
   { key: "expsEmptyTitle", label: "Categoría sin viajes: título", default: "Próximamente", group: "Página Nuestros Viajes" },
   { key: "expsEmptyText", label: "Categoría sin viajes: texto", default: "Por el momento no hay experiencias publicadas en esta categoría. Mirá el resto de nuestros viajes o consultanos por uno a medida.", group: "Página Nuestros Viajes", multiline: true },
+
+  // Galería Fotográfica (/galeria)
+  { key: "galeriaTitle", label: "Título", default: "Galería Fotográfica", group: "Página Galería Fotográfica" },
+  { key: "galeriaSubtitle", label: "Texto de presentación", default: "Paisajes, naturaleza, montaña y momentos de viaje, a través de nuestra mirada.", group: "Página Galería Fotográfica", multiline: true },
+  { key: "galeriaEmptyTitle", label: "Galería vacía: título", default: "Muy pronto", group: "Página Galería Fotográfica" },
+  { key: "galeriaEmptyText", label: "Galería vacía: texto", default: "Estamos preparando la galería. Mientras tanto, podés conocer nuestros viajes.", group: "Página Galería Fotográfica", multiline: true },
 
   // Inicio — sección de reseñas
   { key: "homeReviewsTitle", label: "Título de la sección de reseñas", default: "Lo que dicen nuestros expedicionarios", group: "Inicio — Reseñas" },
