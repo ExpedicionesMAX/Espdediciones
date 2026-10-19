@@ -10,12 +10,15 @@ export type TextField = {
    * guardado se conserva al guardar.
    */
   hidden?: boolean;
+  /** "image": en vez de texto, una foto (subir o pegar URL). Vacío = foto automática. */
+  kind?: "text" | "image";
 };
 
 export type SiteTexts = Record<string, string>;
 
 export const SITE_TEXTS: TextField[] = [
   // Catálogo Nuestros Viajes (/expediciones)
+  { key: "expsCoverImage", label: "Foto de portada (vacío = una foto de tus viajes)", default: "", group: "Página Nuestros Viajes", kind: "image" },
   { key: "expsTitle", label: "Título", default: "Nuestros Viajes", group: "Página Nuestros Viajes" },
   { key: "expsSubtitle", label: "Texto de presentación", default: "Distintas formas de viajar, una misma manera de mirar. Elegí cómo querés explorar.", group: "Página Nuestros Viajes", multiline: true },
   { key: "expsAllLabel", label: "Filtro «todos los viajes»", default: "Todos", group: "Página Nuestros Viajes" },

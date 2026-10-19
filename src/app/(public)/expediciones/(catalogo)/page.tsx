@@ -7,6 +7,8 @@ import { publicExpeditionWhere } from "@/lib/expeditions-query";
 import { ExpeditionCard, CARD_SELECT } from "@/components/public/ExpeditionCard";
 import { TripCategoryPills } from "@/components/public/TripCategoryPills";
 import { getSiteTexts } from "@/lib/site-texts";
+import { getTripPhotos } from "@/lib/page-content";
+import { ContentImage } from "@/components/public/ContentImage";
 import {
   CATALOG_CATEGORY_KEYS,
   CUSTOM_TRIP_PATH,
@@ -49,28 +51,42 @@ export default async function ExpeditionsPage({ searchParams }: { searchParams: 
   if (sp.categoria === "a-medida") redirect(CUSTOM_TRIP_PATH);
 
   const active = isCatalogCategory(sp.categoria) ? sp.categoria : null;
-  const texts = await getSiteTexts();
 
   const where: Prisma.ExpeditionWhereInput = {
     category: active ?? { in: CATALOG_CATEGORY_KEYS },
   };
-  const expeditions = await prisma.expedition.findMany({
-    where: publicExpeditionWhere(where),
-    orderBy: [{ featured: "desc" }, { homeOrder: "asc" }, { name: "asc" }],
-    select: CARD_SELECT,
-  });
+  const [texts, photos, expeditions] = await Promise.all([
+    getSiteTexts(),
+    getTripPhotos(),
+    prisma.expedition.findMany({
+      where: publicExpeditionWhere(where),
+      orderBy: [{ featured: "desc" }, { homeOrder: "asc" }, { name: "asc" }],
+      select: CARD_SELECT,
+    }),
+  ]);
 
   const count = expeditions.length;
+  // Portada: la elegida en «Textos del sitio»; si no, una foto real de los viajes publicados.
+  const cover = texts.expsCoverImage || photos[0]?.url || null;
 
   return (
     <>
-      {/* ENCABEZADO: título protagonista + filtros */}
-      <section className="bg-ink px-4 pb-10 pt-32 text-white sm:px-6 sm:pb-12 sm:pt-36">
-        <div className="mx-auto max-w-6xl">
+      {/* ENCABEZADO: portada + título protagonista + filtros */}
+      <section
+        className={`relative overflow-hidden bg-ink px-4 pb-10 pt-32 text-white sm:px-6 sm:pb-12 sm:pt-36 ${cover ? "flex min-h-[62vh] items-end" : ""}`}
+      >
+        {cover && (
+          <>
+            <ContentImage src={cover} alt="" sizes="100vw" priority />
+            {/* Contraste: el texto y los filtros siempre legibles sobre la foto */}
+            <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/35" />
+          </>
+        )}
+        <div className="relative mx-auto w-full max-w-6xl">
           <h1 className="font-display text-5xl font-semibold leading-[1.02] tracking-tight sm:text-7xl">
             {texts.expsTitle}
           </h1>
-          <p className="mt-5 max-w-xl text-lg text-stone-300">{texts.expsSubtitle}</p>
+          <p className="mt-5 max-w-xl text-lg text-stone-200">{texts.expsSubtitle}</p>
           <div className="mt-10">
             <TripCategoryPills active={active} allLabel={texts.expsAllLabel} />
           </div>

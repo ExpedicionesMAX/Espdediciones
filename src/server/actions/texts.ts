@@ -7,6 +7,8 @@ import { requirePermission } from "@/lib/auth-guard";
 import { PERMISSIONS } from "@/lib/permissions";
 import { logActivity } from "@/lib/audit";
 import { SITE_TEXTS } from "@/lib/site-texts-schema";
+import { imageUrl } from "@/lib/content-fields";
+import { removeStorageFilesIfUnreferenced, removedUrls } from "@/lib/storage";
 
 export type TextsFormState = { ok: boolean; success?: boolean; error?: string };
 
@@ -32,7 +34,9 @@ export async function updateTexts(
       if (typeof prev === "string" && prev.trim()) texts[t.key] = prev;
       continue;
     }
-    const v = formData.get(t.key)?.toString().trim().slice(0, 2000);
+    const raw = formData.get(t.key)?.toString().trim().slice(0, 2000);
+    // Fotos: solo URLs http(s) o rutas locales (nada de javascript:, data:, etc.).
+    const v = t.kind === "image" ? imageUrl(raw) : raw;
     if (v && v !== t.default) texts[t.key] = v;
   }
 
@@ -41,6 +45,8 @@ export async function updateTexts(
     update: { texts: texts as Prisma.InputJsonValue },
     create: { id: "singleton", texts: texts as Prisma.InputJsonValue },
   });
+  // Foto reemplazada o quitada: se borra el archivo solo si ya nada del sitio la usa.
+  await removeStorageFilesIfUnreferenced(removedUrls(stored, texts));
 
   await logActivity({
     userId: user.id,

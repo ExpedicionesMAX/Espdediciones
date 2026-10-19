@@ -73,7 +73,7 @@ export function SiteFooter({ settings }: { settings: SiteSettingsData }) {
           <ul className="mt-4 space-y-2 text-sm">
             {settings.contactEmail && (
               <li>
-                <a href={`mailto:${settings.contactEmail}`} className="hover:text-white">
+                <a href={`mailto:${settings.contactEmail}`} className="[overflow-wrap:anywhere] hover:text-white">
                   {settings.contactEmail}
                 </a>
               </li>

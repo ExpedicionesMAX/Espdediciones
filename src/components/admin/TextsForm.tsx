@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
+import { ImageField } from "@/components/admin/ImageField";
 import { updateTexts, type TextsFormState } from "@/server/actions/texts";
 import { SITE_TEXTS, type TextField } from "@/lib/site-texts-schema";
 import { useDirtyForm } from "@/components/admin/useUnsavedChanges";
@@ -11,9 +12,37 @@ const initial: TextsFormState = { ok: false };
 const inputCls =
   "w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm focus:border-accent focus:outline-none";
 
+/** Campo de foto dentro de «Textos del sitio»: el valor viaja en un campo oculto. */
+function ImageTextField({
+  id,
+  defaultValue,
+  onChange,
+}: {
+  id: string;
+  defaultValue: string;
+  onChange: () => void;
+}) {
+  const [value, setValue] = useState(defaultValue);
+  return (
+    <>
+      <input type="hidden" name={id} value={value} />
+      <ImageField
+        id={id}
+        value={value}
+        folder="sitio"
+        onChange={(url) => {
+          setValue(url);
+          onChange();
+        }}
+        hint="Ideal: foto horizontal y de buena calidad. Si la dejás vacía, se usa una foto de tus viajes."
+      />
+    </>
+  );
+}
+
 export function TextsForm({ stored }: { stored: Record<string, string> }) {
   const [state, formAction, pending] = useActionState(updateTexts, initial);
-  const { dirty, formProps } = useDirtyForm(state);
+  const { dirty, markDirty, formProps } = useDirtyForm(state);
 
   const groups = SITE_TEXTS.filter((f) => !f.hidden).reduce<Record<string, TextField[]>>((acc, f) => {
     (acc[f.group] ??= []).push(f);
@@ -48,7 +77,9 @@ export function TextsForm({ stored }: { stored: Record<string, string> }) {
                 <label htmlFor={f.key} className="mb-1 block text-sm font-medium text-ink">
                   {f.label}
                 </label>
-                {f.multiline ? (
+                {f.kind === "image" ? (
+                  <ImageTextField id={f.key} defaultValue={stored[f.key] ?? ""} onChange={markDirty} />
+                ) : f.multiline ? (
                   <textarea
                     id={f.key}
                     name={f.key}
