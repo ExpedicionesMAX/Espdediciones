@@ -55,6 +55,10 @@ export type StoryImage = {
 
 export const MAX_STORY_IMAGES = 24;
 
+/** Intensidades del velo oscuro sobre la foto de portada. */
+export const HERO_OVERLAYS = ["none", "light", "medium", "strong"] as const;
+export type HeroOverlay = (typeof HERO_OVERLAYS)[number];
+
 export type HomeContent = {
   hero: {
     eyebrow: string;
@@ -66,6 +70,8 @@ export type HomeContent = {
     primaryHref: string;
     secondaryLabel: string;
     secondaryHref: string;
+    /** Cuánto se oscurece la foto para que el texto se lea: "none" | "light" | "medium" | "strong". */
+    overlay: string;
   };
   story: {
     eyebrow: string;
@@ -115,6 +121,7 @@ export const HOME_DEFAULTS: HomeContent = {
     primaryHref: "#nosotros",
     secondaryLabel: "Explorá nuestros viajes",
     secondaryHref: "/expediciones",
+    overlay: "medium", // el velo que tenía el sitio hasta ahora
   },
   story: {
     eyebrow: "Nosotros",
@@ -251,6 +258,7 @@ export function normalizeStoredHome(value: unknown): HomeContent {
       primaryHref: safeHref(hero.primaryHref),
       secondaryLabel: str(hero.secondaryLabel, 60),
       secondaryHref: safeHref(hero.secondaryHref),
+      overlay: (HERO_OVERLAYS as readonly string[]).includes(hero.overlay as string) ? (hero.overlay as string) : "",
     },
     story: normalizeStory(story),
     philosophy: {

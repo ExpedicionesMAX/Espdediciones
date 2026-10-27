@@ -17,6 +17,14 @@ import { whatsappUrl, formatDateRange } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
+/** Velo sobre la foto de portada según lo elegido en el panel ("medium" = el de siempre). */
+const HERO_OVERLAY_CLASS: Record<string, string> = {
+  none: "",
+  light: "from-black/55 via-black/15 to-transparent",
+  medium: "from-black/85 via-black/40 to-black/30",
+  strong: "from-black/90 via-black/60 to-black/45",
+};
+
 const SOCIAL_LABELS: Record<string, string> = {
   instagram: "Instagram",
   youtube: "YouTube",
@@ -439,9 +447,14 @@ export default async function HomePage() {
         {heroPhoto && (
           <ContentImage src={heroPhoto.url} alt={hero.imageAlt || heroPhoto.alt} sizes="100vw" priority />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/30" />
+        {/* Velo oscuro para que el texto se lea; la intensidad se elige en el panel. */}
+        {HERO_OVERLAY_CLASS[hero.overlay] && (
+          <div aria-hidden="true" className={`absolute inset-0 bg-gradient-to-t ${HERO_OVERLAY_CLASS[hero.overlay]}`} />
+        )}
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-20 pt-32 sm:px-6 lg:pb-28">
-          <div className="max-w-3xl animate-fade-up text-white">
+          <div
+            className={`max-w-3xl animate-fade-up text-white ${hero.overlay === "none" || hero.overlay === "light" ? "hero-text-shadow" : ""}`}
+          >
             <p className="text-sm font-medium uppercase tracking-[0.25em] text-stone-300">
               {hero.eyebrow || settings.siteName}
             </p>

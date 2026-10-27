@@ -86,6 +86,13 @@ test("secciones: respeta el orden guardado, completa faltantes y no deja ocultar
   assert.equal(new Set(n.sections.map((s) => s.key)).size, HOME_SECTIONS.length);
 });
 
+test("velo de la portada: por defecto «medio» (como antes); se respeta lo elegido; valores raros se ignoran", () => {
+  assert.equal(resolveHome(normalizeStoredHome(null)).hero.overlay, "medium");
+  assert.equal(resolveHome(normalizeStoredHome({ hero: { overlay: "none" } })).hero.overlay, "none");
+  assert.equal(resolveHome(normalizeStoredHome({ hero: { overlay: "light" } })).hero.overlay, "light");
+  assert.equal(resolveHome(normalizeStoredHome({ hero: { overlay: "<script>" } })).hero.overlay, "medium");
+});
+
 test("resolveHome: vacío usa el valor por defecto; lo cargado lo reemplaza", () => {
   const empty = resolveHome(normalizeStoredHome(null));
   assert.equal(empty.hero.title, HOME_DEFAULTS.hero.title);

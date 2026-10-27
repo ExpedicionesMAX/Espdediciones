@@ -64,6 +64,14 @@ body {
   animation: fade-up 0.6s ease-out both;
 }
 
+/* Sombra suave del texto de portada cuando la foto va con poco o ningún velo:
+   mantiene el título legible sobre zonas claras (nieve, cielo). */
+.hero-text-shadow {
+  text-shadow:
+    0 1px 3px rgb(0 0 0 / 0.55),
+    0 2px 18px rgb(0 0 0 / 0.35);
+}
+
 /* Transición sutil al cambiar de foto en la vista ampliada */
 @keyframes lightbox-in {
   from {
