@@ -7,6 +7,7 @@ import { requirePermission } from "@/lib/auth-guard";
 import { PERMISSIONS } from "@/lib/permissions";
 import { logActivity } from "@/lib/audit";
 import { settingsInputSchema } from "@/lib/validations/settings";
+import { removeStorageFilesIfUnreferenced, removedUrls } from "@/lib/storage";
 
 type PillarInput = {
   title: string;
@@ -132,11 +133,17 @@ export async function updateSettings(
     reviewsUrl: d.reviewsUrl ?? null,
   };
 
+  const previous = await prisma.siteSettings.findUnique({
+    where: { id: "singleton" },
+    select: { logoUrl: true },
+  });
   await prisma.siteSettings.upsert({
     where: { id: "singleton" },
     update: data,
     create: { id: "singleton", ...data },
   });
+  // Logo reemplazado o quitado: el archivo viejo se borra solo si nada más lo usa.
+  await removeStorageFilesIfUnreferenced(removedUrls([previous?.logoUrl], [data.logoUrl]));
 
   await logActivity({
     userId: user.id,

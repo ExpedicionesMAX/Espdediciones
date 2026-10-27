@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 
 export type LightboxItem = {
   url: string;
@@ -70,7 +71,9 @@ export function Lightbox({
 
   if (!item) return null;
 
-  return (
+  // Portal al <body>: si la foto está dentro de una sección animada (transform), un
+  // `position: fixed` quedaría encerrado en esa sección en vez de cubrir la pantalla.
+  return createPortal(
     <div
       role="dialog"
       aria-modal="true"
@@ -164,6 +167,7 @@ export function Lightbox({
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

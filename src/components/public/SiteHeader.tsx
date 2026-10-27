@@ -141,12 +141,18 @@ function HeaderInner({
       )}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-4 sm:px-6">
-        <Link href="/" className="shrink-0 font-display text-xl font-semibold tracking-tight" onClick={closeAll}>
+        {/* Logo de Configuración en lugar del nombre; se puede tocar para ir al inicio. Sin logo, el nombre. */}
+        <Link
+          href="/"
+          aria-label={`${siteName} — Inicio`}
+          className="flex min-w-0 shrink-0 items-center font-display text-xl font-semibold tracking-tight"
+          onClick={closeAll}
+        >
           {logoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={logoUrl} alt={siteName} className="h-8 w-auto" />
+            <img src={logoUrl} alt={siteName} className="h-10 w-auto max-w-[220px] object-contain sm:h-12" />
           ) : (
-            siteName
+            <span className="truncate">{siteName}</span>
           )}
         </Link>
 

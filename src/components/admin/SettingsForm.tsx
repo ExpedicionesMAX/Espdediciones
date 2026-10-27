@@ -7,6 +7,7 @@ import { FONT_OPTIONS } from "@/lib/fonts";
 import type { WhyPillar } from "@/lib/site";
 import { useDirtyForm } from "@/components/admin/useUnsavedChanges";
 import { UnsavedBadge } from "@/components/admin/content-form-ui";
+import { ImageField } from "@/components/admin/ImageField";
 
 const initial: SettingsFormState = { ok: false };
 
@@ -62,7 +63,8 @@ export function SettingsForm({
   expeditions: { id: string; name: string }[];
 }) {
   const [state, formAction, pending] = useActionState(updateSettings, initial);
-  const { dirty, formProps } = useDirtyForm(state);
+  const { dirty, markDirty, formProps } = useDirtyForm(state);
+  const [logo, setLogo] = useState(values.logoUrl);
   const err = (f: string) => state.fieldErrors?.[f]?.[0];
 
   const [pillars, setPillars] = useState<WhyPillar[]>(
@@ -105,8 +107,18 @@ export function SettingsForm({
           <input id="tagline" name="tagline" defaultValue={values.tagline} className={inputCls} />
         </div>
         <div>
-          <label htmlFor="logoUrl" className={labelCls}>Logo (URL)</label>
-          <input id="logoUrl" name="logoUrl" defaultValue={values.logoUrl} placeholder="https://… (si lo dejás vacío se muestra el nombre)" className={inputCls} />
+          <label htmlFor="logoUrl" className={labelCls}>Logo</label>
+          <input type="hidden" name="logoUrl" value={logo} />
+          <ImageField
+            id="logoUrl"
+            value={logo}
+            folder="sitio"
+            onChange={(url) => {
+              setLogo(url);
+              markDirty();
+            }}
+            hint="Aparece arriba a la izquierda en lugar del nombre, y al tocarlo lleva al inicio. Ideal: PNG con fondo transparente. Si lo quitás, vuelve a verse el nombre."
+          />
           {err("logoUrl") && <p className="mt-1 text-xs text-red-600">{err("logoUrl")}</p>}
         </div>
         <div>

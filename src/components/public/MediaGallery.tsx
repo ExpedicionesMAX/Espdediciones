@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { MediaItem } from "@/lib/media";
 
 function PlayIcon({ className = "" }: { className?: string }) {
@@ -13,6 +14,7 @@ function PlayIcon({ className = "" }: { className?: string }) {
 
 export function MediaGallery({ items }: { items: MediaItem[] }) {
   const [open, setOpen] = useState<number | null>(null);
+  const touchX = useRef<number | null>(null);
 
   const close = useCallback(() => setOpen(null), []);
   const go = useCallback(
@@ -74,12 +76,25 @@ export function MediaGallery({ items }: { items: MediaItem[] }) {
         ))}
       </div>
 
-      {current && (
+      {/* Portal al <body>: el visor cubre siempre toda la pantalla, esté donde esté la galería. */}
+      {current && createPortal(
         <div
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4"
           role="dialog"
           aria-modal="true"
+          aria-label="Foto ampliada"
           onClick={close}
+          onTouchStart={(e) => {
+            touchX.current = e.touches[0]?.clientX ?? null;
+          }}
+          onTouchEnd={(e) => {
+            // Deslizar con el dedo pasa a la foto anterior/siguiente.
+            const start = touchX.current;
+            touchX.current = null;
+            const end = e.changedTouches[0]?.clientX;
+            if (start == null || end == null || items.length < 2) return;
+            if (Math.abs(end - start) > 50) go(end < start ? 1 : -1);
+          }}
         >
           <button
             type="button"
@@ -133,7 +148,7 @@ export function MediaGallery({ items }: { items: MediaItem[] }) {
               <img
                 src={current.url}
                 alt=""
-                className="mx-auto max-h-[85vh] w-auto max-w-full rounded-lg object-contain"
+                className="mx-auto max-h-[80dvh] w-auto max-w-full rounded-lg object-contain"
               />
             )}
           </div>
@@ -141,7 +156,8 @@ export function MediaGallery({ items }: { items: MediaItem[] }) {
           <p className="absolute bottom-4 left-1/2 -translate-x-1/2 text-sm text-white/70">
             {open! + 1} / {items.length}
           </p>
-        </div>
+        </div>,
+        document.body,
       )}
     </>
   );
