@@ -59,6 +59,15 @@ export const MAX_STORY_IMAGES = 24;
 export const HERO_OVERLAYS = ["none", "light", "medium", "strong"] as const;
 export type HeroOverlay = (typeof HERO_OVERLAYS)[number];
 
+/** Opciones de presentación de los textos de la portada (se eligen en el panel). */
+export const HERO_TITLE_SIZES = ["sm", "md", "lg", "xl"] as const;
+export const HERO_TEXT_SIZES = ["sm", "md", "lg"] as const;
+export const HERO_ALIGNS = ["left", "center"] as const;
+
+function oneOf(list: readonly string[], v: unknown): string {
+  return typeof v === "string" && list.includes(v) ? v : "";
+}
+
 export type HomeContent = {
   hero: {
     eyebrow: string;
@@ -72,6 +81,12 @@ export type HomeContent = {
     secondaryHref: string;
     /** Cuánto se oscurece la foto para que el texto se lea: "none" | "light" | "medium" | "strong". */
     overlay: string;
+    /** Tamaño del título: "sm" | "md" | "lg" | "xl". */
+    titleSize: string;
+    /** Tamaño del texto de presentación: "sm" | "md" | "lg". */
+    textSize: string;
+    /** Alineación de los textos y botones: "left" | "center". */
+    align: string;
   };
   story: {
     eyebrow: string;
@@ -112,7 +127,7 @@ export type HomeContent = {
 /** Valores por defecto (provisionales). Vacío = "sin valor por defecto". */
 export const HOME_DEFAULTS: HomeContent = {
   hero: {
-    eyebrow: "", // vacío → usa el nombre del sitio de Configuración
+    eyebrow: "", // opcional: vacío (o solo signos, p. ej. ".") = no se muestra
     title: "Viajar para mirar de otra manera",
     text: "Un proyecto que une la fotografía, la naturaleza y el viaje. Conocé quiénes somos y cómo pensamos cada experiencia.",
     image: "", // vacío → usa la portada de un viaje destacado
@@ -122,6 +137,9 @@ export const HOME_DEFAULTS: HomeContent = {
     secondaryLabel: "Explorá nuestros viajes",
     secondaryHref: "/expediciones",
     overlay: "medium", // el velo que tenía el sitio hasta ahora
+    titleSize: "md",
+    textSize: "md",
+    align: "left",
   },
   story: {
     eyebrow: "Nosotros",
@@ -258,7 +276,10 @@ export function normalizeStoredHome(value: unknown): HomeContent {
       primaryHref: safeHref(hero.primaryHref),
       secondaryLabel: str(hero.secondaryLabel, 60),
       secondaryHref: safeHref(hero.secondaryHref),
-      overlay: (HERO_OVERLAYS as readonly string[]).includes(hero.overlay as string) ? (hero.overlay as string) : "",
+      overlay: oneOf(HERO_OVERLAYS, hero.overlay),
+      titleSize: oneOf(HERO_TITLE_SIZES, hero.titleSize),
+      textSize: oneOf(HERO_TEXT_SIZES, hero.textSize),
+      align: oneOf(HERO_ALIGNS, hero.align),
     },
     story: normalizeStory(story),
     philosophy: {

@@ -25,6 +25,19 @@ const HERO_OVERLAY_CLASS: Record<string, string> = {
   strong: "from-black/90 via-black/60 to-black/45",
 };
 
+/** Tamaños del título y del texto de portada elegibles en el panel. */
+const HERO_TITLE_CLASS: Record<string, string> = {
+  sm: "text-2xl sm:text-4xl lg:text-5xl",
+  md: "text-3xl sm:text-5xl lg:text-6xl",
+  lg: "text-4xl sm:text-6xl lg:text-7xl", // el tamaño que tenía antes
+  xl: "text-5xl sm:text-7xl lg:text-8xl",
+};
+const HERO_TEXT_CLASS: Record<string, string> = {
+  sm: "text-sm sm:text-base",
+  md: "text-base sm:text-[17px]",
+  lg: "text-lg sm:text-xl",
+};
+
 const SOCIAL_LABELS: Record<string, string> = {
   instagram: "Instagram",
   youtube: "YouTube",
@@ -77,6 +90,7 @@ export default async function HomePage() {
   ]);
   const visible = new Set(content.sections.filter((s) => s.visible).map((s) => s.key));
   const { hero, story, philosophy, team, trips, closing } = content;
+  const centered = hero.align === "center";
 
   // ── Datos reales para las secciones de viajes (solo si se muestran) ──
   const [selection, upcoming, reviewsRaw] = await Promise.all([
@@ -453,18 +467,27 @@ export default async function HomePage() {
         )}
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-20 pt-32 sm:px-6 lg:pb-28">
           <div
-            className={`max-w-3xl animate-fade-up text-white ${hero.overlay === "none" || hero.overlay === "light" ? "hero-text-shadow" : ""}`}
+            className={`max-w-3xl animate-fade-up text-white ${centered ? "mx-auto text-center" : ""} ${hero.overlay === "none" || hero.overlay === "light" ? "hero-text-shadow" : ""}`}
           >
-            <p className="text-sm font-medium uppercase tracking-[0.25em] text-stone-300">
-              {hero.eyebrow || settings.siteName}
-            </p>
-            <h1 className="mt-5 font-display text-4xl font-semibold leading-[1.04] [overflow-wrap:anywhere] sm:text-6xl lg:text-7xl">
+            {/* Rótulo superior: solo si tiene letras o números (vacío o un «.» = no se muestra) */}
+            {/[\p{L}\p{N}]/u.test(hero.eyebrow) && (
+              <p className="mb-5 text-sm font-medium uppercase tracking-[0.25em] text-stone-300">
+                {hero.eyebrow}
+              </p>
+            )}
+            <h1
+              className={`font-display font-semibold leading-[1.08] [overflow-wrap:anywhere] ${HERO_TITLE_CLASS[hero.titleSize] ?? HERO_TITLE_CLASS.md}`}
+            >
               {hero.title}
             </h1>
             {hero.text && (
-              <p className="mt-6 max-w-xl text-lg leading-relaxed text-stone-200">{hero.text}</p>
+              <p
+                className={`mt-5 max-w-xl leading-relaxed text-stone-200 ${centered ? "mx-auto" : ""} ${HERO_TEXT_CLASS[hero.textSize] ?? HERO_TEXT_CLASS.md}`}
+              >
+                {hero.text}
+              </p>
             )}
-            <div className="mt-9 flex flex-wrap gap-3 sm:gap-4">
+            <div className={`mt-9 flex flex-wrap gap-3 sm:gap-4 ${centered ? "justify-center" : ""}`}>
               <HeroLink
                 href={hero.primaryHref}
                 className="rounded-full bg-accent px-7 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-dark"

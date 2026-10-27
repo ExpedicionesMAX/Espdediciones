@@ -27,6 +27,36 @@ import {
 const initial: PageContentFormState = { ok: false };
 const D = HOME_DEFAULTS;
 
+/** Grupo de botones para elegir una opción (accesible: radios con estilo de botón). */
+function Segmented({
+  legend,
+  value,
+  options,
+  onChange,
+}: {
+  legend: string;
+  value: string;
+  options: [string, string][];
+  onChange: (v: string) => void;
+}) {
+  return (
+    <fieldset>
+      <legend className="mb-2 text-sm font-medium text-ink">{legend}</legend>
+      <div className="flex flex-wrap gap-1.5">
+        {options.map(([v, label]) => (
+          <label
+            key={v}
+            className={`cursor-pointer rounded-full px-3 py-1.5 text-xs font-medium ring-1 ring-inset has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-accent ${value === v ? "bg-ink text-white ring-ink" : "bg-white text-stone-600 ring-stone-300 hover:bg-stone-100"}`}
+          >
+            <input type="radio" name={legend} className="sr-only" checked={value === v} onChange={() => onChange(v)} />
+            {label}
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
+
 // Mismas intensidades que la portada pública (src/app/(public)/page.tsx).
 const OVERLAY_OPTIONS = [
   { value: "none", label: "Sin velo", preview: "" },
@@ -82,9 +112,41 @@ export function HomeContentForm({
 
       {/* ─── PORTADA ─── */}
       <Card title="1 · Portada (primera pantalla)" description="Lo primero que ve el visitante: quiénes son y qué es el proyecto.">
-        <TextField id="hero-eyebrow" label="Rótulo superior" value={c.hero.eyebrow} onChange={(v) => set("hero", { eyebrow: v })} placeholder={siteName} hint="Vacío = el nombre del sitio." />
+        <TextField id="hero-eyebrow" label="Rótulo superior (opcional)" value={c.hero.eyebrow} onChange={(v) => set("hero", { eyebrow: v })} placeholder={`Ej.: ${siteName}`} hint="Texto chico en mayúsculas arriba del título. Si lo dejás vacío, no se muestra nada." />
         <TextField id="hero-title" label="Título principal" value={c.hero.title} onChange={(v) => set("hero", { title: v })} placeholder={D.hero.title} hint="La filosofía del proyecto en una frase." />
         <TextField id="hero-text" label="Texto de presentación" value={c.hero.text} onChange={(v) => set("hero", { text: v })} placeholder={D.hero.text} multiline />
+        <div className="grid gap-4 rounded-xl bg-stone-50 p-4 sm:grid-cols-3">
+          <Segmented
+            legend="Tamaño del título"
+            value={c.hero.titleSize || "md"}
+            options={[
+              ["sm", "Chico"],
+              ["md", "Mediano"],
+              ["lg", "Grande"],
+              ["xl", "Muy grande"],
+            ]}
+            onChange={(v) => set("hero", { titleSize: v })}
+          />
+          <Segmented
+            legend="Tamaño del texto"
+            value={c.hero.textSize || "md"}
+            options={[
+              ["sm", "Chico"],
+              ["md", "Mediano"],
+              ["lg", "Grande"],
+            ]}
+            onChange={(v) => set("hero", { textSize: v })}
+          />
+          <Segmented
+            legend="Ubicación de los textos"
+            value={c.hero.align || "left"}
+            options={[
+              ["left", "A la izquierda"],
+              ["center", "Centrados"],
+            ]}
+            onChange={(v) => set("hero", { align: v })}
+          />
+        </div>
         <div>
           <label htmlFor="hero-image" className={labelCls}>Fotografía de portada</label>
           <ImageField id="hero-image" value={c.hero.image} onChange={(v) => set("hero", { image: v })} hint="Una foto de naturaleza o de una experiencia real. Vacío = la portada de un viaje destacado." />

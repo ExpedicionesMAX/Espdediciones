@@ -93,6 +93,19 @@ test("velo de la portada: por defecto «medio» (como antes); se respeta lo eleg
   assert.equal(resolveHome(normalizeStoredHome({ hero: { overlay: "<script>" } })).hero.overlay, "medium");
 });
 
+test("textos de la portada: tamaños y alineación por defecto, elegidos e inválidos", () => {
+  const d = resolveHome(normalizeStoredHome(null)).hero;
+  assert.deepEqual([d.titleSize, d.textSize, d.align], ["md", "md", "left"]);
+  const c = resolveHome(normalizeStoredHome({ hero: { titleSize: "xl", textSize: "sm", align: "center" } })).hero;
+  assert.deepEqual([c.titleSize, c.textSize, c.align], ["xl", "sm", "center"]);
+  const bad = resolveHome(normalizeStoredHome({ hero: { titleSize: "gigante", textSize: 9, align: "right" } })).hero;
+  assert.deepEqual([bad.titleSize, bad.textSize, bad.align], ["md", "md", "left"]);
+});
+
+test("rótulo superior: vacío por defecto (no se inventa uno)", () => {
+  assert.equal(resolveHome(normalizeStoredHome(null)).hero.eyebrow, "");
+});
+
 test("resolveHome: vacío usa el valor por defecto; lo cargado lo reemplaza", () => {
   const empty = resolveHome(normalizeStoredHome(null));
   assert.equal(empty.hero.title, HOME_DEFAULTS.hero.title);
