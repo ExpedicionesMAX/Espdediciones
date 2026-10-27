@@ -8,6 +8,7 @@ import { PERMISSIONS } from "@/lib/permissions";
 import { logActivity } from "@/lib/audit";
 import { settingsInputSchema } from "@/lib/validations/settings";
 import { removeStorageFilesIfUnreferenced, removedUrls } from "@/lib/storage";
+import { normalizeLogoShadow, normalizeLogoSize } from "@/lib/logo-size";
 
 type PillarInput = {
   title: string;
@@ -135,12 +136,18 @@ export async function updateSettings(
 
   const previous = await prisma.siteSettings.findUnique({
     where: { id: "singleton" },
-    select: { logoUrl: true },
+    select: { logoUrl: true, texts: true },
   });
+  // El tamaño del logo se guarda junto a los textos del sitio (sin tocar los demás textos).
+  const texts = {
+    ...((previous?.texts as Record<string, unknown> | null) ?? {}),
+    logoSize: normalizeLogoSize(formData.get("logoSize")),
+    logoShadow: normalizeLogoShadow(formData.get("logoShadow")),
+  } as Prisma.InputJsonValue;
   await prisma.siteSettings.upsert({
     where: { id: "singleton" },
-    update: data,
-    create: { id: "singleton", ...data },
+    update: { ...data, texts },
+    create: { id: "singleton", ...data, texts },
   });
   // Logo reemplazado o quitado: el archivo viejo se borra solo si nada más lo usa.
   await removeStorageFilesIfUnreferenced(removedUrls([previous?.logoUrl], [data.logoUrl]));

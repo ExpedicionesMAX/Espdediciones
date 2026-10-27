@@ -8,6 +8,7 @@ import type { WhyPillar } from "@/lib/site";
 import { useDirtyForm } from "@/components/admin/useUnsavedChanges";
 import { UnsavedBadge } from "@/components/admin/content-form-ui";
 import { ImageField } from "@/components/admin/ImageField";
+import { LOGO_SHADOWS, LOGO_SIZES } from "@/lib/logo-size";
 
 const initial: SettingsFormState = { ok: false };
 
@@ -15,6 +16,8 @@ export type SettingsFormValues = {
   siteName: string;
   tagline: string;
   logoUrl: string;
+  logoSize: string;
+  logoShadow: string;
   whatsappNumber: string;
   contactEmail: string;
   contactPhone: string;
@@ -65,6 +68,8 @@ export function SettingsForm({
   const [state, formAction, pending] = useActionState(updateSettings, initial);
   const { dirty, markDirty, formProps } = useDirtyForm(state);
   const [logo, setLogo] = useState(values.logoUrl);
+  const [logoSize, setLogoSize] = useState(values.logoSize);
+  const [logoShadow, setLogoShadow] = useState(values.logoShadow);
   const err = (f: string) => state.fieldErrors?.[f]?.[0];
 
   const [pillars, setPillars] = useState<WhyPillar[]>(
@@ -121,6 +126,64 @@ export function SettingsForm({
           />
           {err("logoUrl") && <p className="mt-1 text-xs text-red-600">{err("logoUrl")}</p>}
         </div>
+        {logo && (
+          <fieldset>
+            <legend className={labelCls}>Tamaño del logo</legend>
+            <div className="flex flex-wrap gap-1.5">
+              {LOGO_SIZES.map((s) => (
+                <label
+                  key={s.key}
+                  className={`cursor-pointer rounded-full px-3 py-1.5 text-xs font-medium ring-1 ring-inset has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-accent ${logoSize === s.key ? "bg-ink text-white ring-ink" : "bg-white text-stone-600 ring-stone-300 hover:bg-stone-100"}`}
+                >
+                  <input
+                    type="radio"
+                    name="logoSize"
+                    value={s.key}
+                    checked={logoSize === s.key}
+                    onChange={() => setLogoSize(s.key)}
+                    className="sr-only"
+                  />
+                  {s.label}
+                </label>
+              ))}
+            </div>
+            <p className={`${labelCls} mt-4`}>Sombra (relieve)</p>
+            <div className="flex flex-wrap gap-1.5" role="radiogroup" aria-label="Sombra del logo">
+              {LOGO_SHADOWS.map((s) => (
+                <label
+                  key={s.key}
+                  className={`cursor-pointer rounded-full px-3 py-1.5 text-xs font-medium ring-1 ring-inset has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-accent ${logoShadow === s.key ? "bg-ink text-white ring-ink" : "bg-white text-stone-600 ring-stone-300 hover:bg-stone-100"}`}
+                >
+                  <input
+                    type="radio"
+                    name="logoShadow"
+                    value={s.key}
+                    checked={logoShadow === s.key}
+                    onChange={() => setLogoShadow(s.key)}
+                    className="sr-only"
+                  />
+                  {s.label}
+                </label>
+              ))}
+            </div>
+            {/* Vista previa: así se ve en la barra superior del sitio */}
+            <div className="mt-3 flex items-center justify-between gap-4 rounded-xl bg-stone-700 bg-gradient-to-r from-stone-800 to-stone-600 px-4 py-4">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={logo}
+                alt="Vista previa del logo"
+                className={`w-auto max-w-[60%] object-contain ${LOGO_SIZES.find((s) => s.key === logoSize)?.className ?? ""} ${LOGO_SHADOWS.find((s) => s.key === logoShadow)?.className ?? ""}`}
+              />
+              <span className="hidden text-xs font-medium text-white/80 sm:block">Nosotros · Nuestros Viajes · Galería</span>
+            </div>
+          </fieldset>
+        )}
+        {!logo && (
+          <>
+            <input type="hidden" name="logoSize" value={logoSize} />
+            <input type="hidden" name="logoShadow" value={logoShadow} />
+          </>
+        )}
         <div>
           <label htmlFor="accentColor" className={labelCls}>Color de acento</label>
           <div className="flex items-center gap-3">

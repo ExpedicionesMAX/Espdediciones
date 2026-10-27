@@ -1,6 +1,8 @@
 import { requirePermission } from "@/lib/auth-guard";
 import { PERMISSIONS } from "@/lib/permissions";
 import { getSiteSettings } from "@/lib/site";
+import { getSiteTexts } from "@/lib/site-texts";
+import { normalizeLogoShadow, normalizeLogoSize } from "@/lib/logo-size";
 import { prisma } from "@/lib/prisma";
 import { SettingsForm, type SettingsFormValues } from "@/components/admin/SettingsForm";
 
@@ -9,7 +11,7 @@ export const metadata = { title: "Configuración" };
 
 export default async function SettingsPage() {
   await requirePermission(PERMISSIONS.SETTINGS_MANAGE);
-  const s = await getSiteSettings();
+  const [s, texts] = await Promise.all([getSiteSettings(), getSiteTexts()]);
   const expeditions = await prisma.expedition.findMany({
     select: { id: true, name: true },
     orderBy: { name: "asc" },
@@ -25,6 +27,8 @@ export default async function SettingsPage() {
     siteName: s.siteName,
     tagline: s.tagline ?? "",
     logoUrl: s.logoUrl ?? "",
+    logoSize: normalizeLogoSize(texts.logoSize),
+    logoShadow: normalizeLogoShadow(texts.logoShadow),
     whatsappNumber: s.whatsappNumber ?? "",
     contactEmail: s.contactEmail ?? "",
     contactPhone: s.contactPhone ?? "",

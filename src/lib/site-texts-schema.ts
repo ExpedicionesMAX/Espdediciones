@@ -38,6 +38,11 @@ export const SITE_TEXTS: TextField[] = [
   { key: "homeReviewsTitle", label: "Título de la sección de reseñas", default: "Lo que dicen nuestros expedicionarios", group: "Inicio — Reseñas" },
   { key: "homeReviewsSubtitle", label: "Bajada de la sección de reseñas", default: "Experiencias que quedan.", group: "Inicio — Reseñas" },
 
+  // Ajuste del sitio guardado junto a los textos. Se edita en Configuración
+  // (no en «Textos del sitio»): oculto acá para que guardar textos lo conserve.
+  { key: "logoSize", label: "Tamaño del logo", default: "md", group: "Ajustes", hidden: true },
+  { key: "logoShadow", label: "Sombra del logo", default: "none", group: "Ajustes", hidden: true },
+
   // Página Fechas
   { key: "fechasTitle", label: "Título", default: "Próximas fechas", group: "Página Fechas", hidden: true },
   { key: "fechasSubtitle", label: "Subtítulo", default: "Todas nuestras salidas, ordenadas por mes.", group: "Página Fechas", multiline: true, hidden: true },

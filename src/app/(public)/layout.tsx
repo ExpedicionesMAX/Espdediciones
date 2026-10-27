@@ -6,14 +6,17 @@ import { whatsappUrl } from "@/lib/format";
 import { fontVar } from "@/lib/fonts";
 import { prisma } from "@/lib/prisma";
 import { ABOUT_PAGE_SLUG } from "@/lib/page-content";
+import { getSiteTexts } from "@/lib/site-texts";
+import { logoShadowClass, logoSizeClass } from "@/lib/logo-size";
 
 export default async function PublicLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [settings, menuPages] = await Promise.all([
+  const [settings, texts, menuPages] = await Promise.all([
     getSiteSettings(),
+    getSiteTexts(),
     prisma.page
       .findMany({
         // «Nosotros» ahora es el inicio: no se repite en el menú.
@@ -38,7 +41,12 @@ export default async function PublicLayout({
         } as React.CSSProperties
       }
     >
-      <SiteHeader siteName={settings.siteName} logoUrl={settings.logoUrl} pages={menuPages} />
+      <SiteHeader
+        siteName={settings.siteName}
+        logoUrl={settings.logoUrl}
+        logoClassName={`${logoSizeClass(texts.logoSize)} ${logoShadowClass(texts.logoShadow)}`}
+        pages={menuPages}
+      />
       <main className="flex-1">{children}</main>
       <SiteFooter settings={settings} />
       {wa && <WhatsAppFloat href={wa} />}

@@ -99,3 +99,14 @@ test("detectImageType rechaza SVG, HTML y archivos disfrazados", () => {
   assert.equal(detectImageType(new Uint8Array([0x4d, 0x5a, 0x90, 0x00])), null); // ejecutable .exe
   assert.equal(detectImageType(new Uint8Array([])), null);
 });
+
+test("logo: tamaño y sombra por defecto como estaban; valores inválidos vuelven al defecto", async () => {
+  const { normalizeLogoSize, normalizeLogoShadow, logoSizeClass, logoShadowClass } = await import("@/lib/logo-size");
+  assert.equal(normalizeLogoSize(undefined), "md");
+  assert.equal(normalizeLogoSize("xl"), "xl");
+  assert.equal(normalizeLogoSize("enorme"), "md");
+  assert.equal(logoSizeClass(undefined), "h-10 sm:h-12", "el tamaño de siempre");
+  assert.equal(normalizeLogoShadow(undefined), "none");
+  assert.equal(logoShadowClass(undefined), "", "sin sombra por defecto");
+  assert.ok(logoShadowClass("strong").includes("drop-shadow"));
+});

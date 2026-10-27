@@ -15,6 +15,8 @@ const VIAJES = [
 export function SiteHeader(props: {
   siteName: string;
   logoUrl?: string | null;
+  /** Clases de tamaño y sombra del logo (elegidas en Configuración). */
+  logoClassName?: string;
   pages?: { slug: string; title: string }[];
 }) {
   // useSearchParams requiere un Suspense para no forzar render dinámico de todo el árbol.
@@ -28,6 +30,8 @@ export function SiteHeader(props: {
 function HeaderWithParams(props: {
   siteName: string;
   logoUrl?: string | null;
+  /** Clases de tamaño y sombra del logo (elegidas en Configuración). */
+  logoClassName?: string;
   pages?: { slug: string; title: string }[];
 }) {
   const categoria = useSearchParams().get("categoria");
@@ -37,11 +41,14 @@ function HeaderWithParams(props: {
 function HeaderInner({
   siteName,
   logoUrl,
+  logoClassName = "h-10 sm:h-12",
   pages = [],
   categoria,
 }: {
   siteName: string;
   logoUrl?: string | null;
+  /** Clases de tamaño y sombra del logo (elegidas en Configuración). */
+  logoClassName?: string;
   pages?: { slug: string; title: string }[];
   categoria: string | null;
 }) {
@@ -150,7 +157,7 @@ function HeaderInner({
         >
           {logoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={logoUrl} alt={siteName} className="h-10 w-auto max-w-[220px] object-contain sm:h-12" />
+            <img src={logoUrl} alt={siteName} className={`w-auto max-w-[60vw] object-contain sm:max-w-[320px] ${logoClassName}`} />
           ) : (
             <span className="truncate">{siteName}</span>
           )}
