@@ -247,6 +247,8 @@ model Expedition {
 
   // Contacto
   whatsappMessage String?
+  // Link de invitación al grupo de WhatsApp del viaje (https://chat.whatsapp.com/…)
+  whatsappGroupUrl String?
 
   viewsCount   Int      @default(0)
   inquiryCount Int      @default(0)

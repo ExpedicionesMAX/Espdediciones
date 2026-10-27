@@ -108,6 +108,7 @@ export type ExpeditionFormValues = {
   seoTitle: string;
   seoDescription: string;
   whatsappMessage: string;
+  whatsappGroupUrl: string;
   featured: boolean;
   homeOrder: string;
   itinerary: ItineraryDayValue[];
@@ -420,6 +421,32 @@ export function ExpeditionForm({
         <ItineraryEditor name="itinerary" defaultValue={values.itinerary} />
       </Card>
 
+      <Card
+        title="Grupo de WhatsApp del viaje"
+        description="Si lo cargás, la página del viaje muestra un botón «Unirme al grupo de WhatsApp» que lleva directo a este grupo."
+      >
+        <div>
+          <label htmlFor="whatsappGroupUrl" className={labelCls}>Link de invitación al grupo</label>
+          <input
+            id="whatsappGroupUrl"
+            name="whatsappGroupUrl"
+            type="url"
+            inputMode="url"
+            defaultValue={values.whatsappGroupUrl}
+            className={inputCls}
+            placeholder="https://chat.whatsapp.com/…"
+            aria-describedby="whatsappGroupUrl-ayuda"
+          />
+          {err("whatsappGroupUrl") && (
+            <p role="alert" className="mt-1 text-xs text-red-600">{err("whatsappGroupUrl")}</p>
+          )}
+          <p id="whatsappGroupUrl-ayuda" className={helpCls}>
+            En WhatsApp: abrí el grupo → tocá su nombre → <strong>Invitar al grupo mediante enlace</strong> →{" "}
+            <strong>Copiar enlace</strong>, y pegalo acá. Dejalo vacío si el viaje no tiene grupo.
+          </p>
+        </div>
+      </Card>
+
       <Card title="SEO y contacto">
         <div>
           <label htmlFor="seoTitle" className={labelCls}>Título SEO</label>
@@ -430,7 +457,7 @@ export function ExpeditionForm({
           <textarea id="seoDescription" name="seoDescription" rows={2} defaultValue={values.seoDescription} className={inputCls} />
         </div>
         <div>
-          <label htmlFor="whatsappMessage" className={labelCls}>Mensaje de WhatsApp</label>
+          <label htmlFor="whatsappMessage" className={labelCls}>Mensaje para consultas por WhatsApp (chat con ustedes)</label>
           <input id="whatsappMessage" name="whatsappMessage" defaultValue={values.whatsappMessage} className={inputCls} placeholder="Hola, quiero información sobre…" />
         </div>
       </Card>

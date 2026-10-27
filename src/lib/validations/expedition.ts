@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { normalizeWhatsappGroupUrl } from "@/lib/whatsapp-group";
 
 const clean = (v: unknown) =>
   v === "" || v === null || v === undefined ? undefined : v;
@@ -109,6 +110,18 @@ export const expeditionInputSchema = z.object({
   seoTitle: optString,
   seoDescription: optString,
   whatsappMessage: optString,
+  // Vacío = sin grupo. Si se carga algo, tiene que ser un link de invitación de WhatsApp.
+  whatsappGroupUrl: z.preprocess(
+    clean,
+    z
+      .string()
+      .trim()
+      .optional()
+      .refine((v) => v === undefined || normalizeWhatsappGroupUrl(v) !== null, {
+        message: "Pegá el link de invitación del grupo (empieza con https://chat.whatsapp.com/).",
+      })
+      .transform((v) => (v === undefined ? undefined : normalizeWhatsappGroupUrl(v)!)),
+  ),
 });
 
 export type ExpeditionInput = z.infer<typeof expeditionInputSchema>;

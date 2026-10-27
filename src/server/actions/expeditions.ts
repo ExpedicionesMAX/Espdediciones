@@ -90,6 +90,7 @@ function formToRaw(fd: FormData): Record<string, unknown> {
     seoTitle: fd.get("seoTitle"),
     seoDescription: fd.get("seoDescription"),
     whatsappMessage: fd.get("whatsappMessage"),
+    whatsappGroupUrl: fd.get("whatsappGroupUrl"),
   };
 }
 
@@ -139,6 +140,7 @@ function buildData(
     seoTitle: input.seoTitle ?? null,
     seoDescription: input.seoDescription ?? null,
     whatsappMessage: input.whatsappMessage ?? null,
+    whatsappGroupUrl: input.whatsappGroupUrl ?? null,
     publishedAt,
   };
 }

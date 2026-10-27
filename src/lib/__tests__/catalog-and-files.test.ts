@@ -9,6 +9,29 @@ import {
 import { seasonLabel } from "@/lib/format";
 import { detectImageType } from "@/lib/image-sniff";
 import { tripCover } from "@/lib/media";
+import { normalizeWhatsappGroupUrl } from "@/lib/whatsapp-group";
+
+test("link del grupo de WhatsApp: acepta invitaciones reales y las deja limpias", () => {
+  const code = "AbCdEf1234567890XyZ123";
+  assert.equal(normalizeWhatsappGroupUrl(`https://chat.whatsapp.com/${code}`), `https://chat.whatsapp.com/${code}`);
+  assert.equal(normalizeWhatsappGroupUrl(`  chat.whatsapp.com/${code}  `), `https://chat.whatsapp.com/${code}`, "sin https");
+  assert.equal(normalizeWhatsappGroupUrl(`https://chat.whatsapp.com/${code}?mode=r_c`), `https://chat.whatsapp.com/${code}`, "sin parámetros");
+});
+
+test("link del grupo de WhatsApp: rechaza otros sitios y links que no son de grupo", () => {
+  for (const bad of [
+    "https://wa.me/5491100000000", // chat privado, no grupo
+    "https://evil.com/chat.whatsapp.com/AbCdEf1234567890",
+    "https://chat.whatsapp.com.evil.com/AbCdEf1234567890",
+    "javascript:alert(1)",
+    "https://chat.whatsapp.com/",
+    "https://chat.whatsapp.com/abc", // código demasiado corto
+    "",
+    null,
+  ]) {
+    assert.equal(normalizeWhatsappGroupUrl(bad), null, `debería rechazar ${String(bad)}`);
+  }
+});
 
 test("el catálogo tiene exactamente las 3 categorías, sin Viajes a Medida", () => {
   assert.deepEqual(
