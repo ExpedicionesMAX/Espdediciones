@@ -42,8 +42,11 @@ const montserrat = Montserrat({
 // El nombre del sitio sale de Configuración (con respaldo si la base no responde).
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
+  // Ícono de la pestaña y del celular: el de Configuración; si no hay, el logo.
+  const icon = settings.faviconUrl || settings.logoUrl;
   return {
     metadataBase: new URL(getBaseUrl()),
+    applicationName: settings.siteName,
     title: {
       default: settings.tagline ? `${settings.siteName} — ${settings.tagline}` : settings.siteName,
       template: `%s · ${settings.siteName}`,
@@ -51,6 +54,13 @@ export async function generateMetadata(): Promise<Metadata> {
     description:
       settings.tagline ??
       "Expediciones fotográficas, montañismo, trekking y travesías de naturaleza.",
+    icons: icon ? { icon: [{ url: icon }], shortcut: [{ url: icon }], apple: [{ url: icon }] } : undefined,
+    // Datos por defecto al compartir el link (cada página agrega su título, texto e imagen).
+    openGraph: {
+      siteName: settings.siteName,
+      locale: "es_AR",
+      type: "website",
+    },
   };
 }
 

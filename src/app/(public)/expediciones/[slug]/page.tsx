@@ -1,3 +1,4 @@
+import { siteOpenGraph } from "@/lib/site-meta";
 import { cache } from "react";
 import { ContentImage } from "@/components/public/ContentImage";
 import Link from "next/link";
@@ -59,6 +60,7 @@ export async function generateMetadata({
     title,
     description,
     openGraph: {
+      ...(await siteOpenGraph()),
       title,
       description,
       type: "website",

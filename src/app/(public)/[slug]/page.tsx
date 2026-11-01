@@ -1,3 +1,4 @@
+import { siteOpenGraph } from "@/lib/site-meta";
 import { notFound, permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
@@ -20,6 +21,7 @@ export async function generateMetadata({
     title,
     description,
     openGraph: {
+      ...(await siteOpenGraph()),
       title,
       description,
       images: page.coverImage ? [{ url: page.coverImage }] : undefined,

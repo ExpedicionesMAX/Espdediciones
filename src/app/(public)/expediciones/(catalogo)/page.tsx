@@ -1,3 +1,4 @@
+import { siteOpenGraph } from "@/lib/site-meta";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
@@ -33,15 +34,17 @@ export async function generateMetadata({
   searchParams: SearchParams;
 }): Promise<Metadata> {
   const sp = await searchParams;
-  const texts = await getSiteTexts();
+  const [texts, photos, og] = await Promise.all([getSiteTexts(), getTripPhotos(), siteOpenGraph()]);
   const active = isCatalogCategory(sp.categoria) ? sp.categoria : null;
-  if (active) {
-    return {
-      title: `${categoryLabel(active)} · ${texts.expsTitle}`,
-      description: texts[INTRO_KEYS[active]],
-    };
-  }
-  return { title: texts.expsTitle, description: texts.expsSubtitle };
+  const title = active ? `${categoryLabel(active)} · ${texts.expsTitle}` : texts.expsTitle;
+  const description = active ? texts[INTRO_KEYS[active]] : texts.expsSubtitle;
+  // Vista previa al compartir: la misma foto de portada de la página.
+  const image = texts.expsCoverImage || photos[0]?.url;
+  return {
+    title,
+    description,
+    openGraph: { ...og, title, description, images: image ? [{ url: image }] : undefined },
+  };
 }
 
 export default async function ExpeditionsPage({ searchParams }: { searchParams: SearchParams }) {

@@ -1,3 +1,4 @@
+import { siteOpenGraph } from "@/lib/site-meta";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getPublishedGallery } from "@/lib/gallery";
@@ -12,6 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: texts.galeriaTitle,
     description: texts.galeriaSubtitle,
     openGraph: {
+      ...(await siteOpenGraph()),
       title: texts.galeriaTitle,
       description: texts.galeriaSubtitle,
       images: photos[0] ? [{ url: photos[0].url }] : undefined,

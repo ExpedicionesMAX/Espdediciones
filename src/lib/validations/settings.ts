@@ -5,6 +5,7 @@ export const settingsInputSchema = z.object({
   siteName: z.string().trim().min(1, "El nombre del sitio es obligatorio"),
   tagline: optString,
   logoUrl: optUrl,
+  faviconUrl: optUrl,
   whatsappNumber: optString, // se normaliza a solo dígitos en la acción
   contactEmail: z.preprocess(clean, z.string().email("Email inválido").optional()),
   contactPhone: optString,

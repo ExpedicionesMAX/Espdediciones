@@ -1,3 +1,4 @@
+import { siteOpenGraph } from "@/lib/site-meta";
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -61,6 +62,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { absolute: title },
     description,
     openGraph: {
+      ...(await siteOpenGraph()),
       title,
       description,
       type: "website",

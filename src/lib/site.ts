@@ -23,6 +23,7 @@ export type SiteSettingsData = {
   siteName: string;
   tagline: string | null;
   logoUrl: string | null;
+  faviconUrl: string | null;
   whatsappNumber: string | null;
   contactEmail: string | null;
   contactPhone: string | null;
@@ -57,6 +58,7 @@ const FALLBACK: SiteSettingsData = {
   siteName: "Cumbre",
   tagline: "Expediciones, montañismo y fotografía de naturaleza",
   logoUrl: null,
+  faviconUrl: null,
   whatsappNumber: null,
   contactEmail: null,
   contactPhone: null,
@@ -84,6 +86,7 @@ export const getSiteSettings = cache(async (): Promise<SiteSettingsData> => {
       siteName: s.siteName,
       tagline: s.tagline,
       logoUrl: s.logoUrl,
+      faviconUrl: s.faviconUrl,
       whatsappNumber: s.whatsappNumber,
       contactEmail: s.contactEmail,
       contactPhone: s.contactPhone,

@@ -55,6 +55,7 @@ export async function updateSettings(
     siteName: formData.get("siteName"),
     tagline: formData.get("tagline"),
     logoUrl: formData.get("logoUrl"),
+    faviconUrl: formData.get("faviconUrl"),
     whatsappNumber: formData.get("whatsappNumber"),
     contactEmail: formData.get("contactEmail"),
     contactPhone: formData.get("contactPhone"),
@@ -111,6 +112,7 @@ export async function updateSettings(
     siteName: d.siteName,
     tagline: d.tagline ?? null,
     logoUrl: d.logoUrl ?? null,
+    faviconUrl: d.faviconUrl ?? null,
     whatsappNumber: whatsapp,
     contactEmail: d.contactEmail ?? null,
     contactPhone: d.contactPhone ?? null,
@@ -136,7 +138,7 @@ export async function updateSettings(
 
   const previous = await prisma.siteSettings.findUnique({
     where: { id: "singleton" },
-    select: { logoUrl: true, texts: true },
+    select: { logoUrl: true, faviconUrl: true, texts: true },
   });
   // El tamaño del logo se guarda junto a los textos del sitio (sin tocar los demás textos).
   const texts = {
@@ -150,7 +152,7 @@ export async function updateSettings(
     create: { id: "singleton", ...data, texts },
   });
   // Logo reemplazado o quitado: el archivo viejo se borra solo si nada más lo usa.
-  await removeStorageFilesIfUnreferenced(removedUrls([previous?.logoUrl], [data.logoUrl]));
+  await removeStorageFilesIfUnreferenced(removedUrls([previous?.logoUrl, previous?.faviconUrl], [data.logoUrl, data.faviconUrl]));
 
   await logActivity({
     userId: user.id,

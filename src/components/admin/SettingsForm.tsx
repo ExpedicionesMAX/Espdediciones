@@ -8,6 +8,7 @@ import type { WhyPillar } from "@/lib/site";
 import { useDirtyForm } from "@/components/admin/useUnsavedChanges";
 import { UnsavedBadge } from "@/components/admin/content-form-ui";
 import { ImageField } from "@/components/admin/ImageField";
+import { FaviconField } from "@/components/admin/FaviconField";
 import { LOGO_SHADOWS, LOGO_SIZES } from "@/lib/logo-size";
 
 const initial: SettingsFormState = { ok: false };
@@ -16,6 +17,7 @@ export type SettingsFormValues = {
   siteName: string;
   tagline: string;
   logoUrl: string;
+  faviconUrl: string;
   logoSize: string;
   logoShadow: string;
   whatsappNumber: string;
@@ -184,6 +186,16 @@ export function SettingsForm({
             <input type="hidden" name="logoShadow" value={logoShadow} />
           </>
         )}
+        <div>
+          <p className={labelCls}>Ícono de la pestaña (favicon)</p>
+          <FaviconField
+            name="faviconUrl"
+            defaultValue={values.faviconUrl}
+            logoUrl={logo}
+            siteName={values.siteName}
+            onChange={markDirty}
+          />
+        </div>
         <div>
           <label htmlFor="accentColor" className={labelCls}>Color de acento</label>
           <div className="flex items-center gap-3">

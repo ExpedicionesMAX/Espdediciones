@@ -27,6 +27,7 @@ export default async function SettingsPage() {
     siteName: s.siteName,
     tagline: s.tagline ?? "",
     logoUrl: s.logoUrl ?? "",
+    faviconUrl: s.faviconUrl ?? "",
     logoSize: normalizeLogoSize(texts.logoSize),
     logoShadow: normalizeLogoShadow(texts.logoShadow),
     whatsappNumber: s.whatsappNumber ?? "",

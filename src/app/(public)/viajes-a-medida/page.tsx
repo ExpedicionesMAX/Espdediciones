@@ -1,3 +1,4 @@
+import { siteOpenGraph } from "@/lib/site-meta";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { InquiryForm } from "@/components/public/InquiryForm";
@@ -16,6 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: content.seo.title,
     description: content.seo.description,
     openGraph: {
+      ...(await siteOpenGraph()),
       title: content.seo.title,
       description: content.seo.description,
       images: image ? [{ url: image }] : undefined,
