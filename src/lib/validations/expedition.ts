@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { normalizeWhatsappGroupUrl } from "@/lib/whatsapp-group";
+import { normalizeFocus } from "@/lib/focus";
 
 const clean = (v: unknown) =>
   v === "" || v === null || v === undefined ? undefined : v;
@@ -89,6 +90,8 @@ export const expeditionInputSchema = z.object({
   registrationDeadline: optDate,
 
   coverImage: optUrl,
+  // Encuadre de la portada ("X% Y%"); cualquier valor inválido o el centro se guarda vacío.
+  coverFocus: z.preprocess((v) => normalizeFocus(v) ?? undefined, z.string().optional()),
   videoUrl: optUrl,
   gallery: z.array(z.string().url()).default([]),
 

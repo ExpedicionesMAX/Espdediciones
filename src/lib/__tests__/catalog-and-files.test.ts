@@ -110,3 +110,15 @@ test("logo: tamaño y sombra por defecto como estaban; valores inválidos vuelve
   assert.equal(logoShadowClass(undefined), "", "sin sombra por defecto");
   assert.ok(logoShadowClass("strong").includes("drop-shadow"));
 });
+
+test("encuadre de la portada: se guarda «X% Y%», el centro o lo inválido queda vacío", async () => {
+  const { normalizeFocus, focusCss, parseFocus } = await import("@/lib/focus");
+  assert.equal(normalizeFocus("30% 70%"), "30% 70%");
+  assert.equal(normalizeFocus("30 70"), "30% 70%");
+  assert.equal(normalizeFocus("50% 50%"), null, "centro = vacío (como antes)");
+  assert.equal(normalizeFocus("150% 20%"), null);
+  assert.equal(normalizeFocus("url(javascript:x)"), null);
+  assert.equal(normalizeFocus(undefined), null);
+  assert.equal(focusCss(null), "50% 50%");
+  assert.deepEqual(parseFocus("12.6% 99%"), { x: 13, y: 99 });
+});

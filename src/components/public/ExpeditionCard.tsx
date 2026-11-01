@@ -3,6 +3,7 @@ import type { ActivityType, Difficulty } from "@prisma/client";
 import { ACTIVITY_LABELS, DIFFICULTY_LABELS, seasonLabel } from "@/lib/format";
 import { categoryLabel } from "@/lib/trip-categories";
 import { tripCover } from "@/lib/media";
+import { focusCss } from "@/lib/focus";
 import { ContentImage } from "@/components/public/ContentImage";
 
 export type CardExpedition = {
@@ -25,6 +26,7 @@ export type CardExpedition = {
   region?: string | null;
   country?: string | null;
   gallery?: string[];
+  coverFocus?: string | null;
 };
 
 /** Lugar del viaje: el destino vinculado o, si no hay, la región/país cargados en el viaje. */
@@ -58,6 +60,7 @@ export const CARD_SELECT = {
   region: true,
   country: true,
   gallery: true, // portada provisoria: primera foto del propio viaje
+  coverFocus: true,
   destination: { select: { name: true } },
 } as const;
 
@@ -84,6 +87,8 @@ export function ExpeditionCard({ expedition }: { expedition: CardExpedition }) {
               alt={expedition.name}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               className="transition-transform duration-700 group-hover:scale-105"
+              // Encuadre elegido en el panel (solo para la portada propia, no la provisoria)
+              position={cover === expedition.coverImage ? focusCss(expedition.coverFocus) : undefined}
             />
           ) : (
             // Sin fotos todavía: fondo neutro de la marca (nunca una foto ajena al viaje).

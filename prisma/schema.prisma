@@ -194,6 +194,8 @@ model Expedition {
   availableMonths Int[] @default([])
 
   coverImage String?
+  // Encuadre de la portada: punto que se mantiene visible al recortar, "X% Y%" (vacío = centro)
+  coverFocus String?
   gallery    String[] @default([])
   videoUrl   String? // YouTube / Vimeo
 

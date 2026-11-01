@@ -98,6 +98,7 @@ export type ExpeditionFormValues = {
   price: string;
   depositPrice: string;
   coverImage: string;
+  coverFocus: string;
   videoUrl: string;
   gallery: string;
   includes: string;
@@ -376,6 +377,8 @@ export function ExpeditionForm({
         <CoverImageField
           name="coverImage"
           defaultValue={values.coverImage}
+          focusName="coverFocus"
+          defaultFocus={values.coverFocus}
           library={coverLibrary}
           fallbackUrl={firstGalleryImage(values.gallery)}
           onChange={markDirty}

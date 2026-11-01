@@ -15,6 +15,7 @@ import { DIFFICULTY_LABELS, ACTIVITY_LABELS, seasonLabel, whatsappUrl } from "@/
 import { tripLocation } from "@/components/public/ExpeditionCard";
 import { getBaseUrl } from "@/lib/base-url";
 import { normalizeWhatsappGroupUrl } from "@/lib/whatsapp-group";
+import { focusCss } from "@/lib/focus";
 import {
   CUSTOM_TRIP_PATH,
   catalogHref,
@@ -173,7 +174,13 @@ export default async function ExpeditionDetailPage({
       {/* HERO */}
       <section className="relative flex min-h-[80vh] items-end overflow-hidden bg-ink">
         {cover ? (
-          <ContentImage src={cover} alt={exp.name} sizes="100vw" priority />
+          <ContentImage
+            src={cover}
+            alt={exp.name}
+            sizes="100vw"
+            priority
+            position={cover === exp.coverImage ? focusCss(exp.coverFocus) : undefined}
+          />
         ) : (
           // Sin fotos: fondo neutro de la marca, sin imágenes ajenas al viaje.
           <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-stone-700 via-stone-800 to-ink" />

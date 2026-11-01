@@ -42,6 +42,7 @@ const EMPTY: ExpeditionFormValues = {
   price: "",
   depositPrice: "",
   coverImage: "",
+  coverFocus: "",
   videoUrl: "",
   gallery: "",
   includes: "",
