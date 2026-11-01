@@ -11,6 +11,7 @@ import { StoryPhotos, type StoryPhoto } from "@/components/public/StoryPhotos";
 import { getSiteSettings, type WhyPillar } from "@/lib/site";
 import { getAboutPageFallback, getHomeContent, getTripPhotos } from "@/lib/page-content";
 import { paragraphs } from "@/lib/content-fields";
+import { CoverImage } from "@/components/public/CoverImage";
 import { getSiteTexts } from "@/lib/site-texts";
 import type { HomeSectionKey } from "@/lib/home-content";
 import { CUSTOM_TRIP_PATH } from "@/lib/trip-categories";
@@ -461,7 +462,14 @@ export default async function HomePage() {
       {/* HERO INSTITUCIONAL */}
       <section className="relative flex min-h-[92vh] items-end overflow-hidden bg-ink">
         {heroPhoto && (
-          <ContentImage src={heroPhoto.url} alt={hero.imageAlt || heroPhoto.alt} sizes="100vw" priority />
+          <CoverImage
+            src={heroPhoto.url}
+            alt={hero.imageAlt || heroPhoto.alt}
+            sizes="100vw"
+            priority
+            // Encuadre o «foto entera» elegido en el panel (solo para la foto propia, no la de respaldo)
+            focus={hero.image ? hero.focus : null}
+          />
         )}
         {/* Velo oscuro para que el texto se lea; la intensidad se elige en el panel. */}
         {HERO_OVERLAY_CLASS[hero.overlay] && (

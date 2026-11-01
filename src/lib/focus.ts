@@ -20,14 +20,25 @@ export function parseFocus(value: unknown): Focus | null {
   return { x: clamp(x), y: clamp(y) };
 }
 
-/** Valor para guardar: "X% Y%", o null si es el centro o no es válido. */
+/**
+ * Valor especial: «mostrar la foto entera» (se achica para que entre completa,
+ * sin recortar; el espacio sobrante se rellena con la misma foto desenfocada).
+ */
+export const WHOLE = "entera";
+
+export function isWhole(value: unknown): boolean {
+  return typeof value === "string" && value.trim().toLowerCase() === WHOLE;
+}
+
+/** Valor para guardar: "X% Y%", "entera", o null si es el centro o no es válido. */
 export function normalizeFocus(value: unknown): string | null {
+  if (isWhole(value)) return WHOLE;
   const f = parseFocus(value);
   if (!f || (f.x === 50 && f.y === 50)) return null;
   return `${f.x}% ${f.y}%`;
 }
 
-/** Valor CSS para `object-position` (centro si no hay encuadre). */
+/** Valor CSS para `object-position` (centro si no hay encuadre o si es «entera»). */
 export function focusCss(value: unknown): string {
   const f = parseFocus(value) ?? CENTER;
   return `${f.x}% ${f.y}%`;

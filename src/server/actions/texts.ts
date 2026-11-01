@@ -8,6 +8,7 @@ import { PERMISSIONS } from "@/lib/permissions";
 import { logActivity } from "@/lib/audit";
 import { SITE_TEXTS } from "@/lib/site-texts-schema";
 import { imageUrl } from "@/lib/content-fields";
+import { normalizeFocus } from "@/lib/focus";
 import { removeStorageFilesIfUnreferenced, removedUrls } from "@/lib/storage";
 
 export type TextsFormState = { ok: boolean; success?: boolean; error?: string };
@@ -36,7 +37,8 @@ export async function updateTexts(
     }
     const raw = formData.get(t.key)?.toString().trim().slice(0, 2000);
     // Fotos: solo URLs http(s) o rutas locales (nada de javascript:, data:, etc.).
-    const v = t.kind === "image" ? imageUrl(raw) : raw;
+    // Encuadre: solo "X% Y%" o "entera" (cualquier otra cosa se descarta).
+    const v = t.kind === "image" ? imageUrl(raw) : t.kind === "focus" ? normalizeFocus(raw) : raw;
     if (v && v !== t.default) texts[t.key] = v;
   }
 

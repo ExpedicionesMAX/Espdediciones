@@ -2,7 +2,7 @@ import { siteOpenGraph } from "@/lib/site-meta";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { InquiryForm } from "@/components/public/InquiryForm";
-import { ContentImage } from "@/components/public/ContentImage";
+import { CoverImage } from "@/components/public/CoverImage";
 import { getSiteSettings } from "@/lib/site";
 import { getCustomTripContent, getTripPhotos } from "@/lib/page-content";
 import { paragraphs } from "@/lib/content-fields";
@@ -45,7 +45,14 @@ export default async function CustomTripPage() {
       {/* HERO */}
       <section className="relative flex min-h-[72vh] items-end overflow-hidden bg-ink">
         {heroPhoto && (
-          <ContentImage src={heroPhoto.url} alt={hero.imageAlt || heroPhoto.alt} sizes="100vw" priority />
+          <CoverImage
+            src={heroPhoto.url}
+            alt={hero.imageAlt || heroPhoto.alt}
+            sizes="100vw"
+            priority
+            // Encuadre o «foto entera» elegido en el panel (solo para la foto propia)
+            focus={hero.image ? hero.focus : null}
+          />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/30" />
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-16 pt-32 sm:px-6 sm:pb-20">

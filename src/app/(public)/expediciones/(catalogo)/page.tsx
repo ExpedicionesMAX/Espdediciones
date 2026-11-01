@@ -9,7 +9,7 @@ import { ExpeditionCard, CARD_SELECT } from "@/components/public/ExpeditionCard"
 import { TripCategoryPills } from "@/components/public/TripCategoryPills";
 import { getSiteTexts } from "@/lib/site-texts";
 import { getTripPhotos } from "@/lib/page-content";
-import { ContentImage } from "@/components/public/ContentImage";
+import { CoverImage } from "@/components/public/CoverImage";
 import {
   CATALOG_CATEGORY_KEYS,
   CUSTOM_TRIP_PATH,
@@ -80,7 +80,7 @@ export default async function ExpeditionsPage({ searchParams }: { searchParams: 
       >
         {cover && (
           <>
-            <ContentImage src={cover} alt="" sizes="100vw" priority />
+            <CoverImage src={cover} alt="" sizes="100vw" priority focus={texts.expsCoverImage ? texts.expsCoverFocus : null} />
             {/* Contraste: el texto y los filtros siempre legibles sobre la foto */}
             <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/35" />
           </>

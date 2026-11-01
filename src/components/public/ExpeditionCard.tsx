@@ -3,8 +3,7 @@ import type { ActivityType, Difficulty } from "@prisma/client";
 import { ACTIVITY_LABELS, DIFFICULTY_LABELS, seasonLabel } from "@/lib/format";
 import { categoryLabel } from "@/lib/trip-categories";
 import { tripCover } from "@/lib/media";
-import { focusCss } from "@/lib/focus";
-import { ContentImage } from "@/components/public/ContentImage";
+import { CoverImage } from "@/components/public/CoverImage";
 
 export type CardExpedition = {
   slug: string;
@@ -82,13 +81,13 @@ export function ExpeditionCard({ expedition }: { expedition: CardExpedition }) {
       <Link href={`/expediciones/${expedition.slug}`} className="block">
         <div className="relative aspect-[4/5] w-full overflow-hidden">
           {cover ? (
-            <ContentImage
+            <CoverImage
               src={cover}
               alt={expedition.name}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               className="transition-transform duration-700 group-hover:scale-105"
-              // Encuadre elegido en el panel (solo para la portada propia, no la provisoria)
-              position={cover === expedition.coverImage ? focusCss(expedition.coverFocus) : undefined}
+              // Encuadre o «foto entera» elegido en el panel (solo para la portada propia, no la provisoria)
+              focus={cover === expedition.coverImage ? expedition.coverFocus : null}
             />
           ) : (
             // Sin fotos todavía: fondo neutro de la marca (nunca una foto ajena al viaje).

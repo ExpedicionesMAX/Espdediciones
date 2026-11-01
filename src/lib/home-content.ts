@@ -1,4 +1,5 @@
 import { imageUrl, safeHref, str } from "@/lib/content-fields";
+import { normalizeFocus } from "@/lib/focus";
 
 /**
  * Contenido del inicio institucional (Nosotros), guardado en
@@ -89,6 +90,8 @@ export type HomeContent = {
     textSize: string;
     /** Alineación de los textos y botones: "left" | "center". */
     align: string;
+    /** Encuadre de la foto de portada ("X% Y%"); vacío = centro. */
+    focus: string;
   };
   story: {
     eyebrow: string;
@@ -147,6 +150,7 @@ export const HOME_DEFAULTS: HomeContent = {
     titleSize: "md",
     textSize: "md",
     align: "left",
+    focus: "", // encuadre de la foto ("X% Y%"); vacío = centro
   },
   story: {
     eyebrow: "Nosotros",
@@ -288,6 +292,7 @@ export function normalizeStoredHome(value: unknown): HomeContent {
       titleSize: oneOf(HERO_TITLE_SIZES, hero.titleSize),
       textSize: oneOf(HERO_TEXT_SIZES, hero.textSize),
       align: oneOf(HERO_ALIGNS, hero.align),
+      focus: normalizeFocus(hero.focus) ?? "",
     },
     story: normalizeStory(story),
     philosophy: {

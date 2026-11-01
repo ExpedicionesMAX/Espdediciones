@@ -1,6 +1,5 @@
 import { siteOpenGraph } from "@/lib/site-meta";
 import { cache } from "react";
-import { ContentImage } from "@/components/public/ContentImage";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -15,7 +14,7 @@ import { DIFFICULTY_LABELS, ACTIVITY_LABELS, seasonLabel, whatsappUrl } from "@/
 import { tripLocation } from "@/components/public/ExpeditionCard";
 import { getBaseUrl } from "@/lib/base-url";
 import { normalizeWhatsappGroupUrl } from "@/lib/whatsapp-group";
-import { focusCss } from "@/lib/focus";
+import { CoverImage } from "@/components/public/CoverImage";
 import {
   CUSTOM_TRIP_PATH,
   catalogHref,
@@ -174,12 +173,12 @@ export default async function ExpeditionDetailPage({
       {/* HERO */}
       <section className="relative flex min-h-[80vh] items-end overflow-hidden bg-ink">
         {cover ? (
-          <ContentImage
+          <CoverImage
             src={cover}
             alt={exp.name}
             sizes="100vw"
             priority
-            position={cover === exp.coverImage ? focusCss(exp.coverFocus) : undefined}
+            focus={cover === exp.coverImage ? exp.coverFocus : null}
           />
         ) : (
           // Sin fotos: fondo neutro de la marca, sin imágenes ajenas al viaje.

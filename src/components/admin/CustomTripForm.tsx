@@ -9,6 +9,7 @@ import {
   type ProcessStep,
 } from "@/lib/custom-trip-content";
 import { ImageField } from "@/components/admin/ImageField";
+import { FocusPicker } from "@/components/admin/FocusPicker";
 import { useSavedSnapshot } from "@/components/admin/useUnsavedChanges";
 import {
   Card,
@@ -56,7 +57,20 @@ export function CustomTripForm({
         <TextField id="ct-text" label="Texto" value={c.hero.text} onChange={(v) => set("hero", { text: v })} placeholder={D.hero.text} multiline />
         <div>
           <label htmlFor="ct-image" className={labelCls}>Fotografía</label>
-          <ImageField id="ct-image" value={c.hero.image} onChange={(v) => set("hero", { image: v })} hint="Vacío = una foto de tus viajes publicados." />
+          <ImageField id="ct-image" value={c.hero.image} onChange={(v) => set("hero", { image: v, focus: "" })} hint="Vacío = una foto de tus viajes publicados." />
+          {c.hero.image && (
+            <div className="mt-4">
+              <FocusPicker
+                imageUrl={c.hero.image}
+                value={c.hero.focus}
+                onChange={(f) => set("hero", { focus: f })}
+                previews={[
+                  { label: "En compu", aspect: "16 / 9", className: "w-40" },
+                  { label: "En celular", aspect: "9 / 16", className: "w-20" },
+                ]}
+              />
+            </div>
+          )}
         </div>
         <TextField id="ct-alt" label="Descripción de la foto" value={c.hero.imageAlt} onChange={(v) => set("hero", { imageAlt: v })} />
       </Card>

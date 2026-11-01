@@ -15,6 +15,7 @@ export function ContentImage({
   priority = false,
   className,
   position,
+  fit = "cover",
 }: {
   src: string;
   alt: string;
@@ -22,8 +23,11 @@ export function ContentImage({
   priority?: boolean;
   className?: string;
   position?: string;
+  /** "cover" = llena recortando (lo de siempre); "contain" = foto entera. */
+  fit?: "cover" | "contain";
 }) {
   const style = position ? { objectPosition: position } : undefined;
+  const fitCls = fit === "contain" ? "object-contain" : "object-cover";
   if (isOptimizableImage(src)) {
     return (
       <Image
@@ -33,7 +37,7 @@ export function ContentImage({
         sizes={sizes}
         priority={priority}
         style={style}
-        className={cn("object-cover", className)}
+        className={cn(fitCls, className)}
       />
     );
   }
@@ -45,7 +49,7 @@ export function ContentImage({
       loading={priority ? "eager" : "lazy"}
       decoding="async"
       style={style}
-      className={cn("absolute inset-0 h-full w-full object-cover", className)}
+      className={cn("absolute inset-0 h-full w-full", fitCls, className)}
     />
   );
 }

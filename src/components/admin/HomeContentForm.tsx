@@ -12,6 +12,7 @@ import {
   type TeamMember,
 } from "@/lib/home-content";
 import { ImageField } from "@/components/admin/ImageField";
+import { FocusPicker } from "@/components/admin/FocusPicker";
 import { StoryImagesEditor } from "@/components/admin/StoryImagesEditor";
 import { TripPicker, type TripOption } from "@/components/admin/TripPicker";
 import { useSavedSnapshot } from "@/components/admin/useUnsavedChanges";
@@ -155,7 +156,20 @@ export function HomeContentForm({
         </div>
         <div>
           <label htmlFor="hero-image" className={labelCls}>Fotografía de portada</label>
-          <ImageField id="hero-image" value={c.hero.image} onChange={(v) => set("hero", { image: v })} hint="Una foto de naturaleza o de una experiencia real. Vacío = la portada de un viaje destacado." />
+          <ImageField id="hero-image" value={c.hero.image} onChange={(v) => set("hero", { image: v, focus: "" })} hint="Una foto de naturaleza o de una experiencia real. Vacío = la portada de un viaje destacado." />
+          {c.hero.image && (
+            <div className="mt-4">
+              <FocusPicker
+                imageUrl={c.hero.image}
+                value={c.hero.focus}
+                onChange={(f) => set("hero", { focus: f })}
+                previews={[
+                  { label: "En compu", aspect: "16 / 9", className: "w-40" },
+                  { label: "En celular", aspect: "9 / 16", className: "w-20" },
+                ]}
+              />
+            </div>
+          )}
         </div>
         <TextField id="hero-alt" label="Descripción de la foto (accesibilidad)" value={c.hero.imageAlt} onChange={(v) => set("hero", { imageAlt: v })} placeholder="Ej.: Atardecer sobre el río, con el grupo fotografiando" />
         <fieldset>

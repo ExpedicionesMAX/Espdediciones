@@ -1,5 +1,6 @@
 import { imageUrl, str } from "@/lib/content-fields";
 import { pickStrings } from "@/lib/home-content";
+import { normalizeFocus } from "@/lib/focus";
 
 /**
  * Contenido de la página Viajes a Medida, guardado en
@@ -11,7 +12,7 @@ import { pickStrings } from "@/lib/home-content";
 export type ProcessStep = { title: string; text: string };
 
 export type CustomTripContent = {
-  hero: { eyebrow: string; title: string; text: string; image: string; imageAlt: string };
+  hero: { eyebrow: string; title: string; text: string; image: string; imageAlt: string; focus: string };
   intro: { title: string; body: string };
   process: { title: string; steps: ProcessStep[] };
   form: { show: boolean; title: string; text: string };
@@ -26,6 +27,7 @@ export const CUSTOM_TRIP_DEFAULTS: CustomTripContent = {
     text: "Contanos qué tenés en mente y armamos la travesía con vos.",
     image: "", // vacío → usa una foto de los viajes publicados
     imageAlt: "",
+    focus: "", // encuadre ("X% Y%") o "entera"; vacío = centro
   },
   intro: {
     title: "Una experiencia pensada a partir de tu idea",
@@ -78,6 +80,7 @@ export function normalizeStoredCustomTrip(value: unknown): CustomTripContent {
       text: str(hero.text, 600),
       image: imageUrl(hero.image),
       imageAlt: str(hero.imageAlt, 200),
+      focus: normalizeFocus(hero.focus) ?? "",
     },
     intro: { title: str(intro.title, 200), body: str(intro.body, 6000) },
     process: {

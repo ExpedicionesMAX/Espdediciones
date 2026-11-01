@@ -121,4 +121,11 @@ test("encuadre de la portada: se guarda «X% Y%», el centro o lo inválido qued
   assert.equal(normalizeFocus(undefined), null);
   assert.equal(focusCss(null), "50% 50%");
   assert.deepEqual(parseFocus("12.6% 99%"), { x: 13, y: 99 });
+  // «Mostrar la foto entera»
+  assert.equal(normalizeFocus("entera"), "entera");
+  assert.equal(normalizeFocus(" Entera "), "entera");
+  assert.equal(focusCss("entera"), "50% 50%");
+  const { normalizeStoredCustomTrip } = await import("@/lib/custom-trip-content");
+  assert.equal(normalizeStoredCustomTrip({ hero: { focus: "entera" } }).hero.focus, "entera");
+  assert.equal(normalizeStoredCustomTrip({ hero: { focus: "javascript:x" } }).hero.focus, "");
 });
