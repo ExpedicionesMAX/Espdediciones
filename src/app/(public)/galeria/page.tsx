@@ -28,7 +28,7 @@ export default async function GalleryPage() {
     <>
       <section className="bg-ink px-4 pb-12 pt-32 text-white sm:px-6 sm:pb-14 sm:pt-36">
         <div className="mx-auto max-w-6xl">
-          <h1 className="font-display text-5xl font-semibold leading-[1.02] tracking-tight sm:text-7xl">
+          <h1 className="font-display text-5xl font-semibold leading-[1.02] tracking-tight [overflow-wrap:anywhere] sm:text-7xl">
             {texts.galeriaTitle}
           </h1>
           {texts.galeriaSubtitle && (

@@ -28,6 +28,15 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Celulares con letra agrandada: una palabra larga baja de renglón en vez de
+   ensanchar la página (sin esto aparece una franja blanca a la derecha). */
+h1,
+h2,
+h3,
+.rich-text {
+  overflow-wrap: anywhere;
+}
+
 /* Texto largo con saltos de línea preservados (descripciones del CMS) */
 .rich-text {
   white-space: pre-line;

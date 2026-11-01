@@ -89,7 +89,7 @@ export default async function ExpeditionsPage({ searchParams }: { searchParams: 
           </>
         )}
         <div className={`relative mx-auto w-full max-w-6xl ${cover && overlayNeedsTextShadow(texts.expsCoverOverlay) ? "hero-text-shadow" : ""}`}>
-          <h1 className="font-display text-5xl font-semibold leading-[1.02] tracking-tight sm:text-7xl">
+          <h1 className="font-display text-5xl font-semibold leading-[1.02] tracking-tight [overflow-wrap:anywhere] sm:text-7xl">
             {texts.expsTitle}
           </h1>
           <p className="mt-5 max-w-xl text-lg text-stone-200">{texts.expsSubtitle}</p>

@@ -422,7 +422,8 @@ export default async function HomePage() {
             {settings.contactEmail && (
               <a
                 href={`mailto:${settings.contactEmail}`}
-                className="rounded-full px-7 py-3 text-sm font-semibold text-ink ring-1 ring-inset ring-stone-300 transition-colors hover:bg-stone-100"
+                // Un email largo puede no entrar en celulares: se corta en dos renglones en vez de ensanchar la página.
+                className="max-w-full rounded-full px-7 py-3 text-center text-sm font-semibold text-ink ring-1 ring-inset ring-stone-300 transition-colors [overflow-wrap:anywhere] hover:bg-stone-100"
               >
                 {settings.contactEmail}
               </a>

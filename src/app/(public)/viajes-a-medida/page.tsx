@@ -137,7 +137,7 @@ export default async function CustomTripPage() {
             {settings.contactEmail && (
               <li>
                 <span className="font-medium text-ink">Email:</span>{" "}
-                <a href={`mailto:${settings.contactEmail}`} className="text-accent hover:underline">
+                <a href={`mailto:${settings.contactEmail}`} className="text-accent [overflow-wrap:anywhere] hover:underline">
                   {settings.contactEmail}
                 </a>
               </li>

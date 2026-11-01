@@ -284,7 +284,7 @@ export default async function ExpeditionDetailPage({
 
       <div id="detalle" className="mx-auto grid max-w-6xl scroll-mt-20 gap-12 px-4 py-14 sm:px-6 lg:grid-cols-[1fr_360px]">
         {/* MAIN */}
-        <div className="space-y-14">
+        <div className="min-w-0 space-y-14">
           {description && (
             <section>
               <h2 className="font-display text-2xl font-semibold text-ink">{texts.expLaExpedicion}</h2>
@@ -409,7 +409,7 @@ export default async function ExpeditionDetailPage({
         </div>
 
         {/* SIDEBAR — grupo de WhatsApp del viaje (si existe) y consulta privada */}
-        <aside className="lg:sticky lg:top-24 lg:self-start">
+        <aside className="min-w-0 lg:sticky lg:top-24 lg:self-start">
           <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
             <h3 className="font-display text-lg font-semibold text-ink">
               {groupUrl ? "Sumate al grupo de este viaje" : "¿Querés saber más sobre este viaje?"}
