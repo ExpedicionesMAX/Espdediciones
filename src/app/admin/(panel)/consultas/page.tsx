@@ -5,6 +5,7 @@ import { hasPermission, PERMISSIONS } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
 import { updateInquiryStatus } from "@/server/actions/inquiries";
 import { formatDate } from "@/lib/format";
+import { DeleteInquiryButton } from "@/components/admin/DeleteInquiryButton";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Consultas" };
@@ -124,21 +125,24 @@ export default async function InquiriesPage({
               )}
 
               {canUpdate && (
-                <form action={updateInquiryStatus} className="mt-4 flex items-center gap-2">
-                  <input type="hidden" name="id" value={q.id} />
-                  <select
-                    name="status"
-                    defaultValue={q.status}
-                    className="rounded-lg border border-stone-300 bg-white px-3 py-1.5 text-sm focus:border-accent focus:outline-none"
-                  >
-                    {INQUIRY_STATUSES.map((s) => (
-                      <option key={s} value={s}>{STATUS_LABELS[s]}</option>
-                    ))}
-                  </select>
-                  <button className="rounded-lg bg-ink px-4 py-1.5 text-sm font-semibold text-white hover:bg-stone-800">
-                    Actualizar
-                  </button>
-                </form>
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
+                  <form action={updateInquiryStatus} className="flex items-center gap-2">
+                    <input type="hidden" name="id" value={q.id} />
+                    <select
+                      name="status"
+                      defaultValue={q.status}
+                      className="rounded-lg border border-stone-300 bg-white px-3 py-1.5 text-sm focus:border-accent focus:outline-none"
+                    >
+                      {INQUIRY_STATUSES.map((s) => (
+                        <option key={s} value={s}>{STATUS_LABELS[s]}</option>
+                      ))}
+                    </select>
+                    <button className="rounded-lg bg-ink px-4 py-1.5 text-sm font-semibold text-white hover:bg-stone-800">
+                      Actualizar
+                    </button>
+                  </form>
+                  <DeleteInquiryButton id={q.id} name={q.name} />
+                </div>
               )}
             </div>
           ))

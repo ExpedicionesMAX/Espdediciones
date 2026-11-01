@@ -436,14 +436,6 @@ export default async function ExpeditionDetailPage({
                 Configurá el número de WhatsApp en el panel para habilitar este botón.
               </p>
             )}
-            {groupUrl && wa && (
-              <p className="mt-3 text-center text-sm text-stone-500">
-                ¿Preferís escribirnos en privado?{" "}
-                <a href={wa} target="_blank" rel="noopener noreferrer" className="font-semibold text-accent hover:text-accent-dark">
-                  Consultar por WhatsApp
-                </a>
-              </p>
-            )}
             <p className="mt-5 border-t border-stone-100 pt-4 text-sm text-stone-500">
               ¿Buscás algo distinto?{" "}
               <Link href={CUSTOM_TRIP_PATH} className="font-semibold text-accent hover:text-accent-dark">

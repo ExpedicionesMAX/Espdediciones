@@ -148,3 +148,27 @@ export async function updateInquiryStatus(formData: FormData): Promise<void> {
 
   revalidatePath("/admin/consultas");
 }
+
+/** Borra una consulta (permanente). El contacto del CRM y su historial se conservan. */
+export async function deleteInquiry(formData: FormData): Promise<void> {
+  const user = await requirePermission(PERMISSIONS.INQUIRY_UPDATE);
+  const id = formData.get("id")?.toString();
+  if (!id) return;
+
+  const deleted = await prisma.contactInquiry
+    .delete({ where: { id }, select: { name: true } })
+    .catch(() => null); // ya borrada (doble clic, otra pestaña)
+  if (!deleted) return;
+
+  await logActivity({
+    userId: user.id,
+    action: "delete",
+    entityType: "ContactInquiry",
+    entityId: id,
+    summary: `Eliminó la consulta de ${deleted.name}`,
+  });
+
+  revalidatePath("/admin/consultas");
+  revalidatePath("/admin/crm");
+  revalidatePath("/admin/dashboard");
+}
