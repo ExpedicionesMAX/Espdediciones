@@ -13,6 +13,7 @@ import {
 } from "@/lib/home-content";
 import { ImageField } from "@/components/admin/ImageField";
 import { StoryImagesEditor } from "@/components/admin/StoryImagesEditor";
+import { TripPicker, type TripOption } from "@/components/admin/TripPicker";
 import { useSavedSnapshot } from "@/components/admin/useUnsavedChanges";
 import {
   Card,
@@ -65,15 +66,20 @@ const OVERLAY_OPTIONS = [
   { value: "strong", label: "Fuerte", preview: "from-black/90 via-black/60 to-black/45" },
 ] as const;
 
+export type { TripOption };
+
 export function HomeContentForm({
   stored,
   siteName,
   aboutPageText,
+  tripOptions,
 }: {
   stored: HomeContent;
   siteName: string;
   /** Texto actual de la página «Nosotros» (respaldo de la historia). */
   aboutPageText: string;
+  /** Viajes que se pueden elegir para la sección «Nuestros Viajes». */
+  tripOptions: TripOption[];
 }) {
   const [state, formAction, pending] = useActionState(updateHomeContent, initial);
   const [c, setC] = useState<HomeContent>(stored);
@@ -314,16 +320,20 @@ export function HomeContentForm({
         title="5 · Nuestros Viajes"
         description={
           <>
-            Transición hacia las experiencias. Muestra hasta 3 viajes publicados: los marcados como
-            «destacados» en{" "}
-            <Link href="/admin/expediciones" className="text-accent hover:underline">Expediciones</Link>{" "}
-            (o los primeros publicados si no hay destacados).
+            Transición hacia las experiencias. Elegí qué viajes mostrar (Expediciones, Escapadas o
+            Viajes Coleccionables) y en qué orden. Solo se ven los que estén publicados en{" "}
+            <Link href="/admin/expediciones" className="text-accent hover:underline">Viajes y categorías</Link>.
           </>
         }
       >
         <TextField id="trips-title" label="Título" value={c.trips.title} onChange={(v) => set("trips", { title: v })} placeholder={D.trips.title} />
         <TextField id="trips-text" label="Texto de apoyo" value={c.trips.text} onChange={(v) => set("trips", { text: v })} placeholder={D.trips.text} multiline />
         <TextField id="trips-btn" label="Texto del botón (lleva al catálogo)" value={c.trips.buttonLabel} onChange={(v) => set("trips", { buttonLabel: v })} placeholder={D.trips.buttonLabel} />
+        <TripPicker
+          options={tripOptions}
+          selectedIds={c.trips.selectedIds}
+          onChange={(selectedIds) => set("trips", { selectedIds })}
+        />
       </Card>
 
       {/* ─── CIERRE ─── */}

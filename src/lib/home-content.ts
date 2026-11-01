@@ -54,6 +54,8 @@ export type StoryImage = {
 };
 
 export const MAX_STORY_IMAGES = 24;
+/** Máximo de viajes elegibles para la sección «Nuestros Viajes» del inicio. */
+export const MAX_HOME_TRIPS = 12;
 
 /** Intensidades del velo oscuro sobre la foto de portada. */
 export const HERO_OVERLAYS = ["none", "light", "medium", "strong"] as const;
@@ -115,6 +117,11 @@ export type HomeContent = {
     title: string;
     text: string;
     buttonLabel: string;
+    /**
+     * Viajes elegidos para el inicio, en orden (ids). Vacío = automático
+     * (los destacados o, si no hay, los primeros publicados).
+     */
+    selectedIds: string[];
   };
   closing: {
     title: string;
@@ -173,6 +180,7 @@ export const HOME_DEFAULTS: HomeContent = {
     title: "Nuestros Viajes",
     text: "Distintas formas de viajar, una misma manera de mirar. Descubrí nuestras expediciones fotográficas, escapadas y viajes coleccionables.",
     buttonLabel: "Ver todos nuestros viajes",
+    selectedIds: [],
   },
   closing: {
     title: "Hablemos",
@@ -315,6 +323,10 @@ export function normalizeStoredHome(value: unknown): HomeContent {
       title: str(trips.title, 120),
       text: str(trips.text, 600),
       buttonLabel: str(trips.buttonLabel, 60),
+      // Solo ids con forma válida, sin repetir, hasta MAX_HOME_TRIPS.
+      selectedIds: [
+        ...new Set(arr(trips.selectedIds).filter((x): x is string => typeof x === "string" && /^[a-z0-9]{8,40}$/i.test(x))),
+      ].slice(0, MAX_HOME_TRIPS),
     },
     closing: {
       title: str(closing.title, 200),
@@ -355,7 +367,13 @@ export function resolveHome(stored: HomeContent): HomeContent {
       ),
       members: t.members,
     },
-    trips: pickStrings(stored.trips, d.trips),
+    trips: {
+      ...pickStrings(
+        { title: stored.trips.title, text: stored.trips.text, buttonLabel: stored.trips.buttonLabel },
+        { title: d.trips.title, text: d.trips.text, buttonLabel: d.trips.buttonLabel },
+      ),
+      selectedIds: stored.trips.selectedIds,
+    },
     closing: pickStrings(stored.closing, d.closing),
     sections: stored.sections,
   };

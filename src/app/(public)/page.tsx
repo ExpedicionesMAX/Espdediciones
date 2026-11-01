@@ -96,7 +96,7 @@ export default async function HomePage() {
 
   // ── Datos reales para las secciones de viajes (solo si se muestran) ──
   const [selection, upcoming, reviewsRaw] = await Promise.all([
-    visible.has("viajes") ? getTripSelection() : Promise.resolve([]),
+    visible.has("viajes") ? getTripSelection(trips.selectedIds) : Promise.resolve([]),
     visible.has("proxima") ? getUpcoming(settings.upcomingExpeditionId) : Promise.resolve(null),
     visible.has("resenas")
       ? prisma.testimonial.findMany({
@@ -557,7 +557,20 @@ function HeroLink({
 }
 
 /** Hasta 3 viajes reales: los destacados primero; si no hay destacados, los publicados. */
-async function getTripSelection() {
+async function getTripSelection(selectedIds: string[]) {
+  // Elegidos en el panel (Inicio → Nuestros Viajes): en ese orden y solo si están publicados.
+  if (selectedIds.length > 0) {
+    const chosen = await prisma.expedition.findMany({
+      where: publicExpeditionWhere({ id: { in: selectedIds } }),
+      select: { ...CARD_SELECT, id: true },
+    });
+    const ordered = selectedIds
+      .map((id) => chosen.find((e) => e.id === id))
+      .filter((e): e is (typeof chosen)[number] => e !== undefined);
+    // Si ninguno de los elegidos está publicado, se usa la selección automática (nunca queda vacía).
+    if (ordered.length > 0) return ordered;
+  }
+  // Automático (como antes): hasta 3 destacados; si no hay, los primeros publicados.
   const featured = await prisma.expedition.findMany({
     where: publicExpeditionWhere({ featured: true }),
     orderBy: [{ homeOrder: "asc" }, { name: "asc" }],

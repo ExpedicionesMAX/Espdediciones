@@ -162,3 +162,13 @@ test("Viajes a Medida: defaults, formulario visible por defecto y pasos saneados
   assert.equal(c.form.show, false);
   assert.deepEqual(c.process.steps, [{ title: "Uno", text: "x" }]);
 });
+
+test("Nuestros Viajes del inicio: elegidos en orden, sin repetidos ni basura; vacío = automático", () => {
+  assert.deepEqual(resolveHome(normalizeStoredHome(null)).trips.selectedIds, [], "por defecto: automático");
+  const n = normalizeStoredHome({
+    trips: { selectedIds: ["cmulmagsc0000l804cid0dgmc", "abc", "cmulmagsc0000l804cid0dgmc", "<script>", 42, "zzzzzzzzzzzz"] },
+  });
+  assert.deepEqual(n.trips.selectedIds, ["cmulmagsc0000l804cid0dgmc", "zzzzzzzzzzzz"]);
+  const many = normalizeStoredHome({ trips: { selectedIds: Array.from({ length: 30 }, (_, i) => `viaje${String(i).padStart(6, "0")}`) } });
+  assert.equal(many.trips.selectedIds.length, 12, "máximo 12");
+});
