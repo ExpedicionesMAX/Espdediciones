@@ -80,6 +80,7 @@ export default async function EditExpeditionPage({
     depositPrice: numStr(exp.depositPrice),
     coverImage: exp.coverImage ?? "",
     coverFocus: exp.coverFocus ?? "",
+    coverOverlay: exp.coverOverlay ?? "",
     videoUrl: exp.videoUrl ?? "",
     gallery: exp.gallery.join("\n"),
     includes: exp.includes.join("\n"),

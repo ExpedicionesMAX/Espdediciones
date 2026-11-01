@@ -10,6 +10,7 @@ import {
 } from "@/lib/custom-trip-content";
 import { ImageField } from "@/components/admin/ImageField";
 import { FocusPicker } from "@/components/admin/FocusPicker";
+import { OverlayPicker } from "@/components/admin/OverlayPicker";
 import { useSavedSnapshot } from "@/components/admin/useUnsavedChanges";
 import {
   Card,
@@ -70,6 +71,7 @@ export function CustomTripForm({
             </div>
           )}
         </div>
+        <OverlayPicker name="ct-overlay" imageUrl={c.hero.image} value={c.hero.overlay} onChange={(v) => set("hero", { overlay: v })} />
         <TextField id="ct-alt" label="Descripción de la foto" value={c.hero.imageAlt} onChange={(v) => set("hero", { imageAlt: v })} />
       </Card>
 

@@ -13,6 +13,7 @@ import {
 } from "@/lib/home-content";
 import { ImageField } from "@/components/admin/ImageField";
 import { FocusPicker } from "@/components/admin/FocusPicker";
+import { OverlayPicker } from "@/components/admin/OverlayPicker";
 import { StoryImagesEditor } from "@/components/admin/StoryImagesEditor";
 import { TripPicker, type TripOption } from "@/components/admin/TripPicker";
 import { useSavedSnapshot } from "@/components/admin/useUnsavedChanges";
@@ -58,14 +59,6 @@ function Segmented({
     </fieldset>
   );
 }
-
-// Mismas intensidades que la portada pública (src/app/(public)/page.tsx).
-const OVERLAY_OPTIONS = [
-  { value: "none", label: "Sin velo", preview: "" },
-  { value: "light", label: "Suave", preview: "from-black/55 via-black/15 to-transparent" },
-  { value: "medium", label: "Medio (actual)", preview: "from-black/85 via-black/40 to-black/30" },
-  { value: "strong", label: "Fuerte", preview: "from-black/90 via-black/60 to-black/45" },
-] as const;
 
 export type { TripOption };
 
@@ -170,48 +163,7 @@ export function HomeContentForm({
           )}
         </div>
         <TextField id="hero-alt" label="Descripción de la foto (accesibilidad)" value={c.hero.imageAlt} onChange={(v) => set("hero", { imageAlt: v })} placeholder="Ej.: Atardecer sobre el río, con el grupo fotografiando" />
-        <fieldset>
-          <legend className={labelCls}>Oscurecer la foto (para que el texto se lea)</legend>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {OVERLAY_OPTIONS.map((o) => {
-              const selected = (c.hero.overlay || "medium") === o.value;
-              return (
-                <label
-                  key={o.value}
-                  className={`cursor-pointer overflow-hidden rounded-xl border-2 ${selected ? "border-accent" : "border-stone-200 hover:border-stone-300"}`}
-                >
-                  <input
-                    type="radio"
-                    name="hero-overlay"
-                    value={o.value}
-                    checked={selected}
-                    onChange={() => set("hero", { overlay: o.value })}
-                    className="sr-only"
-                  />
-                  {/* Vista previa con la foto de portada elegida */}
-                  <span className="relative block aspect-[4/3] bg-stone-500">
-                    {c.hero.image && (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={c.hero.image} alt="" className="absolute inset-0 h-full w-full object-cover" />
-                    )}
-                    {o.preview && <span className={`absolute inset-0 bg-gradient-to-t ${o.preview}`} />}
-                    <span
-                      className={`absolute bottom-2 left-2 font-display text-sm font-semibold text-white ${o.value === "none" || o.value === "light" ? "hero-text-shadow" : ""}`}
-                    >
-                      Título
-                    </span>
-                  </span>
-                  <span className={`block px-2 py-1.5 text-center text-xs font-medium ${selected ? "text-accent" : "text-stone-600"}`}>
-                    {o.label}
-                  </span>
-                </label>
-              );
-            })}
-          </div>
-          <p className="mt-1 text-xs text-stone-400">
-            «Sin velo» muestra la foto tal cual; con fotos muy claras, el título se puede leer menos.
-          </p>
-        </fieldset>
+        <OverlayPicker name="hero-overlay" imageUrl={c.hero.image} value={c.hero.overlay} onChange={(v) => set("hero", { overlay: v })} />
         <div className="grid gap-4 sm:grid-cols-2">
           <TextField id="hero-pl" label="Botón principal" value={c.hero.primaryLabel} onChange={(v) => set("hero", { primaryLabel: v })} placeholder={D.hero.primaryLabel} />
           <TextField id="hero-ph" label="Destino del botón principal" value={c.hero.primaryHref} onChange={(v) => set("hero", { primaryHref: v })} placeholder={D.hero.primaryHref} hint="#nosotros, /expediciones, /viajes-a-medida o https://…" />

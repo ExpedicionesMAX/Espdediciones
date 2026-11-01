@@ -3,6 +3,7 @@
 import { useActionState, useState } from "react";
 import { ImageField } from "@/components/admin/ImageField";
 import { FocusPicker } from "@/components/admin/FocusPicker";
+import { OverlayPicker } from "@/components/admin/OverlayPicker";
 import { updateTexts, type TextsFormState } from "@/server/actions/texts";
 import { SITE_TEXTS, type TextField } from "@/lib/site-texts-schema";
 import { useDirtyForm } from "@/components/admin/useUnsavedChanges";
@@ -23,20 +24,26 @@ function ImageTextField({
   defaultValue,
   focusKey,
   defaultFocus,
+  overlayKey,
+  defaultOverlay,
   onChange,
 }: {
   id: string;
   defaultValue: string;
   focusKey?: string;
   defaultFocus?: string;
+  overlayKey?: string;
+  defaultOverlay?: string;
   onChange: () => void;
 }) {
   const [value, setValue] = useState(defaultValue);
   const [focus, setFocus] = useState(defaultFocus ?? "");
+  const [overlay, setOverlay] = useState(defaultOverlay ?? "");
   return (
     <>
       <input type="hidden" name={id} value={value} />
       {focusKey && <input type="hidden" name={focusKey} value={value ? focus : ""} />}
+      {overlayKey && <input type="hidden" name={overlayKey} value={overlay} />}
       <ImageField
         id={id}
         value={value}
@@ -62,16 +69,35 @@ function ImageTextField({
           />
         </div>
       )}
+      {overlayKey && (
+        <div className="mt-4">
+          <OverlayPicker
+            name={`${overlayKey}-choice`}
+            imageUrl={value}
+            value={overlay}
+            onChange={(o) => {
+              setOverlay(o);
+              onChange();
+            }}
+          />
+        </div>
+      )}
     </>
   );
+}
+
+/** Campo asociado a una foto (encuadre o velo): la misma clave con otro final. */
+function companionKey(imageKey: string, suffix: "Focus" | "Overlay", kind: "focus" | "overlay"): string | undefined {
+  const key = imageKey.replace(/Image$/, suffix);
+  return SITE_TEXTS.some((t) => t.key === key && t.kind === kind) ? key : undefined;
 }
 
 export function TextsForm({ stored }: { stored: Record<string, string> }) {
   const [state, formAction, pending] = useActionState(updateTexts, initial);
   const { dirty, markDirty, formProps } = useDirtyForm(state);
 
-  // Los encuadres no se muestran solos: van dentro del campo de su foto.
-  const groups = SITE_TEXTS.filter((f) => !f.hidden && f.kind !== "focus").reduce<Record<string, TextField[]>>((acc, f) => {
+  // Encuadres y velos no se muestran solos: van dentro del campo de su foto.
+  const groups = SITE_TEXTS.filter((f) => !f.hidden && f.kind !== "focus" && f.kind !== "overlay").reduce<Record<string, TextField[]>>((acc, f) => {
     (acc[f.group] ??= []).push(f);
     return acc;
   }, {});
@@ -108,9 +134,10 @@ export function TextsForm({ stored }: { stored: Record<string, string> }) {
                   <ImageTextField
                     id={f.key}
                     defaultValue={stored[f.key] ?? ""}
-                    // Campo de encuadre de esta foto: la misma clave terminada en «Focus»
-                    focusKey={SITE_TEXTS.some((t) => t.key === f.key.replace(/Image$/, "Focus") && t.kind === "focus") ? f.key.replace(/Image$/, "Focus") : undefined}
+                    focusKey={companionKey(f.key, "Focus", "focus")}
                     defaultFocus={stored[f.key.replace(/Image$/, "Focus")] ?? ""}
+                    overlayKey={companionKey(f.key, "Overlay", "overlay")}
+                    defaultOverlay={stored[f.key.replace(/Image$/, "Overlay")] ?? ""}
                     onChange={markDirty}
                   />
                 ) : f.multiline ? (

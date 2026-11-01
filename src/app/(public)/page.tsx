@@ -12,20 +12,13 @@ import { getSiteSettings, type WhyPillar } from "@/lib/site";
 import { getAboutPageFallback, getHomeContent, getTripPhotos } from "@/lib/page-content";
 import { paragraphs } from "@/lib/content-fields";
 import { CoverImage } from "@/components/public/CoverImage";
+import { overlayClass, overlayNeedsTextShadow } from "@/lib/overlay";
 import { getSiteTexts } from "@/lib/site-texts";
 import type { HomeSectionKey } from "@/lib/home-content";
 import { CUSTOM_TRIP_PATH } from "@/lib/trip-categories";
 import { whatsappUrl, formatDateRange } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
-
-/** Velo sobre la foto de portada según lo elegido en el panel ("medium" = el de siempre). */
-const HERO_OVERLAY_CLASS: Record<string, string> = {
-  none: "",
-  light: "from-black/55 via-black/15 to-transparent",
-  medium: "from-black/85 via-black/40 to-black/30",
-  strong: "from-black/90 via-black/60 to-black/45",
-};
 
 /** Tamaños del título y del texto de portada elegibles en el panel. */
 const HERO_TITLE_CLASS: Record<string, string> = {
@@ -472,12 +465,12 @@ export default async function HomePage() {
           />
         )}
         {/* Velo oscuro para que el texto se lea; la intensidad se elige en el panel. */}
-        {HERO_OVERLAY_CLASS[hero.overlay] && (
-          <div aria-hidden="true" className={`absolute inset-0 bg-gradient-to-t ${HERO_OVERLAY_CLASS[hero.overlay]}`} />
+        {overlayClass(hero.overlay) && (
+          <div aria-hidden="true" className={`absolute inset-0 bg-gradient-to-t ${overlayClass(hero.overlay)}`} />
         )}
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-20 pt-32 sm:px-6 lg:pb-28">
           <div
-            className={`max-w-3xl animate-fade-up text-white ${centered ? "mx-auto text-center" : ""} ${hero.overlay === "none" || hero.overlay === "light" ? "hero-text-shadow" : ""}`}
+            className={`max-w-3xl animate-fade-up text-white ${centered ? "mx-auto text-center" : ""} ${overlayNeedsTextShadow(hero.overlay) ? "hero-text-shadow" : ""}`}
           >
             {/* Rótulo superior: solo si tiene letras o números (vacío o un «.» = no se muestra) */}
             {/[\p{L}\p{N}]/u.test(hero.eyebrow) && (

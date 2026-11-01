@@ -196,6 +196,8 @@ model Expedition {
   coverImage String?
   // Encuadre de la portada: punto que se mantiene visible al recortar, "X% Y%" (vacío = centro)
   coverFocus String?
+  /// Velo oscuro sobre la portada: "none" | "light" | "medium" | "strong"; vacío = "medium".
+  coverOverlay String?
   gallery    String[] @default([])
   videoUrl   String? // YouTube / Vimeo
 

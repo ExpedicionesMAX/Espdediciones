@@ -10,6 +10,7 @@ import { TripCategoryPills } from "@/components/public/TripCategoryPills";
 import { getSiteTexts } from "@/lib/site-texts";
 import { getTripPhotos } from "@/lib/page-content";
 import { CoverImage } from "@/components/public/CoverImage";
+import { overlayClass, overlayNeedsTextShadow } from "@/lib/overlay";
 import {
   CATALOG_CATEGORY_KEYS,
   CUSTOM_TRIP_PATH,
@@ -82,10 +83,12 @@ export default async function ExpeditionsPage({ searchParams }: { searchParams: 
           <>
             <CoverImage src={cover} alt="" sizes="100vw" priority focus={texts.expsCoverImage ? texts.expsCoverFocus : null} />
             {/* Contraste: el texto y los filtros siempre legibles sobre la foto */}
-            <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/35" />
+            {overlayClass(texts.expsCoverOverlay) && (
+              <div aria-hidden="true" className={`absolute inset-0 bg-gradient-to-t ${overlayClass(texts.expsCoverOverlay)}`} />
+            )}
           </>
         )}
-        <div className="relative mx-auto w-full max-w-6xl">
+        <div className={`relative mx-auto w-full max-w-6xl ${cover && overlayNeedsTextShadow(texts.expsCoverOverlay) ? "hero-text-shadow" : ""}`}>
           <h1 className="font-display text-5xl font-semibold leading-[1.02] tracking-tight sm:text-7xl">
             {texts.expsTitle}
           </h1>

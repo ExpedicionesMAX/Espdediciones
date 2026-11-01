@@ -1,5 +1,6 @@
 import { imageUrl, safeHref, str } from "@/lib/content-fields";
 import { normalizeFocus } from "@/lib/focus";
+import { OVERLAYS } from "@/lib/overlay";
 
 /**
  * Contenido del inicio institucional (Nosotros), guardado en
@@ -59,7 +60,7 @@ export const MAX_STORY_IMAGES = 24;
 export const MAX_HOME_TRIPS = 12;
 
 /** Intensidades del velo oscuro sobre la foto de portada. */
-export const HERO_OVERLAYS = ["none", "light", "medium", "strong"] as const;
+export const HERO_OVERLAYS = OVERLAYS;
 export type HeroOverlay = (typeof HERO_OVERLAYS)[number];
 
 /** Opciones de presentación de los textos de la portada (se eligen en el panel). */

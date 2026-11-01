@@ -15,6 +15,7 @@ import { tripLocation } from "@/components/public/ExpeditionCard";
 import { getBaseUrl } from "@/lib/base-url";
 import { normalizeWhatsappGroupUrl } from "@/lib/whatsapp-group";
 import { CoverImage } from "@/components/public/CoverImage";
+import { overlayClass, overlayNeedsTextShadow } from "@/lib/overlay";
 import {
   CUSTOM_TRIP_PATH,
   catalogHref,
@@ -184,9 +185,11 @@ export default async function ExpeditionDetailPage({
           // Sin fotos: fondo neutro de la marca, sin imágenes ajenas al viaje.
           <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-stone-700 via-stone-800 to-ink" />
         )}
-        {/* Contraste sutil: más oscuro abajo (donde va el texto) y arriba (menú). */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/40" />
-        <div className="relative mx-auto w-full max-w-6xl px-4 pb-16 pt-32 text-white sm:px-6">
+        {/* Velo elegido en el panel (por defecto, más oscuro abajo, donde va el texto). */}
+        {overlayClass(exp.coverOverlay) && (
+          <div className={`absolute inset-0 bg-gradient-to-t ${overlayClass(exp.coverOverlay)}`} />
+        )}
+        <div className={`relative mx-auto w-full max-w-6xl px-4 pb-16 pt-32 text-white sm:px-6 ${overlayNeedsTextShadow(exp.coverOverlay) ? "hero-text-shadow" : ""}`}>
           {/* Migas de navegación */}
           <nav aria-label="Ubicación" className="mb-5 text-sm text-stone-300">
             <ol className="flex flex-wrap items-center gap-x-2 gap-y-1">

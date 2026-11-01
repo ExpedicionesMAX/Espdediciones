@@ -128,4 +128,13 @@ test("encuadre de la portada: se guarda «X% Y%», el centro o lo inválido qued
   const { normalizeStoredCustomTrip } = await import("@/lib/custom-trip-content");
   assert.equal(normalizeStoredCustomTrip({ hero: { focus: "entera" } }).hero.focus, "entera");
   assert.equal(normalizeStoredCustomTrip({ hero: { focus: "javascript:x" } }).hero.focus, "");
+  // Velo de las portadas
+  const { normalizeOverlay, overlayClass, overlayNeedsTextShadow } = await import("@/lib/overlay");
+  assert.equal(normalizeOverlay("none"), "none");
+  assert.equal(normalizeOverlay("medium"), null, "el de siempre se guarda vacío");
+  assert.equal(normalizeOverlay("bg-red-500"), null);
+  assert.equal(overlayClass(""), overlayClass("medium"), "vacío = el velo de siempre");
+  assert.equal(overlayClass("none"), "");
+  assert.equal(overlayNeedsTextShadow("light"), true);
+  assert.equal(normalizeStoredCustomTrip({ hero: { overlay: "strong" } }).hero.overlay, "strong");
 });

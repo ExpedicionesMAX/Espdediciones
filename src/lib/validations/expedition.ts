@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { normalizeWhatsappGroupUrl } from "@/lib/whatsapp-group";
 import { normalizeFocus } from "@/lib/focus";
+import { normalizeOverlay } from "@/lib/overlay";
 
 const clean = (v: unknown) =>
   v === "" || v === null || v === undefined ? undefined : v;
@@ -92,6 +93,8 @@ export const expeditionInputSchema = z.object({
   coverImage: optUrl,
   // Encuadre de la portada ("X% Y%"); cualquier valor inválido o el centro se guarda vacío.
   coverFocus: z.preprocess((v) => normalizeFocus(v) ?? undefined, z.string().optional()),
+  // Velo de la portada: una intensidad conocida; «medio» (el de siempre) o inválido = vacío.
+  coverOverlay: z.preprocess((v) => normalizeOverlay(v) ?? undefined, z.string().optional()),
   videoUrl: optUrl,
   gallery: z.array(z.string().url()).default([]),
 

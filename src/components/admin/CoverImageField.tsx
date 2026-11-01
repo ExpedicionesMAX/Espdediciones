@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { uploadPhoto } from "@/lib/upload-client";
 import { FocusPicker } from "@/components/admin/FocusPicker";
+import { OverlayPicker } from "@/components/admin/OverlayPicker";
 
 export type LibraryImage = { url: string; label: string; group: string };
 
@@ -17,6 +18,8 @@ export function CoverImageField({
   defaultValue,
   focusName,
   defaultFocus,
+  overlayName,
+  defaultOverlay,
   library,
   fallbackUrl,
   onChange,
@@ -27,6 +30,9 @@ export function CoverImageField({
   /** Campo oculto con el encuadre ("X% Y%"). */
   focusName: string;
   defaultFocus: string;
+  /** Campo oculto con el velo oscuro de la portada del viaje. */
+  overlayName: string;
+  defaultOverlay: string;
   library: LibraryImage[];
   /** Foto que se usa mientras no haya portada (la primera de la galería del viaje). */
   fallbackUrl?: string | null;
@@ -35,6 +41,7 @@ export function CoverImageField({
 }) {
   const [value, setValue] = useState(defaultValue);
   const [focus, setFocus] = useState(defaultFocus || "");
+  const [overlay, setOverlay] = useState(defaultOverlay || "");
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [picking, setPicking] = useState(false);
@@ -81,6 +88,7 @@ export function CoverImageField({
     <div>
       <input type="hidden" name={name} value={value} />
       <input type="hidden" name={focusName} value={value ? focus : ""} />
+      <input type="hidden" name={overlayName} value={overlay} />
 
       {value ? (
         // Portada elegida: se puede arrastrar para elegir el encuadre.
@@ -149,6 +157,18 @@ export function CoverImageField({
         Ideal: foto horizontal, de buena calidad.
       </p>
       {(uploadError || error) && <p role="alert" className="mt-1 text-xs text-red-600">{uploadError || error}</p>}
+
+      <div className="mt-5">
+        <OverlayPicker
+          name={`${overlayName}-choice`}
+          imageUrl={value || fallbackUrl}
+          value={overlay}
+          onChange={(o) => {
+            setOverlay(o);
+            onChange?.();
+          }}
+        />
+      </div>
 
       {picking && (
         <div

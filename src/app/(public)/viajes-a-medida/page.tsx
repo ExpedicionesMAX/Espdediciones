@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { InquiryForm } from "@/components/public/InquiryForm";
 import { CoverImage } from "@/components/public/CoverImage";
+import { overlayClass, overlayNeedsTextShadow } from "@/lib/overlay";
 import { getSiteSettings } from "@/lib/site";
 import { getCustomTripContent, getTripPhotos } from "@/lib/page-content";
 import { paragraphs } from "@/lib/content-fields";
@@ -54,9 +55,11 @@ export default async function CustomTripPage() {
             focus={hero.image ? hero.focus : null}
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/30" />
+        {overlayClass(hero.overlay) && (
+          <div className={`absolute inset-0 bg-gradient-to-t ${overlayClass(hero.overlay)}`} />
+        )}
         <div className="relative mx-auto w-full max-w-6xl px-4 pb-16 pt-32 sm:px-6 sm:pb-20">
-          <div className="max-w-2xl animate-fade-up text-white">
+          <div className={`max-w-2xl animate-fade-up text-white ${overlayNeedsTextShadow(hero.overlay) ? "hero-text-shadow" : ""}`}>
             <p className="text-sm font-medium uppercase tracking-[0.2em] text-stone-300">{hero.eyebrow}</p>
             <h1 className="mt-4 font-display text-4xl font-semibold leading-[1.05] sm:text-6xl">
               {hero.title}
