@@ -392,7 +392,7 @@ export function ExpeditionForm({
         </div>
         <div>
           <label htmlFor="gallery" className={labelCls}>Galería — fotos y videos</label>
-          <GalleryField name="gallery" defaultValue={values.gallery} />
+          <GalleryField name="gallery" defaultValue={values.gallery} onChange={markDirty} />
         </div>
       </Card>
 
