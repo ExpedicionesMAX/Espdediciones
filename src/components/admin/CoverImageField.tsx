@@ -91,8 +91,11 @@ export function CoverImageField({
             setFocus(f);
             onChange?.();
           }}
-          mainAspect="16 / 7"
-          previews={[{ label: "Así se ve en la tarjeta", aspect: "4 / 5", className: "w-28 sm:w-32" }]}
+          mainAspect="5 / 2" // portada del viaje: 80% del alto de la pantalla
+          previews={[
+            { label: "Así se ve en la tarjeta", aspect: "4 / 5", className: "w-28 sm:w-32" },
+            { label: "En celular", aspect: "9 / 14", className: "w-20" },
+          ]}
         >
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
           <span className="absolute left-3 top-3 rounded-full bg-emerald-600 px-2.5 py-1 text-xs font-semibold text-white">

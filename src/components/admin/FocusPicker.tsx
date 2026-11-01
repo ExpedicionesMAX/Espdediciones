@@ -41,14 +41,20 @@ export function FocusPicker({
   value,
   onChange,
   mainAspect = "16 / 9",
+  mainLabel = "Así se ve en compu",
   previews = [],
   children,
 }: {
   imageUrl: string;
   value: string;
   onChange: (focus: string) => void;
-  /** Proporción del recuadro grande donde se arrastra. */
+  /**
+   * Proporción del recuadro grande donde se arrastra: debe ser la de la
+   * portada real en una compu (pantalla ancha), que es donde más se recorta.
+   */
   mainAspect?: string;
+  /** Rótulo del recuadro grande. */
+  mainLabel?: string;
   /** Recortes adicionales para comparar (p. ej. celular, tarjeta). */
   previews?: FocusPreview[];
   /** Contenido extra sobre la foto grande (etiquetas, degradé…). */
@@ -120,6 +126,9 @@ export function FocusPicker({
       >
         <Shot src={imageUrl} position={position} whole={whole} />
         {children}
+        <span className="pointer-events-none absolute right-3 top-3 rounded-full bg-black/55 px-3 py-1 text-xs font-medium text-white">
+          {mainLabel}
+        </span>
         <span className="pointer-events-none absolute bottom-3 left-3 rounded-full bg-black/55 px-3 py-1 text-xs font-medium text-white">
           {whole ? "Foto entera: se ve completa, sin recortes" : "✥ Arrastrá la foto para elegir qué parte se ve"}
         </span>

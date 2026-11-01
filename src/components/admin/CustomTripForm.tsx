@@ -64,10 +64,8 @@ export function CustomTripForm({
                 imageUrl={c.hero.image}
                 value={c.hero.focus}
                 onChange={(f) => set("hero", { focus: f })}
-                previews={[
-                  { label: "En compu", aspect: "16 / 9", className: "w-40" },
-                  { label: "En celular", aspect: "9 / 16", className: "w-20" },
-                ]}
+                mainAspect="14 / 5" // portada de Viajes a Medida: 72% del alto de la pantalla
+                previews={[{ label: "En celular", aspect: "3 / 4", className: "w-20" }]}
               />
             </div>
           )}

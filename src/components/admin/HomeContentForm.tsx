@@ -163,10 +163,8 @@ export function HomeContentForm({
                 imageUrl={c.hero.image}
                 value={c.hero.focus}
                 onChange={(f) => set("hero", { focus: f })}
-                previews={[
-                  { label: "En compu", aspect: "16 / 9", className: "w-40" },
-                  { label: "En celular", aspect: "9 / 16", className: "w-20" },
-                ]}
+                mainAspect="21 / 9" // portada del inicio: 92% del alto de la pantalla
+                previews={[{ label: "En celular", aspect: "9 / 16", className: "w-20" }]}
               />
             </div>
           )}

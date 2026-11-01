@@ -57,11 +57,8 @@ function ImageTextField({
               setFocus(f);
               onChange();
             }}
-            mainAspect="16 / 7"
-            previews={[
-              { label: "En compu", aspect: "16 / 9", className: "w-40" },
-              { label: "En celular", aspect: "9 / 14", className: "w-20" },
-            ]}
+            mainAspect="3 / 1" // portada de Nuestros Viajes: 62% del alto de la pantalla
+            previews={[{ label: "En celular", aspect: "3 / 4", className: "w-20" }]}
           />
         </div>
       )}
