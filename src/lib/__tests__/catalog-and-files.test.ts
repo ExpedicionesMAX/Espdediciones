@@ -137,4 +137,21 @@ test("encuadre de la portada: se guarda «X% Y%», el centro o lo inválido qued
   assert.equal(overlayClass("none"), "");
   assert.equal(overlayNeedsTextShadow("light"), true);
   assert.equal(normalizeStoredCustomTrip({ hero: { overlay: "strong" } }).hero.overlay, "strong");
+
+  // Qué datos de cada viaje se muestran
+  const { tripDisplay, tripDisplayFromForm, spotsText } = await import("@/lib/trip-display");
+  const d = tripDisplay(null);
+  assert.equal(d.dates, true, "lo que ya se mostraba sigue visible por defecto");
+  assert.equal(d.price, false, "el precio arranca oculto (como hasta ahora)");
+  assert.deepEqual(tripDisplay({ price: true, dates: false, hack: 1 }), { ...d, price: true, dates: false });
+  assert.equal(tripDisplay({ price: "si" }).price, false, "solo valores sí/no");
+  const fd = new FormData();
+  fd.set("show_price", "on");
+  const fromForm = tripDisplayFromForm(fd);
+  assert.equal(fromForm.price, true);
+  assert.equal(fromForm.dates, false, "casilla desmarcada = oculto");
+  assert.equal(spotsText(null, 0), null);
+  assert.equal(spotsText(10, 6), "Quedan 4 lugares");
+  assert.equal(spotsText(10, 9), "Queda 1 lugar");
+  assert.equal(spotsText(10, 12), "Completo");
 });

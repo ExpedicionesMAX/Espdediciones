@@ -13,6 +13,7 @@ import {
   expeditionInputSchema,
   type ExpeditionInput,
 } from "@/lib/validations/expedition";
+import { tripDisplayFromForm } from "@/lib/trip-display";
 
 export type ExpeditionFormState = {
   ok: boolean;
@@ -69,6 +70,8 @@ function formToRaw(fd: FormData): Record<string, unknown> {
     maxAltitude: fd.get("maxAltitude"),
     minAge: fd.get("minAge"),
     capacity: fd.get("capacity"),
+    spotsTaken: fd.get("spotsTaken"),
+    publicInfo: tripDisplayFromForm(fd),
     price: fd.get("price"),
     currency: fd.get("currency"),
     depositPrice: fd.get("depositPrice"),
@@ -122,6 +125,8 @@ function buildData(
     maxAltitude: input.maxAltitude ?? null,
     minAge: input.minAge ?? null,
     capacity: input.capacity ?? null,
+    spotsTaken: input.spotsTaken,
+    publicInfo: input.publicInfo,
     price: input.price ?? null,
     currency: input.currency,
     depositPrice: input.depositPrice ?? null,

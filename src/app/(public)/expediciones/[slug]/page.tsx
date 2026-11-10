@@ -10,7 +10,8 @@ import { getSiteSettings } from "@/lib/site";
 import { getSiteTexts } from "@/lib/site-texts";
 import { buildMediaList, tripCover } from "@/lib/media";
 import { MediaGallery } from "@/components/public/MediaGallery";
-import { DIFFICULTY_LABELS, ACTIVITY_LABELS, seasonLabel, whatsappUrl } from "@/lib/format";
+import { DIFFICULTY_LABELS, ACTIVITY_LABELS, formatDate, formatPrice, seasonLabel, whatsappUrl } from "@/lib/format";
+import { spotsText, tripDisplay } from "@/lib/trip-display";
 import { tripLocation } from "@/components/public/ExpeditionCard";
 import { getBaseUrl } from "@/lib/base-url";
 import { normalizeWhatsappGroupUrl } from "@/lib/whatsapp-group";
@@ -110,8 +111,11 @@ export default async function ExpeditionDetailPage({
 
   const media = buildMediaList(exp.gallery, exp.videoUrl);
   const category = isCatalogCategory(exp.category) ? exp.category : null;
-  const location = tripLocation(exp);
-  const season = seasonLabel(exp.startDate, exp.endDate, exp.availableMonths);
+  // Qué datos eligió mostrar el administrador para este viaje.
+  const show = tripDisplay(exp.publicInfo);
+  const location = show.location ? tripLocation(exp) : null;
+  const season = show.dates ? seasonLabel(exp.startDate, exp.endDate, exp.availableMonths) : null;
+  const spots = show.spots ? spotsText(exp.capacity, exp.spotsTaken) : null;
   const description = exp.fullDescription || exp.shortDescription;
 
   // Chat privado con la empresa (consultas) y, si existe, el grupo de WhatsApp del viaje.
@@ -124,11 +128,15 @@ export default async function ExpeditionDetailPage({
   // Solo datos cargados: lo que no existe no se muestra.
   // Los datos clave van en la portada; el resto, en la franja de abajo.
   const heroMeta: { label: string; value: string }[] = [];
-  if (exp.durationDays) heroMeta.push({ label: "Duración", value: `${exp.durationDays} días` });
+  if (show.duration && exp.durationDays) heroMeta.push({ label: "Duración", value: `${exp.durationDays} días` });
   if (season) heroMeta.push({ label: exp.startDate ? "Fechas" : "Temporada", value: season });
-  if (exp.difficulty) heroMeta.push({ label: "Dificultad", value: DIFFICULTY_LABELS[exp.difficulty] });
+  if (show.difficulty && exp.difficulty) heroMeta.push({ label: "Dificultad", value: DIFFICULTY_LABELS[exp.difficulty] });
+  if (show.price && exp.price != null) heroMeta.push({ label: "Precio", value: formatPrice(exp.price, exp.currency) });
+  if (spots) heroMeta.push({ label: "Lugares", value: spots });
 
   const facts: { label: string; value: string }[] = [];
+  if (show.deposit && exp.depositPrice != null) facts.push({ label: "Seña / reserva", value: formatPrice(exp.depositPrice, exp.currency) });
+  if (show.deadline && exp.registrationDeadline) facts.push({ label: "Inscripción hasta", value: formatDate(exp.registrationDeadline) });
   if (exp.minAge) facts.push({ label: "Edad mínima", value: `${exp.minAge} años` });
   if (exp.distanceKm) facts.push({ label: "Distancia", value: `${exp.distanceKm} km` });
   if (exp.maxAltitude) facts.push({ label: "Altitud máx.", value: `${exp.maxAltitude} m` });

@@ -13,6 +13,7 @@ import { getAboutPageFallback, getHomeContent, getTripPhotos } from "@/lib/page-
 import { paragraphs } from "@/lib/content-fields";
 import { CoverImage } from "@/components/public/CoverImage";
 import { overlayClass, overlayNeedsTextShadow } from "@/lib/overlay";
+import { tripDisplay } from "@/lib/trip-display";
 import { getSiteTexts } from "@/lib/site-texts";
 import type { HomeSectionKey } from "@/lib/home-content";
 import { CUSTOM_TRIP_PATH } from "@/lib/trip-categories";
@@ -339,9 +340,12 @@ export default async function HomePage() {
             </h2>
             {upcoming.subtitle && <p className="mt-2 text-lg text-stone-600">{upcoming.subtitle}</p>}
             <div className="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-sm text-stone-500">
-              {upcoming.destination && <span>{upcoming.destination.name}</span>}
-              {upcoming.startDate && <span>{formatDateRange(upcoming.startDate, upcoming.endDate)}</span>}
-              {upcoming.durationDays ? <span>{upcoming.durationDays} días</span> : null}
+              {/* Solo los datos que el administrador eligió mostrar para este viaje */}
+              {tripDisplay(upcoming.publicInfo).location && upcoming.destination && <span>{upcoming.destination.name}</span>}
+              {tripDisplay(upcoming.publicInfo).dates && upcoming.startDate && (
+                <span>{formatDateRange(upcoming.startDate, upcoming.endDate)}</span>
+              )}
+              {tripDisplay(upcoming.publicInfo).duration && upcoming.durationDays ? <span>{upcoming.durationDays} días</span> : null}
             </div>
             {upcoming.shortDescription && <p className="mt-4 text-stone-700">{upcoming.shortDescription}</p>}
             <Link
@@ -599,6 +603,7 @@ async function getUpcoming(upcomingId: string | null) {
     startDate: true,
     endDate: true,
     durationDays: true,
+    publicInfo: true,
     destination: { select: { name: true } },
   } as const;
   const chosen = upcomingId

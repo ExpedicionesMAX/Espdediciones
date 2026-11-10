@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { tripDisplay } from "@/lib/trip-display";
 import { requirePermission } from "@/lib/auth-guard";
 import { hasPermission, PERMISSIONS } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
@@ -44,6 +45,8 @@ const EMPTY: ExpeditionFormValues = {
   coverImage: "",
   coverFocus: "",
   coverOverlay: "",
+  spotsTaken: "",
+  publicInfo: tripDisplay(null),
   videoUrl: "",
   gallery: "",
   includes: "",

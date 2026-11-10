@@ -2,6 +2,7 @@ import { z } from "zod";
 import { normalizeWhatsappGroupUrl } from "@/lib/whatsapp-group";
 import { normalizeFocus } from "@/lib/focus";
 import { normalizeOverlay } from "@/lib/overlay";
+import { tripDisplay } from "@/lib/trip-display";
 
 const clean = (v: unknown) =>
   v === "" || v === null || v === undefined ? undefined : v;
@@ -85,6 +86,8 @@ export const expeditionInputSchema = z.object({
   minAge: optInt,
 
   capacity: optInt,
+  // Lugares ya ocupados (se cargan a mano): para mostrar «quedan N lugares».
+  spotsTaken: z.preprocess(clean, z.coerce.number().int().min(0).max(100000).default(0)),
   price: optNumber,
   currency: z.preprocess(clean, z.string().default("USD")),
   depositPrice: optNumber,
@@ -95,6 +98,8 @@ export const expeditionInputSchema = z.object({
   coverFocus: z.preprocess((v) => normalizeFocus(v) ?? undefined, z.string().optional()),
   // Velo de la portada: una intensidad conocida; «medio» (el de siempre) o inválido = vacío.
   coverOverlay: z.preprocess((v) => normalizeOverlay(v) ?? undefined, z.string().optional()),
+  // Qué datos se muestran en el sitio (fechas, precio, cupos…), con valores por defecto.
+  publicInfo: z.preprocess((v) => tripDisplay(v), z.record(z.string(), z.boolean())),
   videoUrl: optUrl,
   gallery: z.array(z.string().url()).default([]),
 

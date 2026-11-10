@@ -198,6 +198,8 @@ model Expedition {
   coverFocus String?
   /// Velo oscuro sobre la portada: "none" | "light" | "medium" | "strong"; vacío = "medium".
   coverOverlay String?
+  /// Qué datos se muestran en el sitio (fechas, precio, cupos…). Ver src/lib/trip-display.ts; vacío = valores por defecto.
+  publicInfo Json?
   gallery    String[] @default([])
   videoUrl   String? // YouTube / Vimeo
 

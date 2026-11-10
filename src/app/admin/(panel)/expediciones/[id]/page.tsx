@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { tripDisplay } from "@/lib/trip-display";
 import { notFound } from "next/navigation";
 import { requirePermission } from "@/lib/auth-guard";
 import { hasPermission, PERMISSIONS } from "@/lib/permissions";
@@ -76,6 +77,8 @@ export default async function EditExpeditionPage({
     maxAltitude: exp.maxAltitude?.toString() ?? "",
     minAge: exp.minAge?.toString() ?? "",
     capacity: exp.capacity?.toString() ?? "",
+    spotsTaken: exp.spotsTaken ? exp.spotsTaken.toString() : "",
+    publicInfo: tripDisplay(exp.publicInfo),
     price: numStr(exp.price),
     depositPrice: numStr(exp.depositPrice),
     coverImage: exp.coverImage ?? "",

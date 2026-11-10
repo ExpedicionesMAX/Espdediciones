@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { TRIP_INFO, type TripDisplay } from "@/lib/trip-display";
 import { useActionState } from "react";
 import { useDirtyForm } from "@/components/admin/useUnsavedChanges";
 import type { ExpeditionFormState } from "@/server/actions/expeditions";
@@ -95,6 +96,9 @@ export type ExpeditionFormValues = {
   maxAltitude: string;
   minAge: string;
   capacity: string;
+  spotsTaken: string;
+  /** Qué datos se muestran en el sitio. */
+  publicInfo: TripDisplay;
   price: string;
   depositPrice: string;
   coverImage: string;
@@ -335,6 +339,10 @@ export function ExpeditionForm({
             <label htmlFor="capacity" className={labelCls}>Cupos totales</label>
             <input id="capacity" name="capacity" inputMode="numeric" defaultValue={values.capacity} className={inputCls} />
           </div>
+          <div>
+            <label htmlFor="spotsTaken" className={labelCls}>Lugares ya ocupados</label>
+            <input id="spotsTaken" name="spotsTaken" inputMode="numeric" defaultValue={values.spotsTaken} placeholder="0" className={inputCls} />
+          </div>
         </div>
       </Card>
 
@@ -357,6 +365,31 @@ export function ExpeditionForm({
             <input id="depositPrice" name="depositPrice" inputMode="decimal" defaultValue={values.depositPrice} className={inputCls} />
           </div>
         </div>
+      </Card>
+
+      <Card
+        title="Qué se muestra en el sitio"
+        description="Marcá lo que la gente puede ver en la ficha del viaje y en su tarjeta. Un dato solo aparece si está marcado y cargado."
+      >
+        <div className="grid gap-2 sm:grid-cols-2">
+          {TRIP_INFO.map((f) => (
+            <label
+              key={f.key}
+              className="flex cursor-pointer items-center gap-3 rounded-lg border border-stone-200 px-3 py-2.5 text-sm hover:bg-stone-50"
+            >
+              <input
+                type="checkbox"
+                name={`show_${f.key}`}
+                defaultChecked={values.publicInfo[f.key]}
+                className="h-4 w-4 accent-accent"
+              />
+              <span className="text-ink">{f.label}</span>
+            </label>
+          ))}
+        </div>
+        <p className="text-xs text-stone-400">
+          «Lugares disponibles» se calcula con «Cupos totales» menos «Lugares ya ocupados» (en Fechas y logística).
+        </p>
       </Card>
 
       <Card title="Descripciones">

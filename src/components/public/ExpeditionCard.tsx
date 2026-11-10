@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ActivityType, Difficulty } from "@prisma/client";
-import { ACTIVITY_LABELS, DIFFICULTY_LABELS, seasonLabel } from "@/lib/format";
+import { ACTIVITY_LABELS, DIFFICULTY_LABELS, formatPrice, seasonLabel } from "@/lib/format";
+import { spotsText, tripDisplay } from "@/lib/trip-display";
 import { categoryLabel } from "@/lib/trip-categories";
 import { tripCover } from "@/lib/media";
 import { CoverImage } from "@/components/public/CoverImage";
@@ -26,6 +27,8 @@ export type CardExpedition = {
   country?: string | null;
   gallery?: string[];
   coverFocus?: string | null;
+  /** Qué datos se muestran (ver src/lib/trip-display.ts). */
+  publicInfo?: unknown;
 };
 
 /** Lugar del viaje: el destino vinculado o, si no hay, la región/país cargados en el viaje. */
@@ -60,6 +63,7 @@ export const CARD_SELECT = {
   country: true,
   gallery: true, // portada provisoria: primera foto del propio viaje
   coverFocus: true,
+  publicInfo: true,
   destination: { select: { name: true } },
 } as const;
 
@@ -68,13 +72,17 @@ export function ExpeditionCard({ expedition }: { expedition: CardExpedition }) {
   const badge =
     categoryLabel(expedition.category) ??
     (expedition.activityType ? ACTIVITY_LABELS[expedition.activityType] : null);
-  const season = seasonLabel(expedition.startDate, expedition.endDate, expedition.availableMonths);
-  const location = tripLocation(expedition);
+  // Solo lo que el administrador eligió mostrar para este viaje.
+  const show = tripDisplay(expedition.publicInfo);
+  const season = show.dates ? seasonLabel(expedition.startDate, expedition.endDate, expedition.availableMonths) : null;
+  const location = show.location ? tripLocation(expedition) : null;
   const cover = tripCover(expedition);
   const meta = [
-    expedition.durationDays ? `${expedition.durationDays} días` : null,
+    show.duration && expedition.durationDays ? `${expedition.durationDays} días` : null,
     season,
   ].filter(Boolean);
+  const price = show.price && expedition.price != null ? formatPrice(expedition.price, expedition.currency) : null;
+  const spots = show.spots ? spotsText(expedition.capacity, expedition.spotsTaken) : null;
 
   return (
     <article className="card-lift group relative overflow-hidden rounded-2xl bg-stone-900 shadow-sm ring-1 ring-black/5">
@@ -101,7 +109,7 @@ export function ExpeditionCard({ expedition }: { expedition: CardExpedition }) {
                 {badge}
               </span>
             )}
-            {expedition.difficulty && (
+            {show.difficulty && expedition.difficulty && (
               <span className="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white">
                 {DIFFICULTY_LABELS[expedition.difficulty]}
               </span>
@@ -119,6 +127,9 @@ export function ExpeditionCard({ expedition }: { expedition: CardExpedition }) {
             </h3>
             {meta.length > 0 && (
               <p className="mt-2 text-sm text-stone-300">{meta.join(" · ")}</p>
+            )}
+            {(price || spots) && (
+              <p className="mt-1 text-sm font-semibold text-white">{[price, spots].filter(Boolean).join(" · ")}</p>
             )}
             <span className="mt-3 inline-block text-sm font-semibold text-white/90">
               Quiero saber más <span aria-hidden="true">→</span>
