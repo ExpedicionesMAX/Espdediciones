@@ -14,6 +14,7 @@ import { paragraphs } from "@/lib/content-fields";
 import { CoverImage } from "@/components/public/CoverImage";
 import { overlayClass, overlayNeedsTextShadow } from "@/lib/overlay";
 import { tripDisplay } from "@/lib/trip-display";
+import { SOCIAL_ICON_PATHS } from "@/components/public/social-icons";
 import { getSiteTexts } from "@/lib/site-texts";
 import type { HomeSectionKey } from "@/lib/home-content";
 import { CUSTOM_TRIP_PATH } from "@/lib/trip-categories";
@@ -434,14 +435,31 @@ export default async function HomePage() {
             )}
           </div>
           {socials.length > 0 && (
-            <ul className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-medium text-stone-600">
-              {socials.map(([key, url]) => (
-                <li key={key}>
-                  <a href={url as string} target="_blank" rel="noopener noreferrer" className="hover:text-accent">
-                    {SOCIAL_LABELS[key] ?? key}
-                  </a>
-                </li>
-              ))}
+            <ul className="mt-8 flex flex-wrap justify-center gap-3 text-stone-600">
+              {socials.map(([key, url]) => {
+                const label = SOCIAL_LABELS[key] ?? key;
+                const icon = SOCIAL_ICON_PATHS[key];
+                return (
+                  <li key={key}>
+                    <a
+                      href={url as string}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={label}
+                      title={label}
+                      className="flex h-11 w-11 items-center justify-center rounded-full ring-1 ring-inset ring-stone-300 transition-colors hover:bg-stone-100 hover:text-accent"
+                    >
+                      {icon ? (
+                        <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5" aria-hidden="true">
+                          <path d={icon} />
+                        </svg>
+                      ) : (
+                        <span className="text-sm font-semibold">{label.charAt(0).toUpperCase()}</span>
+                      )}
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
           )}
           <p className="mt-10 text-sm text-stone-500">
