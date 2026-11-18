@@ -155,3 +155,31 @@ test("encuadre de la portada: se guarda «X% Y%», el centro o lo inválido qued
   assert.equal(spotsText(10, 9), "Queda 1 lugar");
   assert.equal(spotsText(10, 12), "Completo");
 });
+
+test("collage de Nosotros: filas parejas, sin fotos sueltas al final", async () => {
+  const { collageRows } = await import("@/lib/collage");
+  const flat = (rows: number[][]) => rows.flat();
+  assert.deepEqual(collageRows([]), []);
+  assert.deepEqual(collageRows([1.5]), [[0]], "una sola foto");
+  assert.deepEqual(collageRows([1.5, 1.5, 1.5]), [[0], [1, 2]], "apaisada principal y dos abajo");
+  assert.deepEqual(collageRows([0.8, 0.8]), [[0, 1]], "una vertical no va sola arriba");
+  assert.deepEqual(collageRows([1.5, 0.8, 0.8, 0.8]), [[0], [1, 2, 3]], "verticales de a tres");
+  assert.deepEqual(collageRows([1.5, 1.5, 1.5, 0.8]), [[0], [1, 2, 3]], "la suelta se suma a la fila anterior");
+  const many = [1.5, 0.75, 1.33, 1.5, 0.66, 1.5, 1.33, 0.75, 1.5, 1.5, 0.8];
+  const rows = collageRows(many);
+  assert.deepEqual(flat(rows), many.map((_, i) => i), "no pierde ni repite fotos");
+  assert.ok(rows.every((r) => r.length >= 1 && r.length <= 4));
+  assert.ok(rows.slice(1).every((r) => r.length >= 2), "debajo de la principal, nunca una sola");
+  assert.deepEqual(flat(collageRows([NaN, 0, -1])), [0, 1, 2], "proporciones raras no rompen");
+});
+
+test("collage de Nosotros: filas al costado del texto según su altura", async () => {
+  const { rowsBesideText } = await import("@/lib/collage");
+  const ratios = [1, 1, 1, 1, 1, 1]; // cada fila de 2 cuadradas mide 0,5 del ancho
+  const rows = [[0, 1], [2, 3], [4, 5]];
+  assert.equal(rowsBesideText(rows, ratios, 0.5), 1);
+  assert.equal(rowsBesideText(rows, ratios, 1.1), 2);
+  assert.equal(rowsBesideText(rows, ratios, 9), 3, "texto largo: todas al costado");
+  assert.equal(rowsBesideText(rows, ratios, 0), 1, "siempre al menos una");
+  assert.equal(rowsBesideText([], [], 2), 0);
+});

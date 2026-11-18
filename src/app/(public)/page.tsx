@@ -140,7 +140,6 @@ export default async function HomePage() {
       : fallbackStoryPhoto
         ? [{ url: fallbackStoryPhoto.url, alt: fallbackStoryPhoto.alt, width: null, height: null }]
         : [];
-  const hasStoryPhotos = storyPhotos.length > 0;
 
   // «Nuestra historia»: lo cargado en el inicio o, si no, la página «Nosotros» del panel.
   const storyBody = paragraphs(story.body || aboutPage?.content || "");
@@ -159,24 +158,9 @@ export default async function HomePage() {
           aria-labelledby="nosotros-titulo"
           className="scroll-mt-20"
         >
-          <div
-            className={`mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-28 ${
-              hasStoryPhotos
-                ? `grid gap-12 lg:grid-cols-2 lg:gap-16 ${storyPhotos.length > 1 ? "items-start" : "items-center"}`
-                : ""
-            }`}
-          >
-            {hasStoryPhotos && (
-              <div className="reveal">
-                <StoryPhotos photos={storyPhotos} interactive={story.images.length > 0} />
-              </div>
-            )}
-            {/* Con varias fotos, el texto va primero (a la izquierda en escritorio) y las fotos lo acompañan. */}
-            <div
-              className={
-                !hasStoryPhotos ? "mx-auto max-w-3xl" : storyPhotos.length > 1 ? "lg:order-first" : ""
-              }
-            >
+          <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-28">
+            {/* Texto con fotos al costado; las que sobran siguen debajo a todo el ancho. */}
+            <StoryPhotos photos={storyPhotos} interactive={story.images.length > 0}>
               <Eyebrow>{story.eyebrow}</Eyebrow>
               <h2
                 id="nosotros-titulo"
@@ -196,7 +180,7 @@ export default async function HomePage() {
                   ))}
                 </div>
               )}
-            </div>
+            </StoryPhotos>
           </div>
         </section>
       ) : null,
