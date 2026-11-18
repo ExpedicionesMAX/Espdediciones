@@ -30,8 +30,10 @@ export async function prepareImageForUpload(file: File): Promise<PreparedImage> 
   const height = Math.round(bitmap.height * scale);
 
   if (file.type === "image/gif" || (scale === 1 && file.size <= REENCODE_ABOVE)) {
+    // Medidas leídas antes de close(): después, el navegador las devuelve en 0.
+    const original = { width: bitmap.width, height: bitmap.height };
     bitmap.close();
-    return { file, width: bitmap.width, height: bitmap.height };
+    return { file, ...original };
   }
 
   const canvas = document.createElement("canvas");

@@ -8,6 +8,7 @@ import { PERMISSIONS } from "@/lib/permissions";
 import { logActivity } from "@/lib/audit";
 import { isOwnStorageUrl, removeStorageFilesIfUnreferenced } from "@/lib/storage";
 import { GALLERY_PAGE_SIZE, getPublishedGallery, type GalleryPhotoPublic } from "@/lib/gallery";
+import { GALLERY_ADD_BATCH } from "@/lib/gallery-limits";
 
 /**
  * Galería Fotográfica. Toda escritura exige el permiso de multimedia y se
@@ -29,11 +30,16 @@ const ADMIN_SELECT = {
   order: true,
 } as const;
 
-const dim = z.number().int().min(1).max(20000).nullable().optional();
+// Las medidas solo sirven para reservar el espacio en la página: si llegan
+// raras (0, decimales, enormes) se guardan vacías en vez de rechazar la foto.
+const dim = z.preprocess(
+  (v) => (typeof v === "number" && Number.isInteger(v) && v >= 1 && v <= 20000 ? v : null),
+  z.number().int().nullable(),
+);
 const newPhotosSchema = z
   .array(z.object({ url: z.string().url().max(1000), width: dim, height: dim }))
   .min(1)
-  .max(50);
+  .max(GALLERY_ADD_BATCH);
 
 const optText = (max: number) =>
   z.preprocess((v) => (typeof v === "string" ? v.trim() : v), z.string().max(max)).optional();

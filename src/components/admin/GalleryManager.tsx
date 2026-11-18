@@ -10,6 +10,7 @@ import {
   type AdminGalleryPhoto,
 } from "@/server/actions/gallery";
 import { uploadPhoto, type UploadedPhoto } from "@/lib/upload-client";
+import { GALLERY_ADD_BATCH } from "@/lib/gallery-limits";
 import { useUnsavedChanges } from "@/components/admin/useUnsavedChanges";
 
 const inputCls =
@@ -68,9 +69,10 @@ export function GalleryManager({ initial }: { initial: AdminGalleryPhoto[] }) {
       if (res.ok) ok.push(res.photo);
       else failed.push(`${files[i].name}: ${res.error}`);
     }
-    if (ok.length > 0) {
+    // Se registran en tandas (el servidor acepta hasta GALLERY_ADD_BATCH por vez).
+    for (let i = 0; i < ok.length; i += GALLERY_ADD_BATCH) {
       setUploading("Guardando…");
-      const saved = await addGalleryPhotos(ok);
+      const saved = await addGalleryPhotos(ok.slice(i, i + GALLERY_ADD_BATCH));
       if (saved.ok && saved.data) {
         setPhotos((prev) => [...prev, ...saved.data!]);
       } else {
